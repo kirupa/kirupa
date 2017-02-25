@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Going from Data to UI</title>
+  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+  <style>
+    #container {
+      padding: 50px;
+      background-color: #FFF;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script type="text/babel">
+    var Circle = React.createClass({
+      render: function() {
+          var circleStyle = {
+            padding: 10,
+            margin: 20,
+            display: "inline-block",
+            backgroundColor: this.props.bgColor,
+            borderRadius: "50%",
+            width: 100,
+            height: 100,
+          };
+
+          return (
+            <div style={circleStyle}>
+            </div>
+          );
+        }
+    });
+
+    var destination = document.querySelector("#container");
+
+    var colors = ["#393E41", "#E94F37", "#1C89BF", "#A1D363",
+                  "#85FFC7", "#297373", "#FF8552", "#A40E4C"];
+
+    var renderData = [];
+
+    for (var i = 0; i < colors.length; i++) {
+      var color = colors[i];
+      renderData.push(<Circle key={i + color} bgColor={color}/>);
+    }
+
+    ReactDOM.render(
+      <div>
+        {renderData}
+      </div>,
+      destination
+    );
+  </script>
+</body>
+
+</html>

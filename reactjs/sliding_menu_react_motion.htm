@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sliding Menu Using React Motion</title>
+  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="https://unpkg.com/react-motion/build/react-motion.js"></script>
+
+  <style>
+    body {
+        background-color: #EEE;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding: 25px;
+        margin: 0;
+        overflow: auto;
+    }
+
+    #container li {
+        margin-bottom: 10px;
+    }
+
+    #roundButton {
+        background-color: #96D9FF;
+        margin-bottom: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 10px solid #0065A6;
+        transition: all .2s cubic-bezier(0, 1.26, .8, 1.28);
+    }
+
+    #roundButton:hover {
+        background-color: #96D9FF;
+        cursor: pointer;
+        border-color: #003557;
+        transform: scale(1.2, 1.2);
+    }
+
+    #roundButton:active {
+        border-color: #003557;
+        background-color: #FFF;
+    }
+
+    #flyoutMenu {
+        width: 100vw;
+        height: 100vh;
+        background-color: #FFE600;
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translate3d(-100vw, 0, 0);
+        transition: transform .3s cubic-bezier(0, .52, 0, 1);
+        overflow: scroll;
+        z-index: 1000;
+    }
+    #flyoutMenu h2 a {
+        color: #333;
+        margin-left: 15px;
+        text-decoration: none;
+    }
+
+    #flyoutMenu h2 a:hover {
+        text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script type="text/babel">
+
+    var PageContent = React.createClass({
+      render: function() {
+        return (
+          <div id="container">
+              <p>Can you spot the item that doesn&apos;t belong?</p>
+              <ul>
+                  <li>Lorem</li>
+                  <li>Ipsum</li>
+                  <li>Dolor</li>
+                  <li>Sit</li>
+                  <li>Bumblebees</li>
+                  <li>Aenean</li>
+                  <li>Consectetur</li>
+              </ul>
+          </div>
+        );
+      }
+    });
+
+    var MenuButton = React.createClass({
+      render: function() {
+        return (
+          <button role="button"
+		  		tabindex="0"
+				id="roundButton"
+				onMouseDown={this.props.handleMouseDown}>
+	  	  </button>
+        );
+      }
+    });
+
+    var Menu = React.createClass({
+      getVisibleState: function () {
+        if (this.props.visibleState == true) {
+          return 0;
+        } else {
+          return -100;
+        }
+      },
+      render: function() {
+
+        var { Motion,
+              spring } = ReactMotion;
+
+        var self = this;
+
+        return (
+          <Motion style={{x: spring(this.getVisibleState())}}>
+            {
+              function({x}) {
+                return (
+                    <div onMouseDown={self.props.handleMouseDown} id="flyoutMenu" style={{
+                      transform: "translate3d(" + x + "vw, 0vw, 0)"
+                    }}>
+                      <h2><a href="#">Home</a></h2>
+                      <h2><a href="#">About</a></h2>
+                      <h2><a href="#">Contact</a></h2>
+                      <h2><a href="#">Search</a></h2>
+                    </div>
+                );
+              }
+            }
+          </Motion>
+        );
+      }
+    });
+
+    var MenuContainer = React.createClass({
+      getInitialState: function() {
+        return {
+          visible: false
+        };
+      },
+      handleMouseDown: function(e) {
+        this.setState(
+          {
+            visible: !this.state.visible
+          }
+        );
+        e.stopPropagation();
+      },
+      render: function() {
+        return (
+          <div>
+            <MenuButton handleMouseDown={this.handleMouseDown}/>
+            <Menu visibleState={this.state.visible}
+                  handleMouseDown={this.handleMouseDown}/>
+            <PageContent/>
+          </div>
+        );
+      }
+    });
+
+    ReactDOM.render(
+      <MenuContainer/>,
+      document.querySelector("#container")
+    );
+  </script>
+</body>
+
+</html>

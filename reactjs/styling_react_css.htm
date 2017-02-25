@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>React Styling Using CSS</title>
+  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <style>
+    div div div {
+      padding: 10px;
+      margin: 10px;
+      background-color: #ffde00;
+      color: #333;
+      display: inline-block;
+      font-family: monospace;
+      font-size: 32px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+
+  <script type="text/babel">
+    var Letter = React.createClass({
+      render: function() {
+          return (
+            <div className="letter">
+              {this.props.children}
+            </div>
+          );
+        }
+    });
+
+    var destination = document.querySelector("#container");
+
+    ReactDOM.render(
+      <div>
+        <Letter>A</Letter>
+        <Letter>E</Letter>
+        <Letter>I</Letter>
+        <Letter>O</Letter>
+        <Letter>U</Letter>
+      </div>,
+      destination
+    );
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>What is my IP Address?</title>
+  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+  <style>
+    body {
+      background-color: #FFCC00;
+    }
+    h1 {
+      font-family: 'Carrois Gothic', sans-serif;
+      text-align: center;
+      padding-top: 140px;
+      font-size: 60px;
+      margin: -15px;
+    }
+    p {
+      font-family: sans-serif;
+      color: #907400;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script type="text/babel">
+    var destination = document.querySelector("#container");
+    var xhr;
+
+    var IPAddress = React.createClass({
+      render: function() {
+          return (
+            <div>
+              <h1>{this.props.ip}</h1>
+              <p>( This is your IP address...probably :P )</p>
+            </div>
+          );
+        }
+    });
+
+    var IPAddressContainer = React.createClass({
+      getInitialState: function() {
+        return {
+          ip_address: "..."
+        };
+      },
+      componentDidMount: function() {
+        xhr = new XMLHttpRequest();
+        xhr.open('GET', "https://ipinfo.io/json", true);
+        xhr.send();
+
+        xhr.addEventListener("readystatechange", this.processRequest, false);
+      },
+      processRequest: function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+              var response = JSON.parse(xhr.responseText);
+
+              this.setState({
+                ip_address: response.ip
+              });
+          }
+      },
+      render: function() {
+          return (
+              <IPAddress ip={this.state.ip_address}/>
+          );
+        }
+    });
+
+    ReactDOM.render(
+      <div>
+        <IPAddressContainer/>
+      </div>,
+      destination
+    );
+  </script>
+</body>
+
+</html>

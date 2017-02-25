@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>React Components</title>
+  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+</head>
+
+<body>
+  <div id="container"></div>
+
+  <script type="text/babel">
+    var Buttonify = React.createClass({
+      render: function() {
+        return (
+          <div>
+            <button type={this.props.behavior}>{this.props.children}</button>
+          </div>
+        );
+      }
+    });
+
+    ReactDOM.render(
+      <div>
+        <Buttonify behavior="Submit">SEND DATA</Buttonify>
+      </div>,
+      document.querySelector("#container")
+    );
+  </script>
+</body>
+
+</html>
