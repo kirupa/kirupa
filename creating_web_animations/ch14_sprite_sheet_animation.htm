@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CSS Sprite Animation</title>
+  <style>
+    #spriteContainer {
+      width: 300px;
+      height: 300px;
+      display: block;
+      background-image: url("http://bit.ly/spriteImage");
+      background-position: 0, 0;
+      animation: sprite .3s steps(24) infinite;
+    }
+
+    @keyframes sprite {
+     100% {
+       background-position: -7224px;
+     }
+  }
+  </style>
+</head>
+
+<body>
+  <div id=spriteContainer></div>
+</body>
+
+</html>
