@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Text Fade and Scale!</title>
+    <style>
+        body {
+            background-color: #F5F5F5;
+            margin: 50px;
+            margin: 25px 0 0 0;
+        }
+        #main {
+            text-align: center;
+            background-color: #82C1FF;
+            width: 600px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 5px;
+        }
+        h1 {
+            font-size: 88px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: normal;
+            color: #FFF;
+            margin: 0;
+            padding: 90px 0 25px 0;
+            transform-origin: 50% 100%;
+            text-shadow: 2px 2px 2px #333;
+            animation-duration: .3s;
+            animation-name: fadeAndScale;
+            animation-timing-function: cubic-bezier(.71, .55, .62, 1.57);
+        }
+        a {
+            font-family: Cambria, Cochin, serif;
+            font-size: 16px;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #A6D2FF;
+            transition: background-color .2s ease-out;
+        }
+        a:hover {
+            background-color: #EEE;
+        }
+        @keyframes fadeAndScale {
+            from {
+                opacity: 0;
+                transform: scale(.9, .9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1, 1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <h1>hi, everybody!</h1>
+        <p><a href="#" onclick="window.location.reload(true);return false;">reload</a></p>
+    </div>
+</body>
+
+</html>
