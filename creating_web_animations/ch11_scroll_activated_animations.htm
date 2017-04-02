@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Change Color on Scroll</title>
+
+  <style>
+    body {
+      background-color: #FDE74C;
+      transition: all 1s ease-in;
+      padding: 50px;
+      color: #111;
+      font-family: sans-serif;
+      line-height: 32px;
+      font-size: 18px;
+    }
+
+    h1 {
+      font-family: sans-serif;
+    }
+
+    .colorOne {
+      background-color: #9BC53D;
+      color: #000;
+    }
+
+    .colorTwo {
+      background-color: #FFF;
+      color: #000;
+    }
+
+    #mainContent {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    #mainContent p {
+      padding: 20px;
+    }
+
+    #mainContent #firstBox {
+      font-weight: bold;
+      transform: translate3d(-30px, 0, 0);
+      transition: all .5s ease-out;
+      opacity: 0;
+    }
+
+    #mainContent #firstBox.active {
+      background-color: #333;
+      color: #FFF;
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+
+    #mainContent #secondBox {
+      transition: all .2s ease-in-out;
+      transform: translate3d(0, 30px, 0);
+      opacity: 0;
+    }
+
+    #mainContent #secondBox.active {
+      background-color: #1581AF;
+      color: #FFF;
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+
+    #mainContent ol li {
+      padding-left: 7px;
+      margin-bottom: 15px;
+      transition: all .2s ease-in-out;
+      transform: translate3d(20px, 0, 0);
+      opacity: 0;
+    }
+
+    #mainContent ol li.active {
+      transform: translate3d(0px, 0, 0);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mainContent">
+    <h1>Scroll Down</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis massa a arcu efficitur suscipit vehicula et risus.</p>
+    <ol id="myList">
+      <li>Nam sagittis est non enim ultrices elementum. </li>
+      <li>Sed id ligula sed mi tempor ornare.</li>
+      <li>Aenean feugiat risus eget sagittis volutpat. Proin quis orci a metus lacinia auctor eget id nisi.</li>
+      <li>Donec pulvinar nunc feugiat semper consequat.</li>
+      <li>Etiam cursus justo eget libero gravida, nec faucibus mauris posuere.</li>
+      <li>In nec sem id libero egestas cursus vel a urna.</li>
+      <li>Fusce pulvinar arcu eu lobortis egestas. Maecenas eleifend felis ut urna consectetur, et pellentesque mi molestie.</li>
+      <li>Aliquam ut felis venenatis, dapibus ante non, gravida nulla.</li>
+      <li>Donec consectetur quam in urna commodo, sed aliquet metus vehicula.</li>
+      <li>Mauris eget est sit amet felis eleifend sagittis non id nulla.</li>
+    </ol>
+    <p id="firstBox">Phasellus tortor nisl, dapibus at posuere sed, tempor in massa. Pellentesque eu sodales orci, finibus congue libero. Mauris molestie bibendum posuere.</p>
+    <p>Nunc blandit varius sapien quis ultrices. Vestibulum et consequat augue. Pellentesque et maximus nisl, sit amet dictum ante.</p>
+    <p id="secondBox">Nullam magna augue, consequat eu augue ut, volutpat fringilla est. Ut commodo ac magna vulputate dictum.</p>
+  </div>
+
+  <script>
+    var isScrolling = false;
+
+    window.addEventListener("scroll", throttleScroll, false);
+
+    function throttleScroll(e) {
+      if (isScrolling == false) {
+        window.requestAnimationFrame(function() {
+          scrolling(e);
+          isScrolling = false;
+        });
+      }
+      isScrolling = true;
+    }
+
+    document.addEventListener("DOMContentLoaded", scrolling, false);
+
+    var listItems = document.querySelectorAll("#mainContent ol li");
+    var firstBox = document.querySelector("#firstBox");
+    var secondBox = document.querySelector("#secondBox");
+
+    function scrolling(e) {
+
+      if (isPartiallyVisible(firstBox)) {
+        firstBox.classList.add("active");
+
+        document.body.classList.add("colorOne");
+        document.body.classList.remove("colorTwo");
+      } else {
+        document.body.classList.remove("colorOne");
+        document.body.classList.remove("colorTwo");
+      }
+
+      if (isFullyVisible(secondBox)) {
+        secondBox.classList.add("active");
+
+        document.body.classList.add("colorTwo");
+        document.body.classList.remove("colorOne");
+      }
+
+      for (var i = 0; i < listItems.length; i++) {
+        var listItem = listItems[i];
+
+        if (isPartiallyVisible(listItem)) {
+          listItem.classList.add("active");
+        } else {
+          listItem.classList.remove("active");
+        }
+      }
+    }
+
+    function isPartiallyVisible(el) {
+      var elementBoundary = el.getBoundingClientRect();
+
+      var top = elementBoundary.top;
+      var bottom = elementBoundary.bottom;
+      var height = elementBoundary.height;
+
+      return ((top + height >= 0) && (height + window.innerHeight >= bottom));
+    }
+
+    function isFullyVisible(el) {
+      var elementBoundary = el.getBoundingClientRect();
+
+      var top = elementBoundary.top;
+      var bottom = elementBoundary.bottom;
+
+      return ((top >= 0) && (bottom <= window.innerHeight));
+    }
+  </script>
+</body>
+
+</html>
