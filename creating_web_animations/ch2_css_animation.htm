@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Intro to CSS Animations</title>
+
+    <style>
+        body {
+            background-color: #e4e4e4;
+            padding: 0;
+            margin: 0;
+        }
+        #container {
+            margin: 20px;
+            width: 100%;
+            height: 250px;
+            background-color: #EEE;
+            text-align: center;
+        }
+        #hexagon {
+            animation: bobble 2s infinite;
+        }
+        @keyframes bobble {
+            0% {
+                transform: translateY(10px);
+            }
+            50% {
+                transform: translateY(40px);
+            }
+            100% {
+                transform: translateY(10px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <img id="hexagon" src="https://www.kirupa.com/images/hexagon.svg" />
+    </div>
+</body>
+
+</html>
