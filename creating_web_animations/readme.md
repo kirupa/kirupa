@@ -5,4 +5,5 @@ Greetings..human! I think. Here, you'll find the source files to the **Creating 
 Now, this is the most important part. If you run into any issues or have any questions, please post on the forums at: **https://forum.kirupa.com**.
 
 Cheers,
-Kirupa :-
+
+Kirupa :P
