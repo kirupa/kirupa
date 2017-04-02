@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Move Element to Click Position</title>
+    <style>
+        body {
+            background-color: #FFF;
+            margin: 30px;
+            margin-top: 10px;
+        }
+
+        #contentContainer {
+            width: 550px;
+            height: 350px;
+            border: 5px black solid;
+            overflow: hidden;
+            background-color: #F2F2F2;
+            cursor: pointer;
+        }
+
+        #thing {
+            position: relative;
+            left: 50px;
+            top: 50px;
+            transition: transform .5s cubic-bezier(.42, -0.3, .78, 1.25);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="contentContainer">
+        <img id="thing" alt="the thing" height="67" src="https://www.kirupa.com/images/smiley_red.png" width="67">
+    </div>
+
+    <script>
+        var theThing = document.querySelector("#thing");
+        var container = document.querySelector("#contentContainer");
+
+        container.addEventListener("click", getClickPosition, false);
+
+        function getClickPosition(e) {
+            var parentPosition = getPosition(e.currentTarget);
+            var xPos = e.clientX - parentPosition.x - (theThing.clientWidth / 2);
+            var yPos = e.clientY - parentPosition.y - (theThing.clientHeight / 2);
+
+            theThing.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+        }
+
+        // Helper function to get an element's exact position
+        function getPosition(el) {
+            var xPos = 0;
+            var yPos = 0;
+
+            while (el) {
+                if (el.tagName == "BODY") {
+                    // deal with browser quirks with body/window/document and page scroll
+                    var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+                    var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+                    xPos += (el.offsetLeft - xScroll + el.clientLeft);
+                    yPos += (el.offsetTop - yScroll + el.clientTop);
+                } else {
+                    // for all other non-BODY elements
+                    xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+                    yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+                }
+
+                el = el.offsetParent;
+            }
+            return {
+                x: xPos,
+                y: yPos
+            };
+        }
+    </script>
+</body>
+
+</html>
