@@ -1,0 +1,131 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Parallax Scrolling Example</title>
+<style>
+	body {
+		background-color: #EEE;
+	}
+	#content {
+		padding: 50px;
+		margin: 40px;
+		background-color: rgba(255, 255, 255, .48);
+		text-align: center;
+	}
+	#content p {
+		font-family: Helvetica, sans-serif;
+		font-size: 24px;
+		line-height: 40px;
+		color: #111;
+	}
+	h1 {
+		text-transform: capitalize;
+		font-family: sans-serif;
+		font-size: 40px;
+		padding: 10px;
+		margin: 40px;
+		background-color: rgba(20, 20, 20, .8);
+		color: #FFF;
+	}
+	#bigYellowCircle {
+		background-image: url("https://www.kirupa.com/images/yellow_circle.svg");
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: 90%;
+		position: fixed;
+		top: 0;
+		width: 100vw;
+		height: 100vw;
+		z-index: -1;
+		opacity: .75;
+	}
+	#blueSquare {
+		background-image: url("https://www.kirupa.com/images/blue_square.svg");
+		background-repeat: no-repeat;
+		background-position: 97% bottom;
+		background-size: 10%;
+		position: fixed;
+		top: 0;
+		width: 100vw;
+		height: 100vw;
+		z-index: -2;
+		opacity: .75;
+	}
+	#greenPentagon {
+		background-image: url("https://www.kirupa.com/images/green_pentagon.svg");
+		background-repeat: no-repeat;
+		background-position: 5% top;
+		background-size: 50%;
+		position: fixed;
+		top: 0;
+		width: 100vw;
+		height: 100vw;
+		z-index: -3;
+		opacity: .75;
+	}
+</style>
+</head>
+
+<body>
+
+<h1>Parallaxing!</h1>
+<div id="content">
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+	<p>All work and no play makes Jack a dull boy</p>
+</div>
+
+<div id="bigYellowCircle"></div>
+<div id="blueSquare"></div>
+<div id="greenPentagon"></div>
+
+<script>
+	var bigYellowCircle = document.querySelector("#bigYellowCircle");
+	var blueSquare = document.querySelector("#blueSquare");
+	var greenPentagon = document.querySelector("#greenPentagon");
+
+	function setTranslate(xPos, yPos, el) {
+		el.style.transform = "translate3d(" + xPos + ", " + yPos + "px, 0)";
+	}
+
+	window.addEventListener("DOMContentLoaded", scrollLoop, false);
+
+	var xScrollPosition;
+	var yScrollPosition;
+
+	function scrollLoop() {
+		xScrollPosition = window.scrollX;
+		yScrollPosition = window.scrollY;
+
+		setTranslate(0, yScrollPosition * -0.2, bigYellowCircle);
+		setTranslate(0, yScrollPosition * -1.5, blueSquare);
+		setTranslate(0, yScrollPosition * .5, greenPentagon);
+
+		requestAnimationFrame(scrollLoop);
+	}
+
+</script>
+</body>
+</html>
