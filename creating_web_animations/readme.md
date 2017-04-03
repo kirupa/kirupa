@@ -1,6 +1,6 @@
 Creating Web Animations
 ------------
-Greetings..human! I think. Here, you'll find the source files to the **Creating Web Animations** book:
+Greetings...human (or really smart dolphin)! Here, you'll find the source files to the **Creating Web Animations** book:
 
 <img src="http://akamaicovers.oreilly.com/images/0636920050858/lrg.jpg" width="250">
 
