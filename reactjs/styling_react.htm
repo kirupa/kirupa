@@ -2,50 +2,68 @@
 <html>
 
 <head>
-  <title>React Components</title>
-  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>Styling in React</title>
+    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <style>
+        #container {
+            padding: 50px;
+            background-color: #FFF;
+        }
+        .letter {
+            padding: 10px;
+            margin: 10px;
+            background-color: #ffde00;
+            color: #333;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 32px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-  <div id="container"></div>
+    <div id="container"></div>
 
-  <script type="text/babel">
-    var Letter = React.createClass({
-      render: function() {
-          var letterStyle = {
-            padding: 10,
-            margin: 10,
-            backgroundColor: this.props.bgcolor,
-            color: "#333",
-            display: "inline-block",
-            fontFamily: "monospace",
-            fontSize: "32px",
-            textAlign: "center"
-          };
+    <script type="text/babel">
+        var destination = document.querySelector("#container");
 
-          return (
-            <div style={letterStyle}>
-              {this.props.children}
-            </div>
-          );
+        class Letter extends React.Component {
+            render() {
+                var letterStyle = {
+                    padding: 10,
+                    margin: 10,
+                    backgroundColor: this.props.bgcolor,
+                    color: "#333",
+                    display: "inline-block",
+                    fontFamily: "monospace",
+                    fontSize: 32,
+                    textAlign: "center"
+                };
+
+                return(
+                    <div style={letterStyle}>
+                        {this.props.children}
+                    </div>
+                );
+            }
         }
-    });
 
-    var destination = document.querySelector("#container");
-
-    ReactDOM.render(
-      <div>
-        <Letter bgcolor="#58B3FF">A</Letter>
-        <Letter bgcolor="#FF605F">E</Letter>
-        <Letter bgcolor="#FFD52E">I</Letter>
-        <Letter bgcolor="#49DD8E">O</Letter>
-        <Letter bgcolor="#AE99FF">U</Letter>
-      </div>,
-      destination
-    );
-  </script>
+        ReactDOM.render(
+            <div>
+                <Letter bgcolor="#58B3FF">A</Letter>
+                <Letter bgcolor="#FF605F">E</Letter>
+                <Letter bgcolor="#FFD52E">I</Letter>
+                <Letter bgcolor="#49DD8E">O</Letter>
+                <Letter bgcolor="#AE99FF">U</Letter>
+            </div>,
+            destination
+        );
+    </script>
 </body>
 
 </html>
