@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Dealing with State</title>
+        <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+            class LightningCounter extends React.Component {
+                constructor(props, context) {
+                    super(props, context);
+                    
+                    this.state = {
+                        strikes: 0
+                    };
+
+                    this.timerTick = this.timerTick.bind(this);
+                }
+
+                timerTick = () => {
+                    this.setState({
+                        strikes: this.state.strikes + 100
+                    });
+                }
+
+                componentDidMount() {
+                    setInterval(this.timerTick, 1000);
+                }
+                
+                render() {
+                    return (
+                        <h1>{this.state.strikes}</h1>
+                    );
+                }
+            }
+
+            class LightningCounterDisplay extends React.Component {
+                render() {
+                    var divStyle = {
+                        width: 250,
+                        textAlign: "center",
+                        backgroundColor: "black",
+                        padding: 40,
+                        fontFamily: "sans-serif",
+                        color: "#999",
+                        borderRadius: 10
+                    };
+
+                    return(
+                        <div style={divStyle}>
+                            <LightningCounter/>
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(
+                <LightningCounterDisplay/>,
+                document.querySelector("#container")
+            );
+        </script>
+    </body>
+</html>
