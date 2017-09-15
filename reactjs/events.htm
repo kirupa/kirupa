@@ -1,100 +1,103 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Events</title>
+        <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+        <style>
+            #container {
+                padding: 50px;
+                background-color: #FFF;
+            }
+        </style>
+    </head>
+             
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
 
-<head>
-  <title>Events!</title>
-  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+            var destination = document.querySelector("#container");
 
-  <style>
-    #container {
-      padding: 50px;
-      background-color: #FFF;
-    }
-  </style>
-</head>
+            class Counter extends React.Component {
+                render() {
+                    var textStyle = {
+                        fontSize: 72,
+                        fontFamily: "sans-serif",
+                        color: "#333",
+                        fontWeight: "bold"
+                    };
+                
+                    return (
+                        <div style={textStyle}>
+                            {this.props.display}
+                        </div>
+                    );
+                }
+            }
 
-<body>
-  <div id="container"></div>
-  <script type="text/babel">
+            class CounterParent extends React.Component {
+                constructor(props) {
+                    super(props);
 
-    var destination = document.querySelector("#container");
+                    this.state = {
+                        count: 0
+                    }
 
-    var Counter = React.createClass({
-      render: function() {
-          var textStyle = {
-            fontSize: 72,
-            fontFamily: "sans-serif",
-            color: "#333",
-            fontWeight: "bold"
-          };
+                    this.increase = this.increase.bind(this);
+                }
 
-          return (
-            <div style={textStyle}>
-              {this.props.display}
-            </div>
-          );
-        }
-    });
+                increase(e) {
+                    var currentCount = this.state.count;
+                    
+                    if (e.shiftKey) {
+                        currentCount += 10;
+                    } else {
+                        currentCount += 1;
+                    }
+                    
+                    this.setState({
+                        count: currentCount
+                    });
+                }
+                
+                render() {
+                    var backgroundStyle = {
+                        padding: 50,
+                        backgroundColor: "#FFC53A",
+                        width: 250,
+                        height: 100,
+                        borderRadius: 10,
+                        textAlign: "center"
+                    };
+                
+                    var buttonStyle = {
+                        fontSize: "1em",
+                        width: 30,
+                        height: 30,
+                        fontFamily: "sans-serif",
+                        color: "#333",
+                        fontWeight: "bold",
+                        lineHeight: "3px"
+                    };
 
-    var CounterParent = React.createClass({
-      getInitialState: function() {
-        return {
-          count: 0
-        };
-      },
-      increase: function(e) {
-        var currentCount = this.state.count;
+                    return (
+                        <div style={backgroundStyle}>
+                            <Counter display={this.state.count}/>
+                            <button onClick={this.increase} style={buttonStyle}>+</button>
+                        </div>
+                    );
+                }
+            };
 
-        console.log(this);
-
-        if (e.shiftKey) {
-          currentCount += 10;
-        } else {
-          currentCount += 1;
-        }
-
-        this.setState({
-          count: currentCount
-        });
-      },
-      render: function() {
-          var backgroundStyle = {
-            padding: 50,
-            backgroundColor: "#FFC53A",
-            width: 250,
-            height: 100,
-            borderRadius: 10,
-            textAlign: "center"
-          };
-
-          var buttonStyle = {
-            fontSize: "1em",
-            width: 30,
-            height: 30,
-            fontFamily: "sans-serif",
-            color: "#333",
-            fontWeight: "bold",
-            lineHeight: "3px"
-          };
-
-          return (
-            <div style={backgroundStyle}>
-              <Counter display={this.state.count}/>
-              <button onClick={this.increase} style={buttonStyle}>+</button>
-            </div>
-          );
-        }
-    });
-
-    ReactDOM.render(
-      <div>
-        <CounterParent/>
-      </div>,
-      destination
-    );
-  </script>
-</body>
-
+            ReactDOM.render(
+                <div>
+                    <CounterParent/>
+                </div>,
+                destination
+            );   
+        
+        </script>
+    </body>
 </html>
