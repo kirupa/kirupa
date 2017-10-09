@@ -1,4 +1,4 @@
-This is the source code for the [**Koncentration**](https://www.kirupa.com/react/koncentration/index.html) game. It's a throwback to the old memory card games you may have played, so you may like this game.
+This is the source code for the [**Koncentration**](https://www.kirupa.com/react/koncentration/index.html) game. It's a throwback to the old memory card games you may have played. If you've never played those games, well...you're in for a world of fun! At least, I hope so.
 
 To use these files, [create a new React app](https://www.kirupa.com/react/setting_up_react_environment.htm).
 
