@@ -1,0 +1,43 @@
+.winningContainer {
+  position: absolute;
+  z-index: 100;
+  left: calc(50% - 150px);
+  top: 307px;
+  width: 300px;
+  height: 150px;
+  background-color: #FFF;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0px 0px 20px #333);
+  animation: showContainer .2s cubic-bezier(0, .96, .87, 1.5) 1s both;
+  opacity: 0;
+}
+.winningContainer button {
+  font-size: 24px;
+  padding: 20px;
+  background-color: #03A9F4;
+  border: 0;
+  color: rgb(220, 245, 255);
+}
+.winningContainer button:hover {
+  background-color: #b1005c;
+  color: #f2a7cf;
+  cursor: pointer;
+}
+.winningContainer button:active {
+  background-color: rgb(111, 0, 59);
+  color: #e48aba;
+  cursor: pointer;
+}
+@keyframes showContainer {
+  from {
+    opacity: 0;
+    transform: translate3d(0px, -20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0);
+  }
+}

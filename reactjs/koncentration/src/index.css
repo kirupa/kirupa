@@ -1,0 +1,19 @@
+body {
+  padding: 25px;
+  background-color: #F4FAFF;
+  font-family: sans-serif;
+}
+#root {
+  display: flex;
+  justify-content: center;
+}
+#root > div {
+  width: 630px;
+}
+
+
+@media all and (max-width: 1024px) {
+  #root > div {
+    width: 320px;
+  }
+}

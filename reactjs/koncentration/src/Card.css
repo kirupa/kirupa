@@ -1,0 +1,86 @@
+.container {
+  perspective: 800px;
+  width: 75px;
+  height: 75px;
+  position: relative;
+  display: inline-block;
+  margin: 15px;
+  filter: drop-shadow(0px 0px 10px #AEAEAE);
+  transition: all .1s ease-out;
+}
+
+.container:hover {
+  transform: scale3d(1.05, 1.05, 1);
+  filter: drop-shadow(0px 0px 5px #CCC);
+}
+
+.container.flipped .card {
+  transform: rotateY(180deg);
+}
+
+.container.flipped {
+  pointer-events: none;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform .4s cubic-bezier(0, .69, .35, 1.5);
+}
+
+.card > div {
+  margin: 0;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.card div {
+  border-radius: 5px;
+}
+
+.card .front {
+  background: repeating-linear-gradient(
+    45deg,
+    #4F646F,
+    #4F646F 10px,
+    #7B919D 10px,
+    #7B919D 20px
+  );
+}
+
+.card .back {
+  background: #FFF;
+  transform: rotateY(180deg);
+}
+
+.card p {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-weight: bold;
+  height: 100%;
+  font-size: 38px;
+}
+
+@media all and (max-width: 1024px) {
+  .container {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: inline-block;
+    margin: 6px;
+    filter: drop-shadow(0px 0px 5px #AEAEAE);
+  }
+  .card p {
+    font-size: 24px;
+  }
+}

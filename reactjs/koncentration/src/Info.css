@@ -1,0 +1,37 @@
+.infoBox {
+  background-color: #FFF;
+  padding: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: #CCC;
+  transition: all .2s ease-out;
+  border-radius: 5px;
+}
+.infoBox:hover {
+  color: #666;
+}
+.infoBox:hover span {
+  background-color: #FBFF00;
+}
+.infoBox:hover h2.seconds span {
+  background-color: #D6FAFF;
+}
+.infoBox span {
+  padding: 5px;
+  border-radius: 5px;
+}
+.infoBox h2 {
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.infoBox h2.moves {
+  margin-right: 20px;
+}
+
+@media all and (max-width: 1024px) {
+  .infoBox {
+    margin-top: 25px;
+  }
+}
