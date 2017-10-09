@@ -6,4 +6,4 @@ Once you have created your project, replace your **src** and **public** folders 
 
 If you have any questions or run into issues, please post your question on the forums: https://forum.kirupa.com
 
-- Kirupa :P
+// Kirupa :P
