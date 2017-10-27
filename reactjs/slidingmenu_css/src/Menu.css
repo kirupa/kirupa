@@ -16,6 +16,7 @@
 
 #flyoutMenu.show {
   transform: translate3d(0vw, 0, 0);
+  overflow: hidden;
 }
 
 #flyoutMenu h2 a {
