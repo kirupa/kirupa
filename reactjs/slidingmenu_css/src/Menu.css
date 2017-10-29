@@ -5,7 +5,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  transition: transform .3s cubic-bezier(0, .52, 0, 1);
+  transition: transform .3s 
+              cubic-bezier(0, .52, 0, 1);
   overflow: scroll;
   z-index: 1000;
 }

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import MenuButton from './MenuButton';
-import Menu from './Menu';
-import PageContent from './PageContent';
+import React, { Component } from "react";
+import MenuButton from "./MenuButton";
+import Menu from "./Menu";
+import PageContent from "./PageContent";
 
 class MenuContainer extends Component {
   constructor(props, context) {
@@ -31,17 +31,23 @@ class MenuContainer extends Component {
   }
 
   render() {
-    var visibility = "hide";
-
-    if (this.state.visible) {
-      visibility = "show";
-    }
-
     return (
       <div>
         <MenuButton handleMouseDown={this.handleMouseDown}/>
-        <Menu toggleMenu={this.toggleMenu} menuVisibility={visibility}/>
-        <PageContent/>
+        <Menu handleMouseDown={this.handleMouseDown}
+              menuVisibility={this.state.visible}/>
+        <div>
+          <p>Can you spot the item that doesn&apos;t belong?</p>
+          <ul>
+              <li>Lorem</li>
+              <li>Ipsum</li>
+              <li>Dolor</li>
+              <li>Sit</li>
+              <li>Bumblebees</li>
+              <li>Aenean</li>
+              <li>Consectetur</li>
+          </ul>
+        </div>
       </div>
     );
   }
