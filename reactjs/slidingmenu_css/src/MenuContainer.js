@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import MenuButton from "./MenuButton";
 import Menu from "./Menu";
-import PageContent from "./PageContent";
 
 class MenuContainer extends Component {
   constructor(props, context) {
