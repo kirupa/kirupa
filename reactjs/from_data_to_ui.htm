@@ -2,10 +2,11 @@
 <html>
 
 <head>
+  <meta charset="UTF-8" />
   <title>Going from Data to UI</title>
-  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
   <style>
     #container {
@@ -18,8 +19,8 @@
 <body>
   <div id="container"></div>
   <script type="text/babel">
-    var Circle = React.createClass({
-      render: function() {
+    class Circle extends React.Component {
+      render() {
           var circleStyle = {
             padding: 10,
             margin: 20,
@@ -35,7 +36,7 @@
             </div>
           );
         }
-    });
+    }
 
     var destination = document.querySelector("#container");
 
