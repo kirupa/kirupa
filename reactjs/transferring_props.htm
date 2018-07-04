@@ -2,10 +2,11 @@
 <html>
 
 <head>
+  <meta charset="UTF-8" />
   <title>Transferring Props</title>
-  <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-  <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>    
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
   <style>
    #container {
@@ -18,8 +19,8 @@
 <body>
   <div id="container"></div>
   <script type="text/babel">
-    var Display = React.createClass({
-      render: function() {
+    class Display extends React.Component {
+      render() {
         return(
           <div>
             <p>{this.props.color}</p>
@@ -28,25 +29,25 @@
           </div>
         );
       }
-    });
+    }
 
-    var Label = React.createClass({
-      render: function() {
+    class Label extends React.Component {
+      render() {
         return (
           <Display {...this.props}/>
         );
       }
-    });
+    }
 
-    var Shirt = React.createClass({
-      render: function() {
+    class Shirt extends React.Component {
+      render() {
           return (
             <div>
               <Label {...this.props}/>
             </div>
           );
         }
-    });
+    }
 
     ReactDOM.render(
       <div>
