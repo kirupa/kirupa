@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Degrees</title>
+  <style>
+    body {
+      padding: 50px;
+    }
+
+    #outerContainer {
+      display: grid;
+      grid-template-columns: 300px 300px;
+    }
+
+    .rectangle {
+      width: 200px;
+      height: 100px;
+      border: 10px solid #94B0DA;
+      background-color: #DCEDFF;
+      margin: 100px;
+      margin-left: 20px;
+
+      display: flex;
+      align-items: center;
+
+      animation-duration: 8s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .rectangle p {
+      text-align: center;
+      width: 100%;
+
+      font-family: sans-serif;
+      font-weight: bold;
+      color: #404f65;
+    }
+
+    .animate {
+      animation-name: rotateAnim;
+    }
+
+    .animateDouble {
+      animation-name: rotateDouble;
+    }
+
+    .animateTriple {
+      animation-name: rotateTriple;
+    }
+
+    .animateReverse {
+      animation-name: rotateReverse;
+    }
+
+    @keyframes rotateAnim {
+      0% {
+        transform: rotate(0deg);
+      }
+      60% {
+        transform: rotate(37deg);
+      }
+      100% {
+        transform: rotate(37deg);
+      }
+    }
+
+    @keyframes rotateDouble {
+      0% {
+        transform: rotate(0deg);
+      }
+      60% {
+        transform: rotate(397deg);
+      }
+      100% {
+        transform: rotate(397deg);
+      }
+    }
+
+    @keyframes rotateTriple {
+      0% {
+        transform: rotate(0deg);
+      }
+      60% {
+        transform: rotate(757deg);
+      }
+      100% {
+        transform: rotate(757deg);
+      }
+    }
+
+    @keyframes rotateReverse {
+      0% {
+        transform: rotate(0deg);
+      }
+      60% {
+        transform: rotate(-323deg);
+      }
+      100% {
+        transform: rotate(-323deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="outerContainer">
+    <div class="rectangle animate">
+      <p>37°</p>
+    </div>
+
+    <div class="rectangle animateReverse">
+      <p>397°</p>
+    </div>
+
+    <div class="rectangle animateDouble">
+      <p>757°</p>
+    </div>
+
+    <div class="rectangle animateTriple">
+      <p>-323°</p>
+    </div>
+  </div>
+</body>
+
+</html>
