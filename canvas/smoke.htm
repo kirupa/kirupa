@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <title>Smoke Effect</title>
+ 
+  <style>
+    body {
+      margin: 0px;
+      padding: 50px;
+    }
+ 
+    #myCanvas {
+      border: 1px #CCC solid;
+    }
+  </style>
+</head>
+ 
+<body>
+  <div id="container">
+    <canvas id="myCanvas" width="500" height="500">
+ 
+    </canvas>
+  </div>
+ 
+  <script>
+    var mainCanvas = document.querySelector("#myCanvas");
+    var mainContext = mainCanvas.getContext("2d");
+
+    var circles = [];
+
+    class Circle {
+      constructor(xPos, yPos, radius, color) {
+        this.radius = radius;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.color = color;
+        this.speed = Math.floor(100 + Math.random() * 100);
+
+        this.incX = 0;
+        this.incY = 0;
+      }
+
+      setNewPosition() {
+        this.newX = Math.floor(Math.random() * 501);
+        this.newY = Math.floor(Math.random() * 501);
+
+        console.log(this.newX + " : new position!");
+
+        var diffX = this.xPos - this.newX;
+        var diffY = this.yPos - this.newY;
+
+        this.incX = diffX / this.speed;
+        this.incY = diffY / this.speed;
+      }
+    
+      draw() {
+        mainContext.beginPath();
+
+        mainContext.arc(this.xPos -= this.incX, this.yPos -= this.incY, this.radius, 0, 2 * Math.PI, true);
+        mainContext.closePath();
+
+        mainContext.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`;
+        mainContext.fill();
+
+        // update position for the next draw
+        if (Math.round(this.xPos) == Math.round(this.newX)) {
+          this.setNewPosition();
+        }
+      }
+    }
+
+    function update() {
+
+      mainContext.clearRect(0, 0, 500, 500);
+
+      for (var i = 0; i < circles.length; i++) {
+        var circle = circles[i];
+        circle.draw();
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    
+    function drawCircles() {
+      mainContext.clearRect(0, 0, 500, 500);
+
+      for (var i = 0; i < 500; i++) {
+
+        var x = Math.floor(Math.random() * 501);
+        var y = Math.floor(Math.random() * 501);
+        var radius = Math.floor(Math.random() * 100) + 10;
+
+        var color = {
+          r: 100,
+          g: 100,
+          b: 100,
+          a: .05
+        }
+
+        var circle = new Circle(x, y, radius, color);
+        circles.push(circle);
+
+        circle.setNewPosition();
+        circle.draw();
+      }
+
+      update();
+    }
+    drawCircles();
+  </script>
+</body>
+ 
+</html>
