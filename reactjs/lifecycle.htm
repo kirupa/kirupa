@@ -1,23 +1,23 @@
+
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Lifecycle Methods</title>
-  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+<meta charset="UTF-8" />
+<title>Lifecycle Methods</title>
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-  <style>
+<style>
     #container {
       padding: 50px;
       background-color: #FFF;
     }
   </style>
 </head>
-
 <body>
   <div id="container"></div>
+  
   <script type="text/babel">
     var destination = document.querySelector("#container");
 
@@ -29,7 +29,9 @@
           color: "#333",
           fontWeight: "bold"
         };
-        console.log("Counter render");
+
+        console.log("render: Counter component");
+      
         return (
           <div style={textStyle}>
             {this.props.display}
@@ -39,15 +41,13 @@
     }
 
     class CounterParent extends React.Component {
-      constructor(props, context) {
-        super(props, context);
-
-        console.log("constructor: Default state time!");
+      constructor(props) {
+        super(props);
+        console.log("constructor: It's default time!");
 
         this.state = {
           count: 0
         };
-
         this.increase = this.increase.bind(this);
       }
 
@@ -57,20 +57,24 @@
         });
       }
 
-      componentWillUpdate(newProps, newState) {
-        console.log("componentWillUpdate: Component is about to update!");
+      static getDerivedStateFromProps(props, state) {
+        console.log("getDerivedStateFromProps: You probably don't need this!")
+
+        return null;
       }
 
       componentDidUpdate(currentProps, currentState) {
         console.log("componentDidUpdate: Component just updated!");
       }
 
-      componentWillMount() {
-        console.log("componentWillMount: Component is about to mount!");
+      getSnapshotBeforeUpdate(prevProps, prevState) {
+        console.log("getSnapshotBeforeUpdate: Component is about to commit its changes!")
+
+        return null;
       }
 
       componentDidMount() {
-        console.log("componentDidMount: Component just mounted!");
+        console.log("componentDidMount: Component is inserted into the tree!");
       }
 
       componentWillUnmount() {
@@ -79,7 +83,6 @@
 
       shouldComponentUpdate(newProps, newState) {
         console.log("shouldComponentUpdate: Should component update?");
-
         if (newState.count < 5) {
           console.log("shouldComponentUpdate: Component should update!");
           return true;
@@ -88,10 +91,6 @@
           console.log("shouldComponentUpdate: Component should not update!");
           return false;
         }
-      }
-
-      componentWillReceiveProps(newProps) {
-        console.log("componentWillReceiveProps: Component will get new props!");
       }
 
       render() {
@@ -103,8 +102,7 @@
           borderRadius: 10,
           textAlign: "center"
         };
-        console.log("CounterParent render");
-
+        console.log("render: CounterParent component");
         return (
           <div style={backgroundStyle}>
             <Counter display={this.state.count} />
@@ -114,11 +112,6 @@
           </div>
         );
       }
-    };
-
-    console.log("defaultProps: Default prop time!");
-    CounterParent.defaultProps = {
-
     };
 
     ReactDOM.render(
