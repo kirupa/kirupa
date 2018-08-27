@@ -2,7 +2,10 @@
 <html>
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" 
+        content="width=device-width, 
+        initial-scale=1.0, 
+        user-scalable=no" />
   <title>Drag/Drop/Bounce</title>
   <style>
     #container {
@@ -88,9 +91,10 @@
 
     function drag(e) {
       if (active) {
+        
+        e.preventDefault();
+
         if (e.type === "touchmove") {
-          e.preventDefault();
-          
           currentX = e.touches[0].clientX - initialX;
           currentY = e.touches[0].clientY - initialY;
         } else {
