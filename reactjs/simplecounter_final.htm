@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Lifecycle : Simple Counter</title>
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<style>
+    #container {
+      padding: 50px;
+      background-color: #FFF;
+    }
+    h1 {
+      font-family: sans-serif;
+      font-size: 72;
+      padding: 50px;
+      margin: 0;
+      border-radius: 5px;
+      background-color: #19647E;
+      color: #F4D35E;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  
+  <script type="text/babel">
+    class SimpleCounter extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+          count: 0
+        };
+
+        this.timerTick = this.timerTick.bind(this);
+
+        console.log("Constructor!");
+      }
+
+      timerTick() {
+        this.setState((prevState) => {
+          return { 
+            count: prevState.count + 1 
+          };
+        });
+      }
+
+      componentDidMount() {
+        this.timer = setInterval(this.timerTick, 100);
+
+        console.log("Component has mounted!");
+      }
+
+      componentDidUpdate(prevProps, prevState) {
+        console.log("Component updated from: " + prevState.count);
+
+        if (this.state.count == 50) {
+          ReactDOM.unmountComponentAtNode(document.querySelector("#container"));
+        }
+      }
+
+      componentWillUnmount() {
+        console.log("Component is about to be unmounted!");
+
+        clearInterval(this.timer);
+      }
+
+      render() {
+        console.log("SimpleCounter render call!");
+        
+        return (
+          <h1>{this.state.count}</h1>
+        );
+      }
+    }
+
+    ReactDOM.render(
+      <div>
+        <SimpleCounter />
+      </div>,
+      document.querySelector("#container")
+    );
+  </script>
+</body>
+
+</html>
