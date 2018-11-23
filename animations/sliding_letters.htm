@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <title>Sliding Letters</title>
+ 
+  <style>
+    body {
+      margin: 0px;
+      padding: 50px;
+    }
+
+    #container {
+      font-size: 0;
+      width: 380px;
+    }
+
+    .letterGroup {
+      width: 100px;
+      height: 100px;
+      margin: 5px;
+
+      background-color: yellow;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .letter {
+      background-color: azure;
+      margin-top: 0px;
+      user-select: none;
+
+      animation: slide 2s infinite cubic-bezier(0, .69, .8, 1);
+    }
+    .letter p {
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 48px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      height: 100px;
+
+      padding: 0;
+      margin: 0;
+    }
+
+    @keyframes slide {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-100px);
+      }
+      100% {
+        transform: translateY(-100px);
+      }
+    }
+  </style>
+</head>
+ 
+<body>
+  <div id="container">
+    <div class="letterGroup">
+      <div class="letter">
+        <p>A</p>
+        <p>A</p>
+      </div>
+    </div>
+
+    <div class="letterGroup">
+      <div class="letter">
+        <p>N</p>
+        <p>N</p>
+      </div>
+    </div>
+
+    <div class="letterGroup">
+      <div class="letter">
+        <p>I</p>
+        <p>I</p>
+      </div>
+    </div>
+
+    <div class="letterGroup">
+      <div class="letter">
+        <p>M</p>
+        <p>M</p>
+      </div>
+    </div>
+
+    <div class="letterGroup">
+        <div class="letter">
+          <p>A</p>
+          <p>A</p>
+        </div>
+      </div>
+  
+      <div class="letterGroup">
+        <div class="letter">
+          <p>T</p>
+          <p>T</p>
+        </div>
+      </div>
+
+      <div class="letterGroup">
+        <div class="letter">
+          <p>I</p>
+          <p>I</p>
+        </div>
+      </div>
+  
+      <div class="letterGroup">
+        <div class="letter">
+          <p>O</p>
+          <p>O</p>
+        </div>
+      </div>
+  
+      <div class="letterGroup">
+        <div class="letter">
+          <p>N</p>
+          <p>N</p>
+        </div>
+      </div>
+    
+  </div>
+ 
+  <script>
+    var letters = document.querySelectorAll(".letter");
+    var container = document.querySelector("#container");
+
+    function setup() {
+      for (var i = 0; i < letters.length; i++) {
+        var letter = letters[i];
+  
+        var colorOne = getRandomHSLColor();
+        var colorTwo = getRandomHSLColor();
+  
+        letter.color = {
+          one: colorOne,
+          two: colorTwo
+        };
+  
+        letter.children[0].style.backgroundColor = colorOne;
+        letter.children[1].style.backgroundColor = colorTwo;
+  
+        letter.style.animationDelay = getRandomNumber(0, 500) / 500 + "s";
+        letter.style.animationDuration = getRandomNumber(20, 40) / 10 + "s";
+      }
+    }
+    setup();
+
+    container.addEventListener("animationiteration", loopLetter, false);
+
+    function loopLetter(e) {
+      var el = e.target;
+
+      var colorOne = el.color.two;
+      var colorTwo = getRandomHSLColor();
+
+      el.color = {
+        one: colorOne,
+        two: colorTwo
+      }
+
+      el.children[0].style.backgroundColor = colorOne;
+      el.children[1].style.backgroundColor = colorTwo;
+    }
+
+    function getRandomNumber(low, high) {
+      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      return r;
+    }
+
+    function getRandomHSLColor() {
+      var hue = getRandomNumber(0, 360);
+      var saturation = getRandomNumber(0, 100);
+      var lightness = getRandomNumber(75, 95);
+
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    }
+    
+  </script>
+</body>
+ 
+</html>
