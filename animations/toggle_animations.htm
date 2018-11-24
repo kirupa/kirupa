@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Toggle CSS Animations</title>
+<style>
+    body {
+      padding: 30px;
+      background-color: #EEE;
+    }
+
+    #playAnimationCheckbox {
+      display: block;
+      text-align: center;
+      font-weight: bold;
+      font-family: sans-serif;
+      margin-top: 10px;
+    }
+
+    #playAnimationCheckbox p {
+      display: inline;
+      margin-left: 5px;
+    }
+    
+    #hexagonContainer {
+      min-width: 211px;
+      min-height: 209px;
+      display: inline-block;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 80px;
+      
+      animation: bobble 2s infinite var(--playState);
+      /* animation-play-state: var(--playState); */
+    }
+    
+    #hexagon {
+      transition: transform calc(var(--toggle) * .15s) cubic-bezier(0, .71, .54, 1.38);
+    }
+    
+    #hexagon:hover {
+      transform: rotate(15deg) scale3d(1.2, 1.2, 1);
+    }
+
+    #reduceMotionStatus {
+      display: none;
+    }
+
+    @keyframes bobble {
+      0% {
+          transform: translateY(0px);
+      }
+      50% {
+          transform: translateY(40px);
+      }
+      100% {
+          transform: translateY(0px);
+      }
+    }
+
+    @media screen and (prefers-reduced-motion: reduce) { 
+      #reduceMotionStatus {
+        display: block;
+        text-align: center;
+        font-family: sans-serif;
+        font-size: small;
+        color: #666;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="hexagonContainer">
+<img id="hexagon" src="https://www.kirupa.com/images/blue_circle.svg" />
+</div>
+<label id="playAnimationCheckbox"><input type="checkbox" /><p>play animation?</p></label>
+<p id="reduceMotionStatus">( OS prefers reducing animation! )</p>
+<script>
+    var animationCheck = document.querySelector("#playAnimationCheckbox input");
+    animationCheck.addEventListener("click", setUserState, false);
+
+    var reduceMotionQuery = matchMedia("(prefers-reduced-motion)");
+    reduceMotionQuery.addListener(setMotionState);
+
+    var userSetting = sessionStorage.getItem("userAnimationState");
+
+    function setMotionState() {
+      // user hasn't specified a preference
+      if (userSetting === null) {
+        // OS setting is supported by browser
+        if (reduceMotionQuery.matches) {
+          animationCheck.checked = false;
+          document.body.style.setProperty("--toggle", "0");
+          document.body.style.setProperty("--playState", "paused");
+        } else { 
+          animationCheck.checked = true;
+          document.body.style.setProperty("--toggle", "1");
+          document.body.style.setProperty("--playState", "running");
+        }
+      } else {
+        setStoredState();
+      }
+    }
+    setMotionState();
+    
+    function setStoredState() {
+      if (userSetting === "play") {
+        animationCheck.checked = true;
+      } else {
+        animationCheck.checked = false;
+      }
+      
+      setUserState();
+    }
+
+    function setUserState(e) {
+      if (animationCheck.checked) {
+        document.body.style.setProperty("--toggle", "1");
+        document.body.style.setProperty("--playState", "running");
+        sessionStorage.setItem("userAnimationState", "play");
+      } else {
+        document.body.style.setProperty("--toggle", "0");
+        document.body.style.setProperty("--playState", "paused");
+        sessionStorage.setItem("userAnimationState", "stop")
+      }
+    }
+  </script>
+</body>
+</html>
