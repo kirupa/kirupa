@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <title>Bouncing Box...that Changes Colors!</title>
+ 
+  <style>
+    body {
+      margin: 0px;
+      padding: 50px;
+    }
+
+    #container {
+      border: 5px #CCC solid;
+      width: 550px;
+      height: 350px;
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: background-color 1s ease-in-out;
+    }
+
+    #square {
+      width: 100px;
+      height: 100px;
+      border-radius: 5px;
+      background-color: #CCC;
+      transition: background-color .15s ease-in-out;
+
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20% {
+        transform: translate3d(0, 300px, 0);
+        animation-timing-function: cubic-bezier(0, .31, .26, .93);
+      }
+      60% {
+        transform: translate3d(0, -100px, 0);
+        animation-timing-function: cubic-bezier(1, .01, 1, .91);
+      }
+      100% {
+        transform: translate3d(0, 400px, 0);
+      }
+    }
+  </style>
+</head>
+ 
+<body>
+  <div id="container">
+    <div id="square"></div>
+  </div>
+ 
+  <script>
+    var square = document.querySelector("#square");
+    var container = document.querySelector("#container");
+
+    square.addEventListener("animationiteration", changeColor, false);
+
+    function changeColor(e) {
+      var h = {
+        min: 0,
+        max: 360
+      };
+
+      var s = {
+        min: 90,
+        max: 100
+      };
+
+      var l = {
+        min: 0,
+        max: 90
+      };
+
+      var a = {
+        min: 100,
+        max: 100
+      };
+
+      var color = getRandomHSLColor(h, s, l, a);
+      var lighterColor = getHSLColor(color.h, color.s, 95, 1);
+
+      square.style.backgroundColor = color.hslValue;
+      container.style.backgroundColor = lighterColor;
+    }
+
+    function getRandomNumber(low, high) {
+      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      return r;
+    }
+
+    function getRandomHSLColor(h, s, l, a) {
+      var hue = getRandomNumber(h.min, h.max);
+      var saturation = getRandomNumber(s.min, s.max);
+      var lightness = getRandomNumber(l.min, l.max);
+      var alpha = getRandomNumber(a.min, a.max) / 100;
+
+      return {
+        h: hue,
+        s: saturation,
+        l: lightness,
+        a: alpha,
+        hslValue: getHSLColor(hue, saturation, lightness, alpha)
+      }
+    }
+
+    function getHSLColor(h, s, l, a) {
+      return `hsl(${h}, ${s}%, ${l}%, ${a})`;
+    }
+    
+  </script>
+</body>
+ 
+</html>
