@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
- 
+
 <head>
   <title>Bouncing Box...that Changes Colors!</title>
- 
+
   <style>
     body {
       margin: 0px;
@@ -34,26 +34,30 @@
     }
 
     @keyframes bounce {
-      0%, 20% {
+
+      0%,
+      20% {
         transform: translate3d(0, 300px, 0);
         animation-timing-function: cubic-bezier(0, .31, .26, .93);
       }
+
       60% {
         transform: translate3d(0, -100px, 0);
         animation-timing-function: cubic-bezier(1, .01, 1, .91);
       }
+
       100% {
         transform: translate3d(0, 400px, 0);
       }
     }
   </style>
 </head>
- 
+
 <body>
   <div id="container">
     <div id="square"></div>
   </div>
- 
+
   <script>
     var square = document.querySelector("#square");
     var container = document.querySelector("#container");
@@ -88,8 +92,6 @@
       container.style.backgroundColor = lighterColor;
     }
 
-
-
     function getRandomColor(h, s, l, a) {
       var hue = getRandomNumber(h.min, h.max);
       var saturation = getRandomNumber(s.min, s.max);
@@ -113,8 +115,8 @@
       var r = Math.floor(Math.random() * (high - low + 1)) + low;
       return r;
     }
-    
+
   </script>
 </body>
- 
+
 </html>
