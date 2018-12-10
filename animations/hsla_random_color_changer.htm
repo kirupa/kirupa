@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simple Color Changer</title>
+
+  <style>
+    body {
+      margin: 50px;
+      padding: 0px;
+    }
+
+    #container {
+      width: 550px;
+      height: 350px;
+      overflow: hidden;
+      background-color: #EEE;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: background-color 1s ease-in-out;
+    }
+
+    #square {
+      width: 150px;
+      height: 150px;
+      border-radius: 5px;
+      background-color: #CCC;
+      transition: background-color 1s ease-in-out;
+
+      animation: colorTimer 2s infinite;
+    }
+
+    @keyframes colorTimer {
+      /* deliberately empty */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="square"></div>
+  </div>
+
+  <script>
+    var square = document.querySelector("#square");
+    var container = document.querySelector("#container");
+
+    square.addEventListener("animationiteration", changeColor, false);
+
+    var h_range = [0, 360];
+    var s_range = [90, 100];
+    var l_range = [0, 90];
+    var a_range = [1, 1];
+
+    function changeColor(e) {
+      var color = getRandomColor(h_range, s_range, l_range, a_range);
+      square.style.backgroundColor = color.hslaValue;
+    }
+
+    function getRandomColor(h, s, l, a) {
+      var hue = getRandomNumber(h[0], h[1]);
+      var saturation = getRandomNumber(s[0], s[1]);
+      var lightness = getRandomNumber(l[0], l[1]);
+      var alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
+    
+      console.log(alpha);
+    
+      return {
+        h: hue,
+        s: saturation,
+        l: lightness,
+        a: alpha,
+        hslaValue: getHSLAColor(hue, saturation, lightness, alpha)
+      }
+    }
+    
+    function getRandomNumber(low, high) {
+      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      return r;
+    }
+    
+    function getHSLAColor(h, s, l, a) {
+      return `hsl(${h}, ${s}%, ${l}%, ${a})`;
+    }
+  </script>
+</body>
+
+</html>
