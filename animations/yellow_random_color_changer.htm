@@ -15,11 +15,9 @@
       height: 350px;
       overflow: hidden;
       background-color: #333;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
       transition: background-color 1s ease-in-out;
     }
 
@@ -29,7 +27,6 @@
       border-radius: 5px;
       background-color: #CCC;
       transition: background-color 1s ease-in-out;
-
       animation: colorTimer 1s infinite;
     }
 
@@ -65,9 +62,7 @@
       var saturation = getRandomNumber(s[0], s[1]);
       var lightness = getRandomNumber(l[0], l[1]);
       var alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
-    
-      console.log(alpha);
-    
+
       return {
         h: hue,
         s: saturation,
