@@ -59,7 +59,7 @@
       var color = getRandomColor(h_range, s_range, l_range, a_range);
       square.style.backgroundColor = color.hslaValue;
 
-      var complementaryColor = getHSLAColor(color.h - 180, color.s, 25, 1);
+      var complementaryColor = getHSLAColor(color.h - 180, color.s, color.l, 1);
       container.style.backgroundColor = complementaryColor;
     }
 
