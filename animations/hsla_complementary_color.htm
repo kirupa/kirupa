@@ -56,10 +56,16 @@
     var a_range = [1, 1];
 
     function changeColor(e) {
-      var yellowColor = getRandomColor(h_range, s_range, l_range, a_range);
-      square.style.backgroundColor = yellowColor.hslaValue;
 
-      var complementaryColor = getHSLAColor(yellowColor.h - 180, yellowColor.s, 25, 1);
+      var h_range = [0, 360];
+      var s_range = [90, 100];
+      var l_range = [50, 95];
+      var a_range = [1, 1];
+
+      var color = getRandomColor(h_range, s_range, l_range, a_range);
+      square.style.backgroundColor = color.hslaValue;
+
+      var complementaryColor = getHSLAColor(color.h - 180, color.s, 25, 1);
       container.style.backgroundColor = complementaryColor;
     }
 
