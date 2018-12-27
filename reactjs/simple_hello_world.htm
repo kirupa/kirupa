@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>React! React! React!</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <style>
+    body {
+      background-color: #E3BAC6;
+    }
+    h1 {
+      font-size: 72px;
+      font-family: sans-serif;
+      padding: 50px;
+      color: #5E4D52;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script type="text/babel">
+    var destination = document.querySelector("#container");
+
+    ReactDOM.render(
+      <h1>Hello, world!</h1>,
+      destination
+    );  
+  </script>
+</body>
+
+</html>
