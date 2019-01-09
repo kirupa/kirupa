@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <title>Infinite Items</title>
+ 
+  <style>
+    body {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #container {
+      font-size: 0;
+
+      height: 100vh;
+      width: 100vw;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .itemGroup {
+      width: 100px;
+      height: 100px;
+      margin: 5px;
+      border: #EEE solid 1px;
+
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .item {
+      margin-top: 0px;
+      user-select: none;
+
+      animation: slide infinite ease-in-out;
+    }
+
+    .item p {
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 48px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      height: 100px;
+
+      padding: 0;
+      margin: 0;
+    }
+
+    .itemGroup:nth-child(1) {
+      background-color: #e57373;
+    }
+
+    .itemGroup:nth-child(1) .item {
+      animation-duration: 400ms;
+      animation-delay: 100ms;
+    }
+
+    .itemGroup:nth-child(2) {
+      background-color: #4DD0E1;
+    }
+
+    .itemGroup:nth-child(2) .item {
+      animation-duration: 300ms;
+      animation-delay: 150ms;
+    }
+
+    .itemGroup:nth-child(3) {
+      background-color: #FFEB3B;
+    }
+
+    .itemGroup:nth-child(3) .item {
+      animation-duration: 600ms;
+      animation-delay: 0ms;
+    }
+
+    .itemGroup:nth-child(4) {
+      background-color: #9CCC65;
+    }
+
+    .itemGroup:nth-child(4) .item {
+      animation-duration: 500ms;
+      animation-delay: 200ms;
+    }
+
+    @keyframes slide {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-100px);
+      }
+      100% {
+        transform: translateY(-100px);
+      }
+    }
+  </style>
+</head>
+ 
+<body>
+  <div id="container">
+    <div class="itemGroup">
+      <div class="item">
+        <p>1</p>
+        <p>2</p>
+      </div>
+    </div>
+    <div class="itemGroup">
+      <div class="item">
+        <p>1</p>
+        <p>2</p>
+      </div>
+    </div>
+    <div class="itemGroup">
+      <div class="item">
+        <p>1</p>
+        <p>2</p>
+      </div>
+    </div>
+    <div class="itemGroup">
+      <div class="item">
+        <p>1</p>
+        <p>2</p>
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+    var items = document.querySelectorAll(".item");
+    var container = document.querySelector("#container");
+
+    var h_range = [0, 360];
+    var s_range = [0, 50];
+    var l_range = [60, 100];
+    var a_range = [1, 1];
+
+    function setup() {
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+
+        item.displayData = {
+          one: getRandomNumber(0, 10),
+          two: getRandomNumber(0, 10)
+        }
+
+        setContent(item);
+      }
+    }
+    setup();
+
+    container.addEventListener("animationiteration", duplicateAndGenerate, false);
+
+    function duplicateAndGenerate(e) {
+      var item = e.target;
+
+      item.displayData = {
+        one: item.displayData.two,
+        two: getRandomNumber(0, 10)
+      }
+
+      setContent(item);
+    }
+
+    function setContent(item) {
+      item.children[0].innerText = item.displayData.one;
+      item.children[1].innerText = item.displayData.two;
+    }
+
+    function getRandomNumber(low, high) {
+      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      return r;
+    }
+        
+  </script>
+</body>
+ 
+</html>
