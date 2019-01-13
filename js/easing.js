@@ -2,8 +2,8 @@
  * This is a near-direct port of Robert Penner's easing equations. Please shower Robert with
  * praise and all of your admiration. His license is provided below.
  *
- * For information on how to use these functions in your animations, check out: 
- * http://www.kirupa.com/html5/animating_with_easing_functions_in_javascript.htm
+ * For information on how to use these functions in your animations, search on: 
+ * http://www.kirupa.com/
  *
  * -Kirupa
  */
