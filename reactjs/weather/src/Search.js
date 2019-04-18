@@ -32,7 +32,8 @@ class Search extends Component {
   }
 
   fetchData() {
-    var apiKey = "e07e97fc6a6549a7dbe844a23f7cb50c";
+    // you should get an API key from: https://openweathermap.org/api
+    var apiKey = "paste key you get from openweathermap";
     var cityName = this.cityInput.current.value;
 
     var thisThis = this;
