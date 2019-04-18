@@ -1,0 +1,105 @@
+.searchMain {
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background: linear-gradient(to bottom,
+                  hsl(54, 100%, 62%)  0%, 94%, 
+                  hsl(199, 98%, 48%)    94%, hsl(199, 98%, 48%)  96%, 
+                  hsl(180, 1%, 0%)   0%, hsl(187, 72%, 0%) 98%,        
+                  hsl(1, 77%, 55%) 0%);
+}
+
+.searchMain h1 {
+  margin: 0;
+  padding: 0;
+  margin-top: -60px;
+  font-size: 72px;
+}
+
+.searchMain form {
+  margin: 30px;
+  text-align: center;
+  background-color: #FFF;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: calc(100% - 100px);
+  min-width: 300px;
+  max-width: 700px;
+  box-shadow: 5px 5px 25px -2px #bfbfbf;
+}
+
+.searchMain form .citySearch {
+  font-size: 24px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  width: 100%;
+  background: none;
+}
+
+.searchMain form .searchButton {
+  width: 25px;
+  padding: 10px;
+}
+
+.yes_error form {
+  animation: flashError .5s ease-out, shake .5s ease-in-out;
+}
+
+@keyframes flashError {
+  from {
+    background-color: coral;
+  }
+  to {
+    background-color: #FFF;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(2px, 2px);
+  }
+  20% {
+    transform: translate(-2px, 0px);
+  }
+  30% {
+    transform: translate(0px, 2px);
+  }
+  40% {
+    transform: translate(-2px, 0px);
+  }
+  50% {
+    transform: translate(0px, -2px);
+  }
+  60% {
+    transform: translate(2px, 0px);
+  }
+  70% {
+    transform: translate(0px, -2px);
+  }
+  80% {
+    transform: translate(2px, 0);
+  }
+  90% {
+    transform: translate(0, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@media all and (max-width:500px) {
+  .searchMain h1 {
+    padding: 0;
+    font-size: 48px;
+  }
+}

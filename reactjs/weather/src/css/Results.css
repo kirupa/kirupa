@@ -1,0 +1,96 @@
+.results {
+  padding: 30px;
+  padding-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.warm {
+  background-color: #CDDC39;
+}
+.hot {
+  background-color: #E53935;
+  color: #FFF;
+}
+
+  .hot .resultsContainer .longText,
+  .hot .resultsContainer .longText .info {
+    color: #FFF;
+  }
+
+.cold {
+  background-color: #80DEEA;
+}
+
+.results a {
+  font-size: 32px;
+  font-weight: bold;
+  padding: 10px;
+  text-decoration: none;
+  background-color: #111;
+  color: #FFF;
+}
+
+.results a:hover {
+  background-color: hsl(0, 0%, 0%, .5);
+}
+
+.resultsContainer {
+  max-width: 700px;
+}
+
+.resultsContainer .temp {
+  font-size: 100px;
+  margin: 0;
+  padding: 0;
+}
+
+.resultsContainer .status {
+  font-size: 48px;
+  margin: 0;
+  padding: 0;
+  opacity: .4;
+}
+
+.resultsContainer .longText {
+  font-size: 24px;
+  font-weight: 200;
+  line-height: 1.5;
+  margin-bottom: 100px;
+  color: hsl(0, 0%, 7%, .7);
+}
+
+.resultsContainer .longText .info {
+  font-weight: bold;
+  color: hsl(0, 0%, 7%, 1);
+}
+
+.error {
+  background-color: coral;
+  justify-content: center;
+}
+
+.error h1 {
+  font-size: 60px;
+  color: hsla(16, 100%, 30%, 1);
+}
+
+.error a {
+  color: white;
+  background-color: #992800;
+}
+
+.error a:hover {
+  background-color: #000;
+}
+
+@media all and (max-width:500px) {
+  .error h1 {
+    font-size: 48px;
+    color: hsla(16, 100%, 30%, 1);
+    text-align: center;
+  }
+}
