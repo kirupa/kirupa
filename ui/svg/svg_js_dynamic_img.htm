@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SVG, Dynamic Image Source, and JavaScript</title>
+
+  <style>
+    .rocketContainer {
+      background-color: #FFEB3B;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .rocketContainer img {
+      width: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="rocketContainer">
+
+  </div>
+  <script>  
+    var container = document.querySelector(".rocketContainer");
+    var imageElement = document.createElement("img");
+    imageElement.src = "https://www.kirupa.com/images/rocket.svg";
+
+    container.appendChild(imageElement);
+  </script>
+</body>
+
+</html>

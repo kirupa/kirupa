@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SVGs in CSS via JavaScript</title>
+
+  <style>
+    .rocket {
+      width: 100px;
+      height: 100px;
+      background-color: #FFEB3B;
+      background-size: 50px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="rocket"></div>
+
+  <script>
+    var rocketElement = document.querySelector(".rocket");
+    rocketElement.style.backgroundImage = `url(https://www.kirupa.com/images/rocket.svg)`;
+  </script>
+</body>
+
+</html>

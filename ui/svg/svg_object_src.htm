@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SVG files and the Object tag!</title>
+
+  <style>
+    .rocketContainer {
+      background-color: #FFEB3B;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .rocketContainer object {
+      width: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="rocketContainer">
+    <object type="image/svg+xml" 
+            data="https://www.kirupa.com/images/rocket.svg">
+      it's a rocketship!
+    </object>
+  </div>
+</body>
+
+</html>
