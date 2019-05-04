@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canvas Grid</title>
+  <style>
+    body {
+      background-color: #FFF;
+      padding: 100px;
+    }
+
+    #myCanvas {
+      border: 10px solid #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="container">
+    <canvas id="myCanvas" width=440 height=440>
+
+    </canvas>
+  </div>
+
+  <script>
+    var rows = 17;
+    var columns = 17;
+    var radius = 1;
+    var x_adjust = 0;
+    var y_adjust = 0;
+    var targetXY = { x:220, y:220 };
+    var maxDistance = getDistance(0, 0, 440, 440);
+
+    function draw() {
+      var ctx = document.getElementById("myCanvas").getContext("2d");
+      for (var y = 0; y < columns; y++) {
+        for (var x = 0; x < rows; x++) {
+
+          var xPos = 20 + x * 25;
+          var yPos = 20 + y * 25;
+
+          radius = intensity(
+            {
+              x: xPos,
+              y: yPos
+            },
+            {
+              x: targetXY.x,
+              y: targetXY.y
+            }
+          );
+
+          console.log(x + " " + y);
+
+          ctx.fillStyle = "black";
+          ctx.beginPath();
+          ctx.arc(xPos, yPos, radius, 0, Math.PI * 2, true);
+          ctx.fill();
+        }
+      }
+    }
+
+    function intensity(current, target) {
+      var distance = getDistance(current.x, current.y, target.x, target.y);
+
+      var size = 5 * (100 / (distance + 50));
+
+      if (size < 1) {
+        return 1;
+      } else {
+        return size;
+      }
+
+      console.log(size);
+      return size;
+    }
+
+    // pythagorean theorem
+    function getDistance(xA, yA, xB, yB) { 
+      var xDiff = xA - xB; 
+      var yDiff = yA - yB;
+  
+      return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+  }
+
+    draw();
+  </script>
+</body>
+
+</html>
