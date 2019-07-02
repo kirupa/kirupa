@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <!--#include virtual="/ssi/newDesign/head.shtml"-->
+
+  <meta
+    content="Make generating the metadata to make your content discoverable and shareable across Twitter, Facebook, Google, Pinterest, and more a breeze!"
+    name="description" />
+  <meta content="Metadata Tag Generator 2000!1!!" name="title" />
+
+  <title>Metadata Tag Generator 2000!1!!</title>
+  <meta name="author" content="Kirupa Chinnathambi" />
+
+  <meta itemprop="name" content="Metadata Tag Generator 2000!1!!">
+  <meta property="og:type" content="tool" />
+  <meta itemprop="description"
+    content="Make generating the metadata to make your content discoverable and shareable across Twitter, Facebook, Google, Pinterest, and more a breeze!">
+  <meta itemprop="image" content="https://www.kirupa.com/images/s/9.png">
+
+  <meta property="og:title" content="Metadata Tag Generator 2000!1!!">
+  <meta property="og:url" content="https://www.kirupa.com/tricks/metadata_generator.htm">
+  <meta property="og:image" content="https://www.kirupa.com/images/s/9.png">
+  <meta property="og:description"
+    content="Make generating the metadata to make your content discoverable and shareable across Twitter, Facebook, Google, Pinterest, and more a breeze!">
+  <meta property="og:site_name" content="kirupa.com" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@kirupa">
+  <meta name="twitter:creator" content="@kirupa">
+  <meta name="twitter:title" content="Metadata Tag Generator 2000!1!!">
+  <meta name="twitter:description"
+    content="Make generating the metadata to make your content discoverable and shareable across Twitter, Facebook, Google, Pinterest, and more a breeze!">
+  <meta name="twitter:image:src" content="https://www.kirupa.com/images/s/9.png">
+
+  <style>
+    body {
+      background-color: #ffeb3b;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: sans-serif;
+      font-size: 34px;
+      color: #776f24;
+      line-height: 30px;
+      margin-top: 30px;
+    }
+
+    h1 span {
+      font-size: 85px;
+    }
+
+    input,
+    textarea {
+      width: calc(100% - 25px);
+      font-size: 16px;
+      font-family: sans-serif;
+      padding: 10px;
+      border: 5px solid #e8e8e8;
+    }
+
+    .container {
+      width: 400px;
+      background-color: #FFF;
+      padding: 15px;
+      margin: 0 auto;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    input {}
+
+    textarea {
+      height: 300px;
+    }
+
+    ::placeholder {
+      color: #666;
+    }
+
+    .tagline {
+      font-size: 20px;
+      font-family: sans-serif;
+      line-height: 30px;
+      font-weight: lighter;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-top: 10px;
+      text-align: center;
+      font-family: sans-serif;
+    }
+
+    .buttonContainer {
+      background-image: url("images/results_export.png");
+      background-repeat: no-repeat;
+      background-position: top;
+      background-size: 625px;
+      height: 276px;
+      margin-top: 30px;
+      padding-top: 284px;
+    }
+
+    button {
+      font-size: 27px;
+      padding: 20px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      background-color: #558B2F;
+      border: 5px solid #1B5E20;
+      color: #fff;
+      font-weight: bold;
+      font-family: sans-serif;
+      margin: 20px 0px;
+      width: 335px;
+      text-align: center;
+      margin: 0px auto;
+      display: block;
+      transform: rotate(-1deg);
+    }
+
+    button:hover {
+      background-color: #72c538;
+      cursor: pointer;
+    }
+
+    .heading {
+      background-color: #fff494;
+    }
+
+    .headingWrapper {
+      padding-top: 90px;
+      padding-bottom: 110px;
+      background-image: url("images/heading_surprise.svg");
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .staticWrapper {
+      background-image: url("images/static_data.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: calc(50% - 340px);
+    }
+
+    .variableWrapper {
+      background-image: url("images/metadata_sun.svg");
+      background-repeat: no-repeat;
+      background-position: calc(50% + 357px);
+    }
+
+    .staticInfo input {
+      border-color: #BDE4A7;
+      background-color: hsla(98, 53%, 77%, 0.5);
+    }
+
+    .variableInfo input {
+      border-color: #9FBBCC;
+      background-color: hsla(203, 31%, 71%, 0.3);
+    }
+
+    .results textarea {
+      border-color: #FAC8CD;
+      font-family: monospace;
+    }
+
+    .results {
+      background-color: #ff929d;
+      font-weight: bold;
+    }
+
+    .results h2 {
+      color: #884e54;
+      font-size: 24px;
+    }
+
+    .heading a {
+      background-color: #327fff;
+      padding: 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #FFF;
+    }
+
+    .heading a:hover {
+      background-color: #0051d7;
+    }
+
+    .url {
+      margin-top: 30px;
+      font-size: 20px;
+      font-family: sans-serif;
+    }
+
+    .footerImage {
+      margin: 0 auto;
+      width: min-content;
+      margin-top: 100px;
+    }
+
+    .footerImage img {
+      width: 70px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="headingWrapper">
+    <div class="container heading">
+      <h1><span>Metadata<br>
+        </span>Tag Generator 2000!1!!</h1>
+      <p class="tagline">This handy tool will generate most of the metadata you will need for ensuring your content is
+        easily shareable on Facebook, Twitter, Pinterest, and more.</p>
+      <p class="url"><strong><a href="https://forum.kirupa.com">What is this?</a></strong></p>
+    </div>
+  </div>
+  <div class="staticWrapper">
+    <div class="container staticInfo">
+      <p><input id="authorField" type="text" placeholder="author name"></p>
+      <p><input id="twitterField" type="text" placeholder="@twitter handle"></p>
+      <p><input id="siteField" type="text" placeholder="site name"></p>
+      <p><input id="contentField" type="text" placeholder="content type (article, video, etc.)"></p>
+    </div>
+  </div>
+  <div class="variableWrapper">
+    <div class="container variableInfo">
+      <p><input id="titleField" type="text" placeholder="title"></p>
+      <p><input id="descriptionField" type="text" placeholder="description"></p>
+      <p><input id="urlField" type="text" placeholder="content URL"></p>
+      <p><input id="imageField" type="text" placeholder="image"></p>
+    </div>
+  </div>
+  <div class="buttonContainer">
+    <button id="generateButton" type="submit">Generate Metadata</button>
+  </div>
+  <div class="container results">
+    <h2>Your generated results are below:</h2>
+    <p><textarea wrap="off" id="results"></textarea>
+    </p>
+  </div>
+  <div class="footerImage"><a href="https://www.kirupa.com"><img src="https://www.kirupa.com/images/orange.png"></a>
+  </div>
+  <script>
+
+    var generateButton = document.querySelector("#generateButton");
+    generateButton.addEventListener("click", processData, false);
+
+    var results = document.querySelector("#results");
+
+    var authorElement = document.querySelector("#authorField");
+    var twitterElement = document.querySelector("#twitterField");
+    var siteNameElement = document.querySelector("#siteField");
+    var contentTypeElement = document.querySelector("#contentField");
+
+    function loadStoredData() {
+      if (localStorage["author"] !== undefined) {
+        authorElement.value = localStorage["author"];
+      }
+
+      if (localStorage["twitter"] !== undefined) {
+        twitterElement.value = localStorage["twitter"];
+      }
+
+      if (localStorage["siteName"] !== undefined) {
+        siteNameElement.value = localStorage["siteName"];
+      }
+
+      if (localStorage["contentType"] !== undefined) {
+        contentTypeElement.value = localStorage["contentType"];
+      }
+    }
+    loadStoredData();
+
+    function storeData() {
+      localStorage["author"] = authorElement.value;
+      localStorage["twitter"] = twitterElement.value;
+      localStorage["siteName"] = siteNameElement.value;
+      localStorage["contentType"] = contentTypeElement.value;
+    }
+
+    function processData(e) {
+
+      var author = authorElement.value;
+      var twitter = twitterElement.value;
+      var siteName = siteNameElement.value;
+      var contentType = contentTypeElement.value;
+
+      storeData();
+
+      var title = document.querySelector("#titleField").value;
+      var description = document.querySelector("#descriptionField").value;
+      var url = document.querySelector("#urlField").value;
+      var image = document.querySelector("#imageField").value;
+
+      var generatedData = generateMetadata(title, description, url, image, author, siteName, twitter, contentType);
+      results.value = generatedData;
+    }
+
+    var generateMetadata = function (title, description, url, image, author, siteName, twitter, contentType) {
+
+      return `<meta content="${description}" name="description" />
+<meta content="${title}" name="title" />
+
+<title>${title}</title>
+<meta name="author" content="${author}" />
+
+<meta itemprop="name" content="${title}">
+<meta property="og:type" content="${contentType}" />
+<meta itemprop="description" content="${description}">
+<meta itemprop="image" content="${image}">
+
+<meta property="og:title" content="${title}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${image}">
+<meta property="og:description" content="${description}">
+<meta property="og:site_name" content="${siteName}" />
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="${twitter}">
+<meta name="twitter:creator" content="${twitter}">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${description}">
+<meta name="twitter:image:src" content="${image}">`;
+    }
+  </script>
+</body>
+
+</html>
