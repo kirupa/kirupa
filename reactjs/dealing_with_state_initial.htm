@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>Dealing with State</title>
-        <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-    </head>
-    <body>
-        <div id="container"></div>
-        <script type="text/babel">
-            class LightningCounter extends React.Component {
-                constructor(props, context) {
-                    super(props, context);
-                    
-                    this.state = {
-                        strikes: 0
-                    };
 
-                    this.timerTick = this.timerTick.bind(this);
-                }
+<head>
+    <meta charset="UTF-8" />
+    <title>Dealing with State</title>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
 
-                timerTick = () => {
-                    this.setState({
-                        strikes: this.state.strikes + 100
-                    });
-                }
+<body>
+    <div id="container"></div>
+    <script type="text/babel">
+        class LightningCounter extends React.Component {
+            constructor(props, context) {
+                super(props, context);
 
-                componentDidMount() {
-                    setInterval(this.timerTick, 1000);
-                }
-                
-                render() {
-                    return (
-                        <h1>{this.state.strikes}</h1>
-                    );
-                }
+                this.state = {
+                    strikes: 0
+                };
+
+                this.timerTick = this.timerTick.bind(this);
             }
 
-            class LightningCounterDisplay extends React.Component {
-                render() {
-                    var divStyle = {
-                        width: 250,
-                        textAlign: "center",
-                        backgroundColor: "black",
-                        padding: 40,
-                        fontFamily: "sans-serif",
-                        color: "#999",
-                        borderRadius: 10
-                    };
-
-                    return(
-                        <div style={divStyle}>
-                            <LightningCounter/>
-                        </div>
-                    );
-                }
+            timerTick = () => {
+                this.setState({
+                    strikes: this.state.strikes + 100
+                });
             }
 
-            ReactDOM.render(
-                <LightningCounterDisplay/>,
-                document.querySelector("#container")
-            );
-        </script>
-    </body>
+            componentDidMount() {
+                setInterval(this.timerTick, 1000);
+            }
+
+            render() {
+                return (
+                    <h1>{this.state.strikes}</h1>
+                );
+            }
+        }
+
+        class LightningCounterDisplay extends React.Component {
+            render() {
+                var divStyle = {
+                    width: 250,
+                    textAlign: "center",
+                    backgroundColor: "black",
+                    padding: 40,
+                    fontFamily: "sans-serif",
+                    color: "#999",
+                    borderRadius: 10
+                };
+
+                return (
+                    <div style={divStyle}>
+                        <LightningCounter />
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <LightningCounterDisplay />,
+            document.querySelector("#container")
+        );
+    </script>
+</body>
+
 </html>

@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8" />
     <title>From Data to UI</title>
-    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
     <style>
         body {
             background-color: #FFCC00;
         }
+
         h1 {
             font-family: 'Carrois Gothic', sans-serif;
             text-align: center;
@@ -19,10 +20,11 @@
             font-size: 60px;
             margin: -15px;
         }
+
         p {
             font-family: sans-serif;
             color: #907400;
-            text-align:center;
+            text-align: center;
         }
     </style>
 </head>
@@ -58,7 +60,7 @@
 
             componentDidMount() {
                 xhr = new XMLHttpRequest();
-                xhr.open('GET', "https://ipinfo.io/json", true);
+                xhr.open('GET', "https://api.ipify.org?format=json", true);
                 xhr.send();
 
                 xhr.addEventListener("readystatechange", this.processRequest, false);
@@ -73,17 +75,17 @@
                     });
                 }
             }
-            
+
             render() {
                 return (
-                    <IPAddress ip={this.state.ip_address}/>
+                    <IPAddress ip={this.state.ip_address} />
                 );
             }
         };
 
         ReactDOM.render(
             <div>
-                <IPAddressContainer/>
+                <IPAddressContainer />
             </div>,
             destination
         );
