@@ -4,12 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>The Colorizer!</title>
-  <script crossorigin 
-          src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script crossorigin 
-          src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-  <script crossorigin
-          src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
   <style>
     #container {
@@ -57,7 +54,7 @@
 <body>
 
   <h1 id="colorHeading">Colorizer</h1>
-  
+
   <div id="container"></div>
   <script type="text/babel">
 
@@ -65,7 +62,7 @@
 
     class Colorizer extends React.Component {
       constructor(props, context) {
-	  	  super(props, context);
+        super(props, context);
 
         this.state = {
           color: "",
@@ -77,10 +74,10 @@
       }
 
       colorValue(e) {
-        this.setState({color: e.target.value});
+        this.setState({ color: e.target.value });
       }
-      
-      setNewColor(e){
+
+      setNewColor(e) {
         this.setState({
           bgColor: this.state.color
         });
@@ -103,16 +100,16 @@
             <div style={squareStyle} className="colorSquare"></div>
 
             <form onSubmit={this.setNewColor}>
-              <input onChange={this.colorValue} 
-                      ref={
-                        function(el) {
-                          self._input = el;
-                        }
-                      }
-                      placeholder="Enter a color value"></input>
+              <input onChange={this.colorValue}
+                ref={
+                  function (el) {
+                    self._input = el;
+                  }
+                }
+                placeholder="Enter a color value"></input>
               <button type="submit">go</button>
             </form>
-            <ColorLabel color={this.state.bgColor}/>
+            <ColorLabel color={this.state.bgColor} />
           </div>
         );
       }
@@ -131,7 +128,7 @@
 
     ReactDOM.render(
       <div>
-        <Colorizer/>
+        <Colorizer />
       </div>,
       destination
     );

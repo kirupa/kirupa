@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8" />
-<title>Lifecycle : Simple Counter</title>
-<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-<style>
+<head>
+  <meta charset="UTF-8" />
+  <title>Lifecycle : Simple Counter</title>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <style>
     #container {
       padding: 50px;
       background-color: #FFF;
     }
+
     h1 {
       font-family: sans-serif;
       font-size: 72;
@@ -23,9 +25,10 @@
     }
   </style>
 </head>
+
 <body>
   <div id="container"></div>
-  
+
   <script type="text/babel">
     class SimpleCounter extends React.Component {
       constructor(props) {
@@ -42,8 +45,8 @@
 
       timerTick() {
         this.setState((prevState) => {
-          return { 
-            count: prevState.count + 1 
+          return {
+            count: prevState.count + 1
           };
         });
       }
@@ -70,7 +73,7 @@
 
       render() {
         console.log("SimpleCounter render call!");
-        
+
         return (
           <h1>{this.state.count}</h1>
         );

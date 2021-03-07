@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>Todo Example</title>
-    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
     <style>
@@ -14,11 +14,13 @@
             background-color: #66CCFF;
             font-family: sans-serif;
         }
+
         .todoListMain .header input {
             padding: 10px;
             font-size: 16px;
             border: 2px solid #FFF;
         }
+
         .todoListMain .header button {
             padding: 10px;
             font-size: 16px;
@@ -27,22 +29,22 @@
             color: #FFF;
             border: 2px solid #0066FF;
         }
-    
+
         .todoListMain .header button:hover {
             background-color: #003399;
             border: 2px solid #003399;
             cursor: pointer;
         }
-    
+
         .todoListMain .theList {
             list-style: none;
             padding-left: 0;
             width: 255px;
         }
-    
+
         .todoListMain .theList li {
             color: #333;
-            background-color: rgba(255,255,255,.5);
+            background-color: rgba(255, 255, 255, .5);
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 5px;
@@ -55,18 +57,18 @@
 
     <script type="text/babel">
         var destination = document.querySelector("#container");
-    
+
         class TodoItems extends React.Component {
             render() {
                 var todoEntries = this.props.entries;
-        
+
                 var listItems = [];
-        
+
                 for (var i = 0; i < todoEntries.length; i++) {
                     var entry = todoEntries[i];
                     listItems.push(<li key={"item" + i}>{entry}</li>);
                 }
-        
+
                 return (
                     <ul className="theList">
                         {listItems}
@@ -74,7 +76,7 @@
                 );
             }
         };
-    
+
         class TodoList extends React.Component {
             constructor(props, context) {
                 super(props, context);
@@ -104,26 +106,26 @@
             addItem(e) {
                 var itemArray = this.state.items;
                 itemArray.push(this.state.textValue);
-        
+
                 this.setState({
                     items: itemArray
                 });
-        
+
                 this._inputElement.value = "";
             }
 
             render() {
                 return (
                     <div className="todoListMain">
-                    <div className="header">
-                        <input ref={(a) => this._inputElement = a}
+                        <div className="header">
+                            <input ref={(a) => this._inputElement = a}
                                 onKeyPress={this.addItemEnter}
                                 placeholder="enter task"
                                 onChange={this.updateValue}>
-                        </input>
-                        <button onClick={this.addItem}>add</button>
-                    </div>
-                        <TodoItems entries={this.state.items}/>
+                            </input>
+                            <button onClick={this.addItem}>add</button>
+                        </div>
+                        <TodoItems entries={this.state.items} />
                     </div>
                 );
             }
@@ -131,7 +133,7 @@
 
         ReactDOM.render(
             <div>
-                <TodoList/>
+                <TodoList />
             </div>,
             destination
         );

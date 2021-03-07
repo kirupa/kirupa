@@ -1,60 +1,63 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Favorite Colors!</title>
-    <script src="https://unpkg.com/redux@latest/dist/redux.js"></script>
-  </head>
-  <body>
-    <script>
-      // action creators
-      function addColor(value) {
-        return {
-          type: "ADD",
-          color: value
-        }
+
+<head>
+  <meta charset="utf-8">
+  <title>Favorite Colors!</title>
+  <script crossorigin src="https://unpkg.com/redux@latest/dist/redux.js"></script>
+</head>
+
+<body>
+  <script>
+    // action creators
+    function addColor(value) {
+      return {
+        type: "ADD",
+        color: value
+      }
+    }
+
+    function removeColor(value) {
+      return {
+        type: "REMOVE",
+        color: value
+      }
+    }
+
+    // our reducer
+    function favoriteColors(state, action) {
+      if (state === undefined) {
+        state = [];
       }
 
-      function removeColor(value) {
-        return {
-          type: "REMOVE",
-          color: value
-        }
+      if (action.type == "ADD") {
+        return state.concat(action.color);
+      } else if (action.type == "REMOVE") {
+        return state.filter(function (item) {
+          return item !== action.color;
+        });
+      } else {
+        return state;
       }
+    }
 
-      // our reducer
-      function favoriteColors(state, action) {
-        if (state === undefined) {
-          state = [];
-        }
+    // the store
+    var store = Redux.createStore(favoriteColors);
+    store.subscribe(render);
 
-        if (action.type == "ADD") {
-          return state.concat(action.color);
-        } else if (action.type == "REMOVE") {
-          return state.filter(function(item) {
-            return item !== action.color;
-          });
-        } else {
-          return state;
-        }
-      }
+    function render() {
+      console.log(store.getState());
+    }
 
-      // the store
-      var store = Redux.createStore(favoriteColors);
-      store.subscribe(render);
+    // make changes!
+    store.dispatch(addColor("blue"));
+    store.dispatch(addColor("yellow"));
+    store.dispatch(addColor("green"));
+    store.dispatch(addColor("red"));
+    store.dispatch(addColor("gray"));
+    store.dispatch(addColor("orange"));
+    store.dispatch(removeColor("gray"));
+  </script>
+</body>
 
-      function render() {
-        console.log(store.getState());
-      }
-
-      // make changes!
-      store.dispatch(addColor("blue"));
-      store.dispatch(addColor("yellow"));
-      store.dispatch(addColor("green"));
-      store.dispatch(addColor("red"));
-      store.dispatch(addColor("gray"));
-      store.dispatch(addColor("orange"));
-      store.dispatch(removeColor("gray"));
-    </script>
-  </body>
 </html>

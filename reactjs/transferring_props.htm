@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Transferring Props</title>
-  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>    
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
   <style>
-   #container {
-     padding: 50px;
-     background-color: #FFF;
-   }
+    #container {
+      padding: 50px;
+      background-color: #FFF;
+    }
   </style>
 </head>
 
@@ -21,7 +21,7 @@
   <script type="text/babel">
     class Display extends React.Component {
       render() {
-        return(
+        return (
           <div>
             <p>{this.props.color}</p>
             <p>{this.props.num}</p>
@@ -34,24 +34,24 @@
     class Label extends React.Component {
       render() {
         return (
-          <Display {...this.props}/>
+          <Display {...this.props} />
         );
       }
     }
 
     class Shirt extends React.Component {
       render() {
-          return (
-            <div>
-              <Label {...this.props}/>
-            </div>
-          );
-        }
+        return (
+          <div>
+            <Label {...this.props} />
+          </div>
+        );
+      }
     }
 
     ReactDOM.render(
       <div>
-        <Shirt color="steelblue" num="3.14" size="medium"/>
+        <Shirt color="steelblue" num="3.14" size="medium" />
       </div>,
       document.querySelector("#container")
     );
