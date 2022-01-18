@@ -3,7 +3,9 @@
 // Details: https://www.kirupa.com/html5/generating_random_colors.htm
 // -------
 // Feel free to use this code as you see fit for any type of content. If you have
-// questions, post on https://forum.kirupa.com
+// questions, post on: https://forum.kirupa.com
+//
+// Source: https://github.com/kirupa/kirupa/blob/master/js/randomColor.js
 //
 //
 function getRandomColor(h, s, l, a) {
