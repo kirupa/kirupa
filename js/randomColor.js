@@ -9,10 +9,10 @@
 //
 //
 function getRandomColor(h, s, l, a) {
-  var hue = getRandomNumber(h[0], h[1]);
-  var saturation = getRandomNumber(s[0], s[1]);
-  var lightness = getRandomNumber(l[0], l[1]);
-  var alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
+  let hue = getRandomNumber(h[0], h[1]);
+  let saturation = getRandomNumber(s[0], s[1]);
+  let lightness = getRandomNumber(l[0], l[1]);
+  let alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
 
   return {
     h: hue,
@@ -24,7 +24,7 @@ function getRandomColor(h, s, l, a) {
 }
 
 function getRandomNumber(low, high) {
-  var r = Math.floor(Math.random() * (high - low + 1)) + low;
+  let r = Math.floor(Math.random() * (high - low + 1)) + low;
   return r;
 }
 
@@ -33,10 +33,10 @@ function getHSLAColor(h, s, l, a) {
 }
 
 function getSimpleRandomColor() {
-  var characters = "0123456789ABCDEF";
-  var color = '#';
+  let characters = "0123456789ABCDEF";
+  let color = '#';
 
-  for (var i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i++) {
     color += characters[getRandomNumber(0, 15)];
   }
   
