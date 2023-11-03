@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>Custom Search JSON API Example</title>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script>
+      function hndlr(response) {
+      for (var i = 0; i < response.items.length; i++) {
+        var item = response.items[i];
+        // Make sure HTML in item.htmlTitle is escaped.
+        document.getElementById("content").append(
+          document.createElement("br"),
+          document.createTextNode(item.htmlTitle)
+        );
+      }
+    }
+    </script>
+    <script src="https://www.googleapis.com/customsearch/v1?key=AIzaSyClC2YSglIQiXv_ay-a7RB8FFN6WTOIaP0&cx=634e3d07b17bd4e44&q=quicksort&callback=hndlr">
+    </script>
+  </body>
+</html>
