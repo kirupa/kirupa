@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Draw a Polygon</title>
+  <title>Draw Any n-sided (Polygon) Shape!</title>
 
   <style>
     #myCanvas {
-      border: 2px solid black;
+      border: 2px solid #CCC;
     }
   </style>
 </head>
@@ -23,7 +23,10 @@
       ctx.beginPath();
 
       for (let i = 0; i < sides; i++) {
+        // Calculate the angle between each point
         const angle = (i * 2 * Math.PI / sides) + rotation;
+
+        // Plot the point on our circle
         const x = centerX + radius * Math.cos(angle);
         const y = centerY + radius * Math.sin(angle);
 
@@ -34,21 +37,25 @@
         }
       }
 
-      ctx.lineWidth = 5;
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "#B12339";
+      ctx.fillStyle = "#E75A70";
+
       ctx.closePath();
+
+      ctx.fill();
       ctx.stroke();
     }
 
-    // Get the canvas element and its 2d context
     const canvas = document.querySelector("#myCanvas");
     const ctx = canvas.getContext("2d");
 
     // Parameters for the polygon
-    const sides = 3;
+    const sides = 5;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = 150;
-    const rotation = Math.PI / 4;
+    const rotation = 0;
 
     drawPolygon(ctx, centerX, centerY, sides, radius, rotation);
   </script>
