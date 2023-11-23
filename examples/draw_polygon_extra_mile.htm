@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Any n-sided (Polygon) Shape!</title>
+
+    <style>
+        #myCanvas {
+            border: 2px solid #CCC;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas width="500" height="500" id="myCanvas"></canvas>
+
+    <script>
+        function drawPolygon(ctx, centerX, centerY, sides, radius, rotation, style) {
+            ctx.beginPath();
+
+            for (let i = 0; i < sides; i++) {
+                // Calculate the angle between each point
+                const angle = (i * 2 * Math.PI / sides) + rotation;
+
+                // Plot the point on our circle
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+
+            ctx.lineWidth = style.width;
+            ctx.strokeStyle = style.stroke;
+            ctx.fillStyle = style.fill;
+
+            ctx.closePath();
+
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        const canvas = document.querySelector("#myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Parameters for the polygon
+        const sides = 5;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 150;
+        const rotation = 0;
+
+        // Going the extra mile and specifying the style
+        const style = { stroke: "#AA8E00", fill: "#FFD500", width: 10 };
+
+        drawPolygon(ctx, centerX, centerY, sides, radius, rotation, style);
+    </script>
+
+</body>
+
+</html>
