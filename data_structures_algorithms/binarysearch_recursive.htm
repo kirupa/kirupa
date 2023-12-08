@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Search (Recursive)</title>
+</head>
+
+<body>
+  <script>
+    function binarySearch(arr, val, start = 0, end = arr.length - 1) {
+      const middleIndex = Math.floor((start + end) / 2);
+
+      if (val === arr[middleIndex]) {
+        return middleIndex;
+      }
+
+      if (start >= end) {
+        return -1;
+      }
+
+      if (val < arr[middleIndex]) {
+        return binarySearch(arr, val, start, middleIndex - 1);
+      } else {
+        return binarySearch(arr, val, middleIndex + 1, end);
+      }
+    }
+
+    let numbers = [1, 3, 5, 10, 32, 40, 60, 71, 80, 99];
+
+    let foundIndex = binarySearch(numbers, 60);
+    console.log(foundIndex) // 6
+  </script>
+</body>
+
+</html>

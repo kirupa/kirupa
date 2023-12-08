@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Follow Mouse</title>
+  <style>
+    canvas {
+      border: #333 10px solid;
+    }
+
+    body {
+      padding: 50px;
+    }
+
+    #coordinates {
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="myCanvas" width="550px" height="350px"></canvas>
+
+  <p id="coordinates">Coordinates go here</p>
+
+  <script>
+    var canvas = document.querySelector("#myCanvas");
+    var context = canvas.getContext("2d");
+
+    var coordinates = document.querySelector("#coordinates");
+
+    function getPosition(el) {
+      var xPosition = 0;
+      var yPosition = 0;
+
+      while (el) {
+        xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+        yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
+        el = el.offsetParent;
+      }
+      return {
+        x: xPosition,
+        y: yPosition
+      };
+    }
+
+    var canvasPos = getPosition(canvas);
+    var mouseX = 0;
+    var mouseY = 0;
+
+    canvas.addEventListener("mousemove", setMousePosition, false);
+
+    function setMousePosition(e) {
+      mouseX = e.clientX - canvasPos.x;
+      mouseY = e.clientY - canvasPos.y;
+    }
+
+    function update() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      context.beginPath();
+      context.arc(mouseX, mouseY, 50, 0, 2 * Math.PI, true);
+      context.fillStyle = "#FF6A6A";
+      context.fill();
+
+      requestAnimationFrame(update);
+
+      coordinates.innerHTML = "Mouse position: (" + mouseX + ", " + mouseY + ")";
+    }
+    update();
+
+  </script>
+
+</body>
+
+</html>
