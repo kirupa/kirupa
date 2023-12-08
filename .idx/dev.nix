@@ -13,6 +13,10 @@
         manager = "web";
         id = "web";
       }
+      {
+        id = "ios";
+        manager = "ios";
+      }
     ];
   };
 }
