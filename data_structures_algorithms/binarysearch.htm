@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Search (Iterative)</title>
+</head>
+
+<body>
+  <script>
+    // Iterative Approach
+    function binarySearch(arr, val) {
+      let start = 0;
+      let end = arr.length - 1;
+
+      while (start <= end) {
+        let middleIndex = Math.floor((start + end) / 2);
+
+        if (arr[middleIndex] === val) {
+          return middleIndex;
+        } else if (arr[middleIndex] < val) {
+          start = middleIndex + 1;
+        } else {
+          end = middleIndex - 1;
+        }
+      }
+
+      return -1;
+    }
+
+    let numbers = [1, 3, 5, 10, 32, 40, 60, 71, 80, 99];
+
+    let foundIndex = binarySearch(numbers, 60);
+    console.log(foundIndex) // 6
+  </script>
+</body>
+
+</html>
