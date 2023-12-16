@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queues in JavaScript</title>
+</head>
+
+<body>
+  <!-- This queue implementation uses a LinkedList! You can learn
+        more about the linked list form here: 
+        https://www.kirupa.com/data_structures_algorithms/linked_list.htm -->
+  <script src="https://www.kirupa.com/js/linkedlist_v1.js"></script>
+  <script>
+    class Queue {
+      constructor() {
+        this.items = new LinkedList();
+      }
+      clear() {
+        this.items = new LinkedList();
+      }
+      contains(item) {
+        return this.items.contains(item);
+      }
+      peek() {
+        return this.items.head.data;
+      }
+      dequeue() {
+        let removedItem = this.items.head.data;
+
+        this.items.removeFirst();
+        return removedItem;
+      }
+      enqueue(item) {
+        this.items.addLast(item);
+      }
+      get length() {
+        return this.items.length;
+      }
+    }
+
+    // create new Queue object
+    let myQ = new Queue();
+
+    // add two items
+    myQ.enqueue("Item 1");
+    myQ.enqueue("Item 2");
+
+    // remove item
+    let removedItem = myQ.dequeue();  // returns Item 1
+
+    console.log(myQ); // Item 2
+  </script>
+</body>
+
+</html>
