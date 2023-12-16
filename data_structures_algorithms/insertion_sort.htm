@@ -18,8 +18,11 @@
         // Store the current element in the activeNumber variable
         activeNumber = input[i];
 
+        // Declaring the variable for the inner loop
+        let j;
+        
         // Inner loop to compare the activeNumber with the elements before it
-        for (let j = i - 1; j >= 0; j--) {
+        for (j = i - 1; j >= 0; j--) {
           if (input[j] > activeNumber) {
             // Move the greater element one position ahead to make space 
             // for the activeNumber
@@ -38,7 +41,7 @@
     let myinput = [24, 10, 17, 9, 5, 9, 1, 23, 300];
     insertionSort(myinput);
 
-    alert(myinput);
+    console.log(myinput);
   </script>
 </body>
 
