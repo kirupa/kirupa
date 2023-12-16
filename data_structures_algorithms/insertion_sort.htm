@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insertion Sort</title>
+</head>
+
+<body>
+  <script>
+    function insertionSort(input) {
+      // Variable to store the current element being compared
+      let activeNumber;
+
+      // Loop through the array starting from the second element (index 1)
+      for (let i = 1; i < input.length; i++) {
+        // Store the current element in the activeNumber variable
+        activeNumber = input[i];
+
+        // Inner loop to compare the activeNumber with the elements before it
+        for (let j = i - 1; j >= 0; j--) {
+          if (input[j] > activeNumber) {
+            // Move the greater element one position ahead to make space 
+            // for the activeNumber
+            input[j + 1] = input[j];
+          } else {
+            // If we find an element that is smaller than or 
+            // equal to the activeNumber, exit the inner loop
+            break;
+          }
+        }
+        // Place the activeNumber in its correct sorted position
+        input[j + 1] = activeNumber;
+      }
+    }
+
+    let myinput = [24, 10, 17, 9, 5, 9, 1, 23, 300];
+    insertionSort(myinput);
+
+    alert(myinput);
+  </script>
+</body>
+
+</html>
