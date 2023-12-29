@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dealing with State</title>
-  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
   <style>
@@ -21,15 +21,15 @@
   <script type="text/babel">
     class LightningCounter extends React.Component {
       constructor(props, context) {
-            super(props, context);
-            
-            this.state = {
-                strikes: 0
-            };
+        super(props, context);
 
-            this.timerTick = this.timerTick.bind(this);
+        this.state = {
+          strikes: 0
+        };
+
+        this.timerTick = this.timerTick.bind(this);
       }
-      
+
       timerTick = () => {
 
         this.setState({
@@ -56,49 +56,49 @@
     }
 
     class LightningCounterDisplay extends React.Component {
-        render() {
-          var commonStyle = {
-            margin: 0,
-            padding: 0
-          }
-          var divStyle = {
-            width: 250,
-            textAlign: "center",
-            backgroundColor: "#020202",
-            padding: 40,
-            fontFamily: "sans-serif",
-            color: "#999999",
-            borderRadius: 10
-          };
-
-          var textStyles = {
-            emphasis: {
-              fontSize: 38,
-              ...commonStyle
-            },
-            smallEmphasis: {
-              ...commonStyle
-            },
-            small: {
-              fontSize: 17,
-              opacity: 0.5,
-              ...commonStyle
-            }
-          }
-
-          return(
-            <div style={divStyle}>
-              <LightningCounter/>
-              <h2 style={textStyles.smallEmphasis}>LIGHTNING STRIKES</h2>
-              <h2 style={textStyles.emphasis}>WORLDWIDE</h2>
-              <p style={textStyles.small}>(since you loaded this example)</p>
-            </div>
-          );
+      render() {
+        var commonStyle = {
+          margin: 0,
+          padding: 0
         }
+        var divStyle = {
+          width: 250,
+          textAlign: "center",
+          backgroundColor: "#020202",
+          padding: 40,
+          fontFamily: "sans-serif",
+          color: "#999999",
+          borderRadius: 10
+        };
+
+        var textStyles = {
+          emphasis: {
+            fontSize: 38,
+            ...commonStyle
+          },
+          smallEmphasis: {
+            ...commonStyle
+          },
+          small: {
+            fontSize: 17,
+            opacity: 0.5,
+            ...commonStyle
+          }
+        }
+
+        return (
+          <div style={divStyle}>
+            <LightningCounter />
+            <h2 style={textStyles.smallEmphasis}>LIGHTNING STRIKES</h2>
+            <h2 style={textStyles.emphasis}>WORLDWIDE</h2>
+            <p style={textStyles.small}>(since you loaded this example)</p>
+          </div>
+        );
+      }
     }
 
     ReactDOM.render(
-      <LightningCounterDisplay/>,
+      <LightningCounterDisplay />,
       document.querySelector("#container")
     );
   </script>
