@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starfield Example</title>
+  <style>
+    #outerspace {
+
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="outerspace" height="500" width="500"></canvas>
+
+  <script>
+    let outerspace = document.querySelector("#outerspace");
+    let mainContext = mainCanvas.getContext('2d');
+
+    var canvasWidth = mainCanvas.width;
+    var canvasHeight = mainCanvas.height;
+
+    var angle = 0;
+
+    var requestAnimationFrame = window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.msRequestAnimationFrame;
+
+    function drawCircle() {
+      mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      // color in the background
+      mainContext.fillStyle = "#111";
+      mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      // draw the circle
+      mainContext.beginPath();
+
+      var radius = 25 + 150 * Math.abs(Math.cos(angle));
+      mainContext.arc(225, 225, radius, 0, Math.PI * 2, false);
+      mainContext.closePath();
+
+      // color in the circle
+      mainContext.fillStyle = "#006699";
+      mainContext.fill();
+
+      angle += Math.PI / 64;
+
+      requestAnimationFrame(drawCircle);
+    }
+    drawCircle();
+  </script>
+</body>
+
+</html>
