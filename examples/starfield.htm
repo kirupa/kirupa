@@ -17,41 +17,49 @@
 
   <script>
     let outerspace = document.querySelector("#outerspace");
-    let mainContext = mainCanvas.getContext('2d');
+    let mainContext = outerspace.getContext('2d');
 
-    var canvasWidth = mainCanvas.width;
-    var canvasHeight = mainCanvas.height;
+    let canvasWidth = outerspace.width;
+    let canvasHeight = outerspace.height;
 
-    var angle = 0;
+    class Star {
+      constructor() {
+        this.x = getRandomInt(-1 * canvasWidth, canvasHeight);
+        this.y = getRandomInt(-1 * canvasWidth, canvasHeight);
+        this.z = Math.random() * canvasWidth;
+        this.pz = this.z;
+        this.context = mainContext;
+      }
 
-    var requestAnimationFrame = window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.msRequestAnimationFrame;
+      draw() {
+        mainContext.beginPath();
 
-    function drawCircle() {
+        let radius = 1 + Math.random() * 5;
+        mainContext.arc(Math.random() * 500, Math.random() * 500, radius, 0, Math.PI * 2, false);
+        mainContext.closePath();
+
+        mainContext.fillStyle = "#FFF";
+        mainContext.fill();
+      }
+    }
+
+    function drawStars() {
       mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
       // color in the background
       mainContext.fillStyle = "#111";
       mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
 
-      // draw the circle
-      mainContext.beginPath();
-
-      var radius = 25 + 150 * Math.abs(Math.cos(angle));
-      mainContext.arc(225, 225, radius, 0, Math.PI * 2, false);
-      mainContext.closePath();
-
-      // color in the circle
-      mainContext.fillStyle = "#006699";
-      mainContext.fill();
-
-      angle += Math.PI / 64;
-
-      requestAnimationFrame(drawCircle);
+      for(let i = 0; i < 100; i++) {
+        let star = new Star();
+        star.draw();
+      }
     }
-    drawCircle();
+    drawStars();
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
   </script>
 </body>
 
