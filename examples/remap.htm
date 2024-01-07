@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remap</title>
+</head>
+
+<body>
+  <script>
+    function remap(value, istart, istop, ostart, ostop) {
+      // Ensure values are numerical to avoid potential errors
+      value = Number(value);
+      istart = Number(istart);
+      istop = Number(istop);
+      ostart = Number(ostart);
+      ostop = Number(ostop);
+
+      // Perform the mapping calculation
+      return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+    }
+
+    console.log(remap(150, 0, 100, 0, 2000)); // 3000
+  </script>
+</body>
+
+</html>
