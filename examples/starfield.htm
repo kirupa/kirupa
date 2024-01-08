@@ -7,13 +7,13 @@
   <title>Starfield Example</title>
   <style>
     #outerspace {
-
+      border-radius: 10px;
     }
   </style>
 </head>
 
 <body>
-  <canvas id="outerspace" height="500" width="500"></canvas>
+  <canvas id="outerspace" height="600" width="600"></canvas>
 
   <script>
     let outerspace = document.querySelector("#outerspace");
@@ -22,20 +22,46 @@
     let canvasWidth = outerspace.width;
     let canvasHeight = outerspace.height;
 
+    let stars = [];
+
     class Star {
       constructor() {
-        this.x = getRandomInt(-1 * canvasWidth, canvasHeight);
-        this.y = getRandomInt(-1 * canvasWidth, canvasHeight);
-        this.z = Math.random() * canvasWidth;
-        this.pz = this.z;
+        this.x = getRandomInt(-1 * canvasWidth, canvasWidth);
+        this.y = getRandomInt(-1 * canvasHeight, canvasHeight);
+        this.z = getRandomInt(1, canvasHeight);
+
         this.context = mainContext;
+
+        this.radiusMax = 1 + Math.random() * 10;
+
+        this.speed = getRandomInt(1, 5) / 2;
+      }
+
+      update() {
+        this.z -= this.speed
+
+        if (this.z < 1) {
+          this.z = canvasWidth;
+          this.x = getRandomInt(-1 * canvasWidth, canvasHeight);
+          this.y = getRandomInt(-1 * canvasWidth, canvasHeight);
+
+          this.speed = getRandomInt(1, 5) / 2;
+          this.radiusMax = 1 + Math.random() * 10;
+        }
       }
 
       draw() {
         mainContext.beginPath();
 
-        let radius = 1 + Math.random() * 5;
-        mainContext.arc(Math.random() * 500, Math.random() * 500, radius, 0, Math.PI * 2, false);
+        let xRatio = this.x / this.z;
+        let yRatio = this.y / this.z;
+
+        let starX = remap(xRatio, 0, 1, 0, canvasWidth);
+        let starY = remap(yRatio, 0, 1, 0, canvasHeight);
+
+        this.radius = remap(this.z, 0, canvasWidth, this.radiusMax, 0);
+
+        mainContext.arc(starX, starY, this.radius, 0, Math.PI * 2, false);
         mainContext.closePath();
 
         mainContext.fillStyle = "#FFF";
@@ -43,22 +69,49 @@
       }
     }
 
+    function setup() {
+      for (let i = 0; i < 2000; i++) {
+        let star = new Star();
+        stars.push(star);
+      }
+    }
+    setup();
+
     function drawStars() {
+
       mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
       // color in the background
       mainContext.fillStyle = "#111";
       mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
 
-      for(let i = 0; i < 100; i++) {
-        let star = new Star();
+      mainContext.translate(canvasWidth / 2, canvasHeight / 2);
+
+      for (let i = 0; i < stars.length; i++) {
+        let star = stars[i];
+        star.update();
         star.draw();
       }
+
+      mainContext.translate(-canvasWidth / 2, -canvasHeight / 2);
+      requestAnimationFrame(drawStars);
     }
     drawStars();
 
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function remap(value, istart, istop, ostart, ostop) {
+      // Ensure values are numerical to avoid potential errors
+      value = Number(value);
+      istart = Number(istart);
+      istop = Number(istop);
+      ostart = Number(ostart);
+      ostop = Number(ostop);
+
+      // Perform the mapping calculation
+      return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
     }
   </script>
 </body>
