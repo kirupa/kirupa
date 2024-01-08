@@ -16,29 +16,36 @@
   <canvas id="outerspace" height="600" width="600"></canvas>
 
   <script>
+    // Get the canvas element and its 2d rendering context
     let outerspace = document.querySelector("#outerspace");
     let mainContext = outerspace.getContext('2d');
 
+    // Get the width and height of the canvas
     let canvasWidth = outerspace.width;
     let canvasHeight = outerspace.height;
 
+    // Array to store star objects
     let stars = [];
 
+    // Define the Star class
     class Star {
       constructor() {
+        // Initialize star's position and depth
         this.x = getRandomInt(-1 * canvasWidth, canvasWidth);
         this.y = getRandomInt(-1 * canvasHeight, canvasHeight);
         this.z = getRandomInt(1, canvasHeight);
 
+        // Set the rendering context
         this.context = mainContext;
 
+        // Set maximum radius and speed for the star
         this.radiusMax = 1 + Math.random() * 10;
-
         this.speed = getRandomInt(1, 5) / 2;
       }
 
+      // Update the star's position and reset if it goes out of the canvas
       update() {
-        this.z -= this.speed
+        this.z -= this.speed;
 
         if (this.z < 1) {
           this.z = canvasWidth;
@@ -50,25 +57,31 @@
         }
       }
 
+      // Draw the star on the canvas
       draw() {
         mainContext.beginPath();
 
+        // Calculate the position of the star on the canvas
         let xRatio = this.x / this.z;
         let yRatio = this.y / this.z;
 
         let starX = remap(xRatio, 0, 1, 0, canvasWidth);
         let starY = remap(yRatio, 0, 1, 0, canvasHeight);
 
+        // Calculate the radius based on the depth
         this.radius = remap(this.z, 0, canvasWidth, this.radiusMax, 0);
 
+        // Draw the star as a filled circle
         mainContext.arc(starX, starY, this.radius, 0, Math.PI * 2, false);
         mainContext.closePath();
 
+        // Set the fill color to white
         mainContext.fillStyle = "#FFF";
         mainContext.fill();
       }
     }
 
+    // Function to initialize stars and populate the stars array
     function setup() {
       for (let i = 0; i < 2000; i++) {
         let star = new Star();
@@ -77,31 +90,39 @@
     }
     setup();
 
+    // Function to draw stars on the canvas and animate them
     function drawStars() {
-
+      // Clear the canvas
       mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      // color in the background
+      // Fill the background with a dark color
       mainContext.fillStyle = "#111";
       mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
 
+      // Translate the coordinate system to the center of the canvas
       mainContext.translate(canvasWidth / 2, canvasHeight / 2);
 
+      // Loop through the stars, update and draw each one
       for (let i = 0; i < stars.length; i++) {
         let star = stars[i];
         star.update();
         star.draw();
       }
 
+      // Reset the translation to the original coordinate system
       mainContext.translate(-canvasWidth / 2, -canvasHeight / 2);
+
+      // Request the next animation frame
       requestAnimationFrame(drawStars);
     }
     drawStars();
 
+    // Function to get a random integer between min and max (inclusive)
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    // Function to remap a value from one range to another
     function remap(value, istart, istop, ostart, ostop) {
       // Ensure values are numerical to avoid potential errors
       value = Number(value);
