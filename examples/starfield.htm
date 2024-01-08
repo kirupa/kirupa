@@ -59,6 +59,10 @@
 
       // Draw the star on the canvas
       draw() {
+        // Adjust the position of our stars
+        this.update();
+
+        // Begin drawing our ellipse (aka star)
         mainContext.beginPath();
 
         // Calculate the position of the star on the canvas
@@ -105,7 +109,6 @@
       // Loop through the stars, update and draw each one
       for (let i = 0; i < stars.length; i++) {
         let star = stars[i];
-        star.update();
         star.draw();
       }
 
