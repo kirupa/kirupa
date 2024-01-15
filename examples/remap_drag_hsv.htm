@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, 
+        initial-scale=1.0, 
+        user-scalable=no" />
+  <title>Drag/Drop/Bounce</title>
+  <style>
+    #container {
+      --hueValue: 245;
+      width: 100%;
+      height: 400px;
+      background-color: oklch(65% 0.202 var(--hueValue));
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      overflow: hidden;
+      border-radius: 7px;
+      touch-action: none;
+    }
+
+    #item {
+      width: 100px;
+      height: 100px;
+      background-color: rgb(245, 230, 99);
+      border: 10px solid rgba(136, 136, 136, .5);
+      border-radius: 50%;
+      touch-action: none;
+      user-select: none;
+      left: 0px;
+
+      display: grid;
+      place-content: center;
+    }
+
+    #item:active {
+      background-color: rgba(168, 218, 220, 1.00);
+    }
+
+    #item:hover {
+      cursor: pointer;
+      border-width: 20px;
+    }
+
+    p {
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 24px;
+      pointer-events: none;
+    }
+    
+    #huePrint {
+      color: #111;
+      background-color: rgb(245, 230, 99);
+      padding: 10px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="outerContainer">
+    <div id="container">
+      <div id="item">
+        <p id="position">0px</p>
+      </div>
+    </div>
+
+    <p class="fadedText">Hue value is: <span id="huePrint">???</span></p>
+  </div>
+
+  <script>
+    var dragItem = document.querySelector("#item");
+    var container = document.querySelector("#container");
+    let positionField = document.querySelector("#position");
+
+    let huePrint = document.querySelector("#huePrint");
+
+    var active = false;
+    var currentX;
+    var currentY;
+    var initialX;
+    var initialY;
+    var xOffset = 0;
+    var yOffset = 0;
+
+    container.addEventListener("pointerdown", dragStart, false);
+    container.addEventListener("pointerup", dragEnd, false);
+    container.addEventListener("pointermove", drag, false);
+
+    let containerWidth = getComputedStyle(container).width.split("px")[0];
+
+
+    function dragStart(e) {
+      if (e.type === "touchstart") {
+        initialX = e.touches[0].clientX - xOffset;
+      } else {
+        initialX = e.clientX - xOffset;
+      }
+
+      if (e.target === dragItem) {
+        active = true;
+      }
+    }
+
+    function dragEnd(e) {
+      initialX = currentX;
+
+      active = false;
+    }
+
+    function drag(e) {
+      if (active) {
+
+        e.preventDefault();
+
+        if (e.type === "touchmove") {
+          currentX = e.touches[0].clientX - initialX;
+        } else {
+          currentX = e.clientX - initialX;
+        }
+
+        xOffset = currentX;
+
+        positionField.textContent = Math.round(xOffset) + "px";
+
+        setTranslate(currentX, dragItem);
+
+        let hueValue = remap(currentX, 0, containerWidth, 0, 360);
+        container.style.setProperty('--hueValue', hueValue);
+
+        huePrint.textContent = Math.round(hueValue);
+      }
+    }
+
+    function remap(value, istart, istop, ostart, ostop) {
+      // Ensure values are numerical to avoid potential errors
+      value = Number(value);
+      istart = Number(istart);
+      istop = Number(istop);
+      ostart = Number(ostart);
+      ostop = Number(ostop);
+
+      // Perform the mapping calculation
+      return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+    }
+
+
+    function setTranslate(xPos, el) {
+      el.style.transform = "translateX(" + xPos + "px)";
+    }
+  </script>
+</body>
+
+</html>
