@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, 
         initial-scale=1.0, 
         user-scalable=no" />
-  <title>Drag/Drop/Bounce</title>
+  <title>Remap Example Involving a Drag and Hue Value</title>
   <style>
+    body {
+      margin: 50px;
+    }
     #container {
       --hueValue: 245;
       width: 100%;
@@ -49,8 +52,8 @@
       font-size: 24px;
       pointer-events: none;
     }
-    
-    #huePrint {
+
+    .highlight {
       color: #111;
       background-color: rgb(245, 230, 99);
       padding: 10px;
@@ -68,7 +71,8 @@
       </div>
     </div>
 
-    <p class="fadedText">Hue value is: <span id="huePrint">???</span></p>
+    <p>Container width is: <span class="highlight" id="containerPrint">???</span></p>
+    <p>Hue value is: <span class="highlight" id="huePrint">???</span></p>
   </div>
 
   <script>
@@ -77,6 +81,7 @@
     let positionField = document.querySelector("#position");
 
     let huePrint = document.querySelector("#huePrint");
+    let containerPrint = document.querySelector("#containerPrint");
 
     var active = false;
     var currentX;
@@ -91,7 +96,7 @@
     container.addEventListener("pointermove", drag, false);
 
     let containerWidth = getComputedStyle(container).width.split("px")[0];
-
+    containerPrint.textContent = containerWidth + "px";
 
     function dragStart(e) {
       if (e.type === "touchstart") {
@@ -128,7 +133,8 @@
 
         setTranslate(currentX, dragItem);
 
-        let hueValue = remap(currentX, 0, containerWidth, 0, 360);
+        // The 50 offset is half the item's width
+        let hueValue = remap(currentX, -50, containerWidth - 50, 0, 360);
         container.style.setProperty('--hueValue', hueValue);
 
         huePrint.textContent = Math.round(hueValue);
