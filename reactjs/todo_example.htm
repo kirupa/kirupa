@@ -54,16 +54,16 @@
     <div id="container"></div>
 
     <script type="text/babel">
-        var destination = document.querySelector("#container");
+        let destination = document.querySelector("#container");
     
         class TodoItems extends React.Component {
             render() {
-                var todoEntries = this.props.entries;
+                let todoEntries = this.props.entries;
         
-                var listItems = [];
+                let listItems = [];
         
-                for (var i = 0; i < todoEntries.length; i++) {
-                    var entry = todoEntries[i];
+                for (let i = 0; i < todoEntries.length; i++) {
+                    let entry = todoEntries[i];
                     listItems.push(<li key={"item" + i}>{entry}</li>);
                 }
         
@@ -102,7 +102,7 @@
             }
 
             addItem(e) {
-                var itemArray = this.state.items;
+                let itemArray = this.state.items;
                 itemArray.push(this.state.textValue);
         
                 this.setState({

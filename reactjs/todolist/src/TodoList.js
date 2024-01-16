@@ -15,7 +15,7 @@ class TodoList extends Component {
   }
 
   addItem(e) {
-    var itemArray = this.state.items;
+    let itemArray = this.state.items;
 
     if (this._inputElement.value !== "") {    
       itemArray.unshift(
@@ -36,7 +36,7 @@ class TodoList extends Component {
   }
 
   deleteItem(key) {  
-    var filteredItems = this.state.items.filter(function (item) {    
+    let filteredItems = this.state.items.filter(function (item) {    
       return (item.key !== key);  
     }); 
 

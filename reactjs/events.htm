@@ -18,11 +18,11 @@
         <div id="container"></div>
         <script type="text/babel">
 
-            var destination = document.querySelector("#container");
+            let destination = document.querySelector("#container");
 
             class Counter extends React.Component {
                 render() {
-                    var textStyle = {
+                    let textStyle = {
                         fontSize: 72,
                         fontFamily: "sans-serif",
                         color: "#333",
@@ -49,7 +49,7 @@
                 }
 
                 increase(e) {
-                    var currentCount = this.state.count;
+                    let currentCount = this.state.count;
                     
                     if (e.shiftKey) {
                         currentCount += 10;
@@ -63,7 +63,7 @@
                 }
                 
                 render() {
-                    var backgroundStyle = {
+                    let backgroundStyle = {
                         padding: 50,
                         backgroundColor: "#FFC53A",
                         width: 250,
@@ -72,7 +72,7 @@
                         textAlign: "center"
                     };
                 
-                    var buttonStyle = {
+                    let buttonStyle = {
                         fontSize: "1em",
                         width: 30,
                         height: 30,

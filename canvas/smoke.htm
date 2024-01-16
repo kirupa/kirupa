@@ -24,10 +24,10 @@
   </div>
  
   <script>
-    var mainCanvas = document.querySelector("#myCanvas");
-    var mainContext = mainCanvas.getContext("2d");
+    let mainCanvas = document.querySelector("#myCanvas");
+    let mainContext = mainCanvas.getContext("2d");
 
-    var circles = [];
+    let circles = [];
 
     class Circle {
       constructor(xPos, yPos, radius, color) {
@@ -47,8 +47,8 @@
 
         console.log(this.newX + " : new position!");
 
-        var diffX = this.xPos - this.newX;
-        var diffY = this.yPos - this.newY;
+        let diffX = this.xPos - this.newX;
+        let diffY = this.yPos - this.newY;
 
         this.incX = diffX / this.speed;
         this.incY = diffY / this.speed;
@@ -74,8 +74,8 @@
 
       mainContext.clearRect(0, 0, 500, 500);
 
-      for (var i = 0; i < circles.length; i++) {
-        var circle = circles[i];
+      for (let i = 0; i < circles.length; i++) {
+        let circle = circles[i];
         circle.draw();
       }
 
@@ -86,20 +86,20 @@
     function drawCircles() {
       mainContext.clearRect(0, 0, 500, 500);
 
-      for (var i = 0; i < 500; i++) {
+      for (let i = 0; i < 500; i++) {
 
-        var x = Math.floor(Math.random() * 501);
-        var y = Math.floor(Math.random() * 501);
-        var radius = Math.floor(Math.random() * 100) + 10;
+        let x = Math.floor(Math.random() * 501);
+        let y = Math.floor(Math.random() * 501);
+        let radius = Math.floor(Math.random() * 100) + 10;
 
-        var color = {
+        let color = {
           r: 100,
           g: 100,
           b: 100,
           a: .05
         }
 
-        var circle = new Circle(x, y, radius, color);
+        let circle = new Circle(x, y, radius, color);
         circles.push(circle);
 
         circle.setNewPosition();

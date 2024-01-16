@@ -6,8 +6,8 @@
     <div id="content"></div>
     <script>
       function hndlr(response) {
-      for (var i = 0; i < response.items.length; i++) {
-        var item = response.items[i];
+      for (let i = 0; i < response.items.length; i++) {
+        let item = response.items[i];
         // Make sure HTML in item.htmlTitle is escaped.
         document.getElementById("content").append(
           document.createElement("br"),

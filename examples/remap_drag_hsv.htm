@@ -76,20 +76,20 @@
   </div>
 
   <script>
-    var dragItem = document.querySelector("#item");
-    var container = document.querySelector("#container");
+    let dragItem = document.querySelector("#item");
+    let container = document.querySelector("#container");
     let positionField = document.querySelector("#position");
 
     let huePrint = document.querySelector("#huePrint");
     let containerPrint = document.querySelector("#containerPrint");
 
-    var active = false;
-    var currentX;
-    var currentY;
-    var initialX;
-    var initialY;
-    var xOffset = 0;
-    var yOffset = 0;
+    let active = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
 
     container.addEventListener("pointerdown", dragStart, false);
     container.addEventListener("pointerup", dragEnd, false);

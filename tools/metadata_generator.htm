@@ -247,15 +247,15 @@
   </div>
   <script>
 
-    var generateButton = document.querySelector("#generateButton");
+    let generateButton = document.querySelector("#generateButton");
     generateButton.addEventListener("click", processData, false);
 
-    var results = document.querySelector("#results");
+    let results = document.querySelector("#results");
 
-    var authorElement = document.querySelector("#authorField");
-    var twitterElement = document.querySelector("#twitterField");
-    var siteNameElement = document.querySelector("#siteField");
-    var contentTypeElement = document.querySelector("#contentField");
+    let authorElement = document.querySelector("#authorField");
+    let twitterElement = document.querySelector("#twitterField");
+    let siteNameElement = document.querySelector("#siteField");
+    let contentTypeElement = document.querySelector("#contentField");
 
     function loadStoredData() {
       if (localStorage["author"] !== undefined) {
@@ -285,23 +285,23 @@
 
     function processData(e) {
 
-      var author = authorElement.value;
-      var twitter = twitterElement.value;
-      var siteName = siteNameElement.value;
-      var contentType = contentTypeElement.value;
+      let author = authorElement.value;
+      let twitter = twitterElement.value;
+      let siteName = siteNameElement.value;
+      let contentType = contentTypeElement.value;
 
       storeData();
 
-      var title = document.querySelector("#titleField").value;
-      var description = document.querySelector("#descriptionField").value;
-      var url = document.querySelector("#urlField").value;
-      var image = document.querySelector("#imageField").value;
+      let title = document.querySelector("#titleField").value;
+      let description = document.querySelector("#descriptionField").value;
+      let url = document.querySelector("#urlField").value;
+      let image = document.querySelector("#imageField").value;
 
-      var generatedData = generateMetadata(title, description, url, image, author, siteName, twitter, contentType);
+      let generatedData = generateMetadata(title, description, url, image, author, siteName, twitter, contentType);
       results.value = generatedData;
     }
 
-    var generateMetadata = function (title, description, url, image, author, siteName, twitter, contentType) {
+    let generateMetadata = function (title, description, url, image, author, siteName, twitter, contentType) {
 
       return `<meta content="${description}" name="description" />
 <meta content="${title}" name="title" />

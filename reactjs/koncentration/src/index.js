@@ -5,7 +5,7 @@ import Header from './Header';
 import Footer from './Footer';
 import './index.css';
 
-var destination = document.querySelector("#root")
+let destination = document.querySelector("#root")
 
 ReactDOM.render(
   <div>

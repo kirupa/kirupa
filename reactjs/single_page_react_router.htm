@@ -60,11 +60,11 @@
     </div>
 
     <script type="text/babel">
-      var destination = document.querySelector("#container");
+      let destination = document.querySelector("#container");
 
-      var { Router, Route, IndexRoute, hashHistory, IndexLink, Link } = ReactRouter
+      let { Router, Route, IndexRoute, hashHistory, IndexLink, Link } = ReactRouter
 
-      var Home = React.createClass({
+      let Home = React.createClass({
         render: function() {
             return (
               <div>
@@ -82,7 +82,7 @@
           }
       });
 
-      var Contact = React.createClass({
+      let Contact = React.createClass({
         render: function() {
             return (
               <div>
@@ -95,7 +95,7 @@
           }
       });
 
-      var Stuff = React.createClass({
+      let Stuff = React.createClass({
         render: function() {
             return (
               <div>
@@ -114,7 +114,7 @@
           }
       });
 
-      var FourOhFour = React.createClass({
+      let FourOhFour = React.createClass({
         render: function() {
             return (
               <div>
@@ -127,7 +127,7 @@
       });
 
 
-      var App = React.createClass({
+      let App = React.createClass({
         render: function() {
           return (
             <div>

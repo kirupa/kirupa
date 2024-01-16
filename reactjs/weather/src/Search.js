@@ -33,10 +33,10 @@ class Search extends Component {
 
   fetchData() {
     // you should get an API key from: https://openweathermap.org/api
-    var apiKey = "paste key you get from openweathermap";
-    var cityName = this.cityInput.current.value;
+    let apiKey = "paste key you get from openweathermap";
+    let cityName = this.cityInput.current.value;
 
-    var thisThis = this;
+    let thisThis = this;
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=${apiKey}&units=imperial`)
       .then(function(response) {

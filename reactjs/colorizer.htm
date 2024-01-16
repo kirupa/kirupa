@@ -61,7 +61,7 @@
   <div id="container"></div>
   <script type="text/babel">
 
-    var destination = document.querySelector("#container");
+    let destination = document.querySelector("#container");
 
     class Colorizer extends React.Component {
       constructor(props, context) {
@@ -92,11 +92,11 @@
       }
 
       render() {
-        var squareStyle = {
+        let squareStyle = {
           backgroundColor: this.state.bgColor
         };
 
-        var self = this;
+        let self = this;
 
         return (
           <div className="colorArea">
@@ -118,7 +118,7 @@
       }
     }
 
-    var heading = document.querySelector("#colorHeading");
+    let heading = document.querySelector("#colorHeading");
 
     class ColorLabel extends React.Component {
       render() {

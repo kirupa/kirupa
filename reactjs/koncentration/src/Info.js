@@ -19,7 +19,7 @@ class Info extends React.Component {
   }
 
   timer() {
-    var gameState = this.props.gameState;
+    let gameState = this.props.gameState;
 
     // Decide whether to increment by 1 or not depending
     // on what state the game is in

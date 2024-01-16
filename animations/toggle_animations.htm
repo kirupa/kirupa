@@ -76,13 +76,13 @@
 <label id="playAnimationCheckbox"><input type="checkbox" /><p>play animation?</p></label>
 <p id="reduceMotionStatus">( OS prefers reducing animation! )</p>
 <script>
-    var animationCheck = document.querySelector("#playAnimationCheckbox input");
+    let animationCheck = document.querySelector("#playAnimationCheckbox input");
     animationCheck.addEventListener("click", setUserState, false);
 
-    var reduceMotionQuery = matchMedia("(prefers-reduced-motion)");
+    let reduceMotionQuery = matchMedia("(prefers-reduced-motion)");
     reduceMotionQuery.addListener(setMotionState);
 
-    var userSetting = sessionStorage.getItem("userAnimationState");
+    let userSetting = sessionStorage.getItem("userAnimationState");
 
     function setMotionState() {
       // user hasn't specified a preference

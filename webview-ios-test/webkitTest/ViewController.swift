@@ -8,7 +8,7 @@ import WebKit
 
 class ViewController: UIViewController, WKNavigationDelegate {
     
-    var wv: WKWebView!
+    let wv: WKWebView!
 
     override func viewDidLoad() {
         super.viewDidLoad()

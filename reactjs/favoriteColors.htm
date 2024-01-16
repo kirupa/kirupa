@@ -40,7 +40,7 @@
       }
 
       // the store
-      var store = Redux.createStore(favoriteColors);
+      let store = Redux.createStore(favoriteColors);
       store.subscribe(render);
 
       function render() {

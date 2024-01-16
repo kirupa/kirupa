@@ -73,7 +73,7 @@
   <div id="container"></div>
   <script type="text/babel">
 
-    var PageContent = React.createClass({
+    let PageContent = React.createClass({
       render: function() {
         return (
           <div id="container">
@@ -92,7 +92,7 @@
       }
     });
 
-    var MenuButton = React.createClass({
+    let MenuButton = React.createClass({
       render: function() {
         return (
           <button role="button"
@@ -104,7 +104,7 @@
       }
     });
 
-    var Menu = React.createClass({
+    let Menu = React.createClass({
       getVisibleState: function () {
         if (this.props.visibleState == true) {
           return 0;
@@ -114,10 +114,10 @@
       },
       render: function() {
 
-        var { Motion,
+        let { Motion,
               spring } = ReactMotion;
 
-        var self = this;
+        let self = this;
 
         return (
           <Motion style={{x: spring(this.getVisibleState())}}>
@@ -140,7 +140,7 @@
       }
     });
 
-    var MenuContainer = React.createClass({
+    let MenuContainer = React.createClass({
       getInitialState: function() {
         return {
           visible: false

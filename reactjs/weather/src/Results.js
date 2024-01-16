@@ -7,15 +7,15 @@ class Results extends Component {
     console.log(this.props);
 
     if (this.props.weatherInfo !== "") {
-      var weather = this.props.weatherInfo;
-      var city = weather.name;
-      var temp = Math.round(weather.main.temp);
-      var minTemp = Math.round(weather.main.temp_min);
-      var maxTemp = Math.round(weather.main.temp_max);
-      var status = weather.weather[0].main;
-      var description = weather.weather[0].description;
+      let weather = this.props.weatherInfo;
+      let city = weather.name;
+      let temp = Math.round(weather.main.temp);
+      let minTemp = Math.round(weather.main.temp_min);
+      let maxTemp = Math.round(weather.main.temp_max);
+      let status = weather.weather[0].main;
+      let description = weather.weather[0].description;
 
-      var backgroundColor = "";
+      let backgroundColor = "";
 
       if (temp > 70) {
         backgroundColor = "hot"

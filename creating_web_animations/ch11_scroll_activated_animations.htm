@@ -104,7 +104,7 @@
   </div>
 
   <script>
-    var isScrolling = false;
+    let isScrolling = false;
 
     window.addEventListener("scroll", throttleScroll, false);
 
@@ -120,9 +120,9 @@
 
     document.addEventListener("DOMContentLoaded", scrolling, false);
 
-    var listItems = document.querySelectorAll("#mainContent ol li");
-    var firstBox = document.querySelector("#firstBox");
-    var secondBox = document.querySelector("#secondBox");
+    let listItems = document.querySelectorAll("#mainContent ol li");
+    let firstBox = document.querySelector("#firstBox");
+    let secondBox = document.querySelector("#secondBox");
 
     function scrolling(e) {
 
@@ -143,8 +143,8 @@
         document.body.classList.remove("colorOne");
       }
 
-      for (var i = 0; i < listItems.length; i++) {
-        var listItem = listItems[i];
+      for (let i = 0; i < listItems.length; i++) {
+        let listItem = listItems[i];
 
         if (isPartiallyVisible(listItem)) {
           listItem.classList.add("active");
@@ -155,20 +155,20 @@
     }
 
     function isPartiallyVisible(el) {
-      var elementBoundary = el.getBoundingClientRect();
+      let elementBoundary = el.getBoundingClientRect();
 
-      var top = elementBoundary.top;
-      var bottom = elementBoundary.bottom;
-      var height = elementBoundary.height;
+      let top = elementBoundary.top;
+      let bottom = elementBoundary.bottom;
+      let height = elementBoundary.height;
 
       return ((top + height >= 0) && (height + window.innerHeight >= bottom));
     }
 
     function isFullyVisible(el) {
-      var elementBoundary = el.getBoundingClientRect();
+      let elementBoundary = el.getBoundingClientRect();
 
-      var top = elementBoundary.top;
-      var bottom = elementBoundary.bottom;
+      let top = elementBoundary.top;
+      let bottom = elementBoundary.bottom;
 
       return ((top >= 0) && (bottom <= window.innerHeight));
     }

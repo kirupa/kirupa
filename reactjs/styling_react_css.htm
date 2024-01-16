@@ -24,7 +24,7 @@
   <div id="container"></div>
 
   <script type="text/babel">
-    var Letter = React.createClass({
+    let Letter = React.createClass({
       render: function() {
           return (
             <div className="letter">
@@ -34,7 +34,7 @@
         }
     });
 
-    var destination = document.querySelector("#container");
+    let destination = document.querySelector("#container");
 
     ReactDOM.render(
       <div>

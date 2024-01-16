@@ -21,7 +21,7 @@ class Card extends React.Component {
   }
 
   render() {
-    var classValue;
+    let classValue;
     
     if (this.props.flipped) {
       classValue = " flipped";

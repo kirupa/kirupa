@@ -34,29 +34,29 @@
     </div>
 
     <script>
-        var theThing = document.querySelector("#thing");
-        var container = document.querySelector("#contentContainer");
+        let theThing = document.querySelector("#thing");
+        let container = document.querySelector("#contentContainer");
 
         container.addEventListener("click", getClickPosition, false);
 
         function getClickPosition(e) {
-            var parentPosition = getPosition(e.currentTarget);
-            var xPos = e.clientX - parentPosition.x - (theThing.clientWidth / 2);
-            var yPos = e.clientY - parentPosition.y - (theThing.clientHeight / 2);
+            let parentPosition = getPosition(e.currentTarget);
+            let xPos = e.clientX - parentPosition.x - (theThing.clientWidth / 2);
+            let yPos = e.clientY - parentPosition.y - (theThing.clientHeight / 2);
 
             theThing.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
         }
 
         // Helper function to get an element's exact position
         function getPosition(el) {
-            var xPos = 0;
-            var yPos = 0;
+            let xPos = 0;
+            let yPos = 0;
 
             while (el) {
                 if (el.tagName == "BODY") {
                     // deal with browser quirks with body/window/document and page scroll
-                    var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
-                    var yScroll = el.scrollTop || document.documentElement.scrollTop;
+                    let xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+                    let yScroll = el.scrollTop || document.documentElement.scrollTop;
 
                     xPos += (el.offsetLeft - xScroll + el.clientLeft);
                     yPos += (el.offsetTop - yScroll + el.clientTop);

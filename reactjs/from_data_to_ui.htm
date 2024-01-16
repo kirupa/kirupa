@@ -21,7 +21,7 @@
   <script type="text/babel">
     class Circle extends React.Component {
       render() {
-          var circleStyle = {
+          let circleStyle = {
             padding: 10,
             margin: 20,
             display: "inline-block",
@@ -38,15 +38,15 @@
         }
     }
 
-    var destination = document.querySelector("#container");
+    let destination = document.querySelector("#container");
 
-    var colors = ["#393E41", "#E94F37", "#1C89BF", "#A1D363",
+    let colors = ["#393E41", "#E94F37", "#1C89BF", "#A1D363",
                   "#85FFC7", "#297373", "#FF8552", "#A40E4C"];
 
-    var renderData = [];
+    let renderData = [];
 
-    for (var i = 0; i < colors.length; i++) {
-      var color = colors[i];
+    for (let i = 0; i < colors.length; i++) {
+      let color = colors[i];
       renderData.push(<Circle key={i + color} bgColor={color}/>);
     }
 

@@ -33,13 +33,13 @@ class Board extends React.Component {
   }
 
   setupGame() {
-    var cardArray = [];
-    var itemCount = 0;
-    var emojis = [0x1F600, 0x1F604, 0x1F34A, 0x1F344, 0x1F37F, 0x1F363, 0x1F370, 0x1F355,
+    let cardArray = [];
+    let itemCount = 0;
+    let emojis = [0x1F600, 0x1F604, 0x1F34A, 0x1F344, 0x1F37F, 0x1F363, 0x1F370, 0x1F355,
                   0x1F354, 0x1F35F, 0x1F6C0, 0x1F48E, 0x1F5FA, 0x23F0, 0x1F579, 0x1F4DA,
                   0x1F431, 0x1F42A, 0x1F439, 0x1F424];
 
-    for (var i = 0; i < this.cards; i++) {
+    for (let i = 0; i < this.cards; i++) {
       //
       // This is done to give two array items the same value
       //
@@ -81,10 +81,10 @@ class Board extends React.Component {
     })
 
     // open cards and check if they match or not!
-    var cardArray = this.state.cardData;
+    let cardArray = this.state.cardData;
 
-    for (var i = 0; i < cardArray.length; i++) {
-      var tempCard = cardArray[i];
+    for (let i = 0; i < cardArray.length; i++) {
+      let tempCard = cardArray[i];
 
       // identify the card we clicked on
       if (tempCard.id === id) {
@@ -116,8 +116,8 @@ class Board extends React.Component {
   checkMatch() {
     // Check if the two opened cards match!
     if (this.flippedCards.length === 2) {
-      var cardA = this.flippedCards[0];
-      var cardB = this.flippedCards[1];
+      let cardA = this.flippedCards[0];
+      let cardB = this.flippedCards[1];
 
       if (cardA.content === cardB.content) {
         cardA.solved = true;
@@ -145,11 +145,11 @@ class Board extends React.Component {
   // https://www.kirupa.com/html5/shuffling_array_js.htm
   // 
   shuffle(cards) {
-    var input = cards;
+    let input = cards;
     
-    for (var i = input.length - 1; i >= 0; i--) {
-      var randomIndex = Math.floor(Math.random() * (i + 1));
-      var itemAtIndex = input[randomIndex]; 
+    for (let i = input.length - 1; i >= 0; i--) {
+      let randomIndex = Math.floor(Math.random() * (i + 1));
+      let itemAtIndex = input[randomIndex]; 
       
       input[randomIndex] = input[i]; 
       input[i] = itemAtIndex;
@@ -162,7 +162,7 @@ class Board extends React.Component {
   // Flip back all unsolved cards
   //
   resetCards() {
-    var cardArray = this.state.cardData;
+    let cardArray = this.state.cardData;
 
     cardArray.map((item) => {
       if (item.solved === false) {
@@ -191,11 +191,11 @@ class Board extends React.Component {
   }
 
   render() {
-    var cardItems = this.state.cardData;
-    var cards = cardItems.map(this.createCard);
+    let cardItems = this.state.cardData;
+    let cards = cardItems.map(this.createCard);
 
     // Display the winning screen only when the game has ended
-    var winningScreen;
+    let winningScreen;
     
     if (this.state.gameStatus === "victory") {
       winningScreen = <WinningScreen resetGame={this.setupGame}/>;

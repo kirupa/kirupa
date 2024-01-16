@@ -102,9 +102,9 @@
 <div id="greenPentagon"></div>
 
 <script>
-	var bigYellowCircle = document.querySelector("#bigYellowCircle");
-	var blueSquare = document.querySelector("#blueSquare");
-	var greenPentagon = document.querySelector("#greenPentagon");
+	let bigYellowCircle = document.querySelector("#bigYellowCircle");
+	let blueSquare = document.querySelector("#blueSquare");
+	let greenPentagon = document.querySelector("#greenPentagon");
 
 	function setTranslate(xPos, yPos, el) {
 		el.style.transform = "translate3d(" + xPos + ", " + yPos + "px, 0)";
@@ -112,8 +112,8 @@
 
 	window.addEventListener("DOMContentLoaded", scrollLoop, false);
 
-	var xScrollPosition;
-	var yScrollPosition;
+	let xScrollPosition;
+	let yScrollPosition;
 
 	function scrollLoop() {
 		xScrollPosition = window.scrollX;

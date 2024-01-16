@@ -25,21 +25,21 @@
   </div>
 
   <script>
-    var rows = 17;
-    var columns = 17;
-    var radius = 1;
-    var x_adjust = 0;
-    var y_adjust = 0;
-    var targetXY = { x:220, y:220 };
-    var maxDistance = getDistance(0, 0, 440, 440);
+    let rows = 17;
+    let columns = 17;
+    let radius = 1;
+    let x_adjust = 0;
+    let y_adjust = 0;
+    let targetXY = { x:220, y:220 };
+    let maxDistance = getDistance(0, 0, 440, 440);
 
     function draw() {
-      var ctx = document.getElementById("myCanvas").getContext("2d");
-      for (var y = 0; y < columns; y++) {
-        for (var x = 0; x < rows; x++) {
+      let ctx = document.getElementById("myCanvas").getContext("2d");
+      for (let y = 0; y < columns; y++) {
+        for (let x = 0; x < rows; x++) {
 
-          var xPos = 20 + x * 25;
-          var yPos = 20 + y * 25;
+          let xPos = 20 + x * 25;
+          let yPos = 20 + y * 25;
 
           radius = intensity(
             {
@@ -63,9 +63,9 @@
     }
 
     function intensity(current, target) {
-      var distance = getDistance(current.x, current.y, target.x, target.y);
+      let distance = getDistance(current.x, current.y, target.x, target.y);
 
-      var size = 5 * (100 / (distance + 50));
+      let size = 5 * (100 / (distance + 50));
 
       if (size < 1) {
         return 1;
@@ -79,8 +79,8 @@
 
     // pythagorean theorem
     function getDistance(xA, yA, xB, yB) { 
-      var xDiff = xA - xB; 
-      var yDiff = yA - yB;
+      let xDiff = xA - xB; 
+      let yDiff = yA - yB;
   
       return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
   }

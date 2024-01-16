@@ -42,12 +42,12 @@
       }
 
       render() {
-        var counterStyle = {
+        let counterStyle = {
           color: "#66FFFF",
           fontSize: 50
         };
 
-        var count = this.state.strikes.toLocaleString();
+        let count = this.state.strikes.toLocaleString();
 
         return (
           <h1 style={counterStyle}>{count}</h1>
@@ -57,11 +57,11 @@
 
     class LightningCounterDisplay extends React.Component {
         render() {
-          var commonStyle = {
+          let commonStyle = {
             margin: 0,
             padding: 0
           }
-          var divStyle = {
+          let divStyle = {
             width: 250,
             textAlign: "center",
             backgroundColor: "#020202",
@@ -71,7 +71,7 @@
             borderRadius: 10
           };
 
-          var textStyles = {
+          let textStyles = {
             emphasis: {
               fontSize: 38,
               ...commonStyle

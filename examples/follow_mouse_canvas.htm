@@ -26,14 +26,14 @@
   <p id="coordinates">Coordinates go here</p>
 
   <script>
-    var canvas = document.querySelector("#myCanvas");
-    var context = canvas.getContext("2d");
+    let canvas = document.querySelector("#myCanvas");
+    let context = canvas.getContext("2d");
 
-    var coordinates = document.querySelector("#coordinates");
+    let coordinates = document.querySelector("#coordinates");
 
     function getPosition(el) {
-      var xPosition = 0;
-      var yPosition = 0;
+      let xPosition = 0;
+      let yPosition = 0;
 
       while (el) {
         xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
@@ -46,9 +46,9 @@
       };
     }
 
-    var canvasPos = getPosition(canvas);
-    var mouseX = 0;
-    var mouseY = 0;
+    let canvasPos = getPosition(canvas);
+    let mouseX = 0;
+    let mouseY = 0;
 
     canvas.addEventListener("mousemove", setMousePosition, false);
 

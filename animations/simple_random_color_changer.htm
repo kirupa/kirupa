@@ -45,8 +45,8 @@
   </div>
 
   <script>
-    var square = document.querySelector("#square");
-    var container = document.querySelector("#container");
+    let square = document.querySelector("#square");
+    let container = document.querySelector("#container");
 
     square.addEventListener("animationiteration", changeColor, false);
 
@@ -55,10 +55,10 @@
     }
     
     function getRandomColor() {
-      var characters = "0123456789ABCDEF";
-      var color = '#';
+      let characters = "0123456789ABCDEF";
+      let color = '#';
     
-      for (var i = 0; i < 6; i++) {
+      for (let i = 0; i < 6; i++) {
         color += characters[getRandomNumber(0, 15)];
       }
       
@@ -66,7 +66,7 @@
     }
     
     function getRandomNumber(low, high) {
-      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
       return r;
     }
   </script>

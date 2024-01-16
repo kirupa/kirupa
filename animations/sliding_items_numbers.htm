@@ -132,12 +132,12 @@
   </div>
  
   <script>
-    var items = document.querySelectorAll(".item");
-    var container = document.querySelector("#container");
+    let items = document.querySelectorAll(".item");
+    let container = document.querySelector("#container");
 
     function setup() {
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i];
 
         item.displayData = {
           one: getRandomNumber(0, 10),
@@ -152,7 +152,7 @@
     container.addEventListener("animationiteration", duplicateAndGenerate, false);
 
     function duplicateAndGenerate(e) {
-      var item = e.target;
+      let item = e.target;
 
       item.displayData = {
         one: item.displayData.two,
@@ -168,7 +168,7 @@
     }
 
     function getRandomNumber(low, high) {
-      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
       return r;
     }
         

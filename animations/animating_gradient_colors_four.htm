@@ -47,32 +47,32 @@
   </div>
 
   <script>
-    var newHue1;
-    var newHue2;
-    var newHue3;
-    var newHue4;
+    let newHue1;
+    let newHue2;
+    let newHue3;
+    let newHue4;
 
-    var currentHue1;
-    var currentHue2;
-    var currentHue3;
-    var currentHue4;
+    let currentHue1;
+    let currentHue2;
+    let currentHue3;
+    let currentHue4;
 
-    var hueDiff1;
-    var hueDiff2;
-    var hueDiff3;
-    var hueDiff4;
+    let hueDiff1;
+    let hueDiff2;
+    let hueDiff3;
+    let hueDiff4;
 
-    var incrementer1 = 0;
-    var incrementer2 = 0;
-    var incrementer3 = 0;
-    var incrementer4 = 0;
+    let incrementer1 = 0;
+    let incrementer2 = 0;
+    let incrementer3 = 0;
+    let incrementer4 = 0;
 
-    var counter = 0;
-    var iterations = 200;
+    let counter = 0;
+    let iterations = 200;
 
     function setNewColor() {
 
-      var bodyStyle = getComputedStyle(document.body);
+      let bodyStyle = getComputedStyle(document.body);
       currentHue1 = Number(bodyStyle.getPropertyValue("--hue1"));
       currentHue2 = Number(bodyStyle.getPropertyValue("--hue2"));
       currentHue3 = Number(bodyStyle.getPropertyValue("--hue3"));
@@ -95,7 +95,7 @@
       incrementer4 = hueDiff4 / iterations;
     }
 
-    var frameId;
+    let frameId;
 
     function animate() {
 
@@ -124,7 +124,7 @@
     animate();
 
     function getRandomNumber(low, high) {
-      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
       return r;
     }
   </script>

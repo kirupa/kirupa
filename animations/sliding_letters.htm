@@ -129,20 +129,20 @@
   </div>
  
   <script>
-    var letters = document.querySelectorAll(".letter");
-    var container = document.querySelector("#container");
+    let letters = document.querySelectorAll(".letter");
+    let container = document.querySelector("#container");
 
-    var h_range = [0, 360];
-    var s_range = [0, 50];
-    var l_range = [60, 100];
-    var a_range = [1, 1];
+    let h_range = [0, 360];
+    let s_range = [0, 50];
+    let l_range = [60, 100];
+    let a_range = [1, 1];
 
     function setup() {
-      for (var i = 0; i < letters.length; i++) {
-        var letter = letters[i];
+      for (let i = 0; i < letters.length; i++) {
+        let letter = letters[i];
   
-        var colorOne = getRandomColor(h_range, s_range, l_range, a_range).hslaValue;
-        var colorTwo = getRandomColor(h_range, s_range, l_range, a_range).hslaValue;
+        let colorOne = getRandomColor(h_range, s_range, l_range, a_range).hslaValue;
+        let colorTwo = getRandomColor(h_range, s_range, l_range, a_range).hslaValue;
   
         letter.displayData = {
           one: colorOne,
@@ -160,7 +160,7 @@
     container.addEventListener("animationiteration", loopLetter, false);
 
     function loopLetter(e) {
-      var el = e.target;
+      let el = e.target;
 
       el.displayData = {
         one: el.displayData.two,
@@ -176,10 +176,10 @@
     }
 
     function getRandomColor(h, s, l, a) {
-      var hue = getRandomNumber(h[0], h[1]);
-      var saturation = getRandomNumber(s[0], s[1]);
-      var lightness = getRandomNumber(l[0], l[1]);
-      var alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
+      let hue = getRandomNumber(h[0], h[1]);
+      let saturation = getRandomNumber(s[0], s[1]);
+      let lightness = getRandomNumber(l[0], l[1]);
+      let alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
 
       return {
         h: hue,
@@ -191,7 +191,7 @@
     }
 
     function getRandomNumber(low, high) {
-      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
       return r;
     }
 

@@ -59,44 +59,44 @@
   </div>
 
   <script>
-    var square = document.querySelector("#square");
-    var container = document.querySelector("#container");
+    let square = document.querySelector("#square");
+    let container = document.querySelector("#container");
 
     square.addEventListener("animationiteration", changeColor, false);
 
     function changeColor(e) {
-      var h = {
+      let h = {
         min: 0,
         max: 360
       };
 
-      var s = {
+      let s = {
         min: 90,
         max: 100
       };
 
-      var l = {
+      let l = {
         min: 0,
         max: 90
       };
 
-      var a = {
+      let a = {
         min: 100,
         max: 100
       };
 
-      var color = getRandomColor(h, s, l, a);
-      var lighterColor = getHSLColor(color.h, color.s, 95, 1);
+      let color = getRandomColor(h, s, l, a);
+      let lighterColor = getHSLColor(color.h, color.s, 95, 1);
 
       square.style.backgroundColor = color.hslValue;
       container.style.backgroundColor = lighterColor;
     }
 
     function getRandomColor(h, s, l, a) {
-      var hue = getRandomNumber(h.min, h.max);
-      var saturation = getRandomNumber(s.min, s.max);
-      var lightness = getRandomNumber(l.min, l.max);
-      var alpha = getRandomNumber(a.min, a.max) / 100;
+      let hue = getRandomNumber(h.min, h.max);
+      let saturation = getRandomNumber(s.min, s.max);
+      let lightness = getRandomNumber(l.min, l.max);
+      let alpha = getRandomNumber(a.min, a.max) / 100;
 
       return {
         h: hue,
@@ -112,7 +112,7 @@
     }
 
     function getRandomNumber(low, high) {
-      var r = Math.floor(Math.random() * (high - low + 1)) + low;
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
       return r;
     }
 
