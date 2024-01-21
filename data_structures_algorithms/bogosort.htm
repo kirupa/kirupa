@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bogo Sort</title>
+</head>
+
+<body>
+  <script>
+    let iterations = 0;
+
+    function isSorted(arr) {
+      // Checks if the given array is sorted
+      for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] > arr[i + 1]) {
+          return false; // Not sorted
+        }
+      }
+      return true; // Sorted
+    }
+
+    function shuffle(arr) {
+      // Shuffles the array (in place) using Fisher-Yates algorithm
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    function bogosort(arr) {
+      iterations = 0;
+
+      // Keep shuffling until the array is magically sorted
+      while (!isSorted(arr)) {
+        iterations++;
+        shuffle(arr);
+      }
+      return arr;
+    }
+
+    // Example usage:
+    const myArray = [5, 3, 1, 8, 2, 0];
+    console.log(`Unsorted array: ${myArray}`);
+
+    const sortedArray = bogosort(myArray);
+    console.log(`Sorted array: ${sortedArray}`); 
+
+    console.log(`Sorting took ${iterations} iterations!`);
+  </script>
+</body>
+
+</html>

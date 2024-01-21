@@ -21,8 +21,18 @@
       return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
     }
 
-    let remappedValue = remap(50, 0, 100, 0, 2000);
-    console.log(remappedValue); // 1000
+    // Some examples of this function being used!
+    let example1 = remap(50, 0, 100, 0, 2000);
+    console.log(example1); // 1000
+
+    let example2 = remap(15, -100, 100, 0, 100);
+    console.log(example2) // 57.5
+
+    let example3 = remap(100, 0, 2000, 0, 50);
+    console.log(example3) // 2.5 
+
+    let octopusOpacity = remap(300, 0, 1000, 100, 0);
+    console.log(octopusOpacity); // 70
   </script>
 </body>
 
