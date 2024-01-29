@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radix Sort!</title>
+</head>
+
+<body>
+  <script>
+    function radixSort(arr) {
+      // Find the maximum number to determine the number of digits
+      const maxNum = Math.max(...arr);
+      const numDigits = Math.ceil(Math.log10(maxNum + 1)); // Number of digits in the largest number
+
+      // Iterate through each digit, starting from the least significant digit (LSD)
+      for (let digit = 0; digit < numDigits; digit++) {
+        const buckets = Array(10).fill(0).map(() => []); // Create 10 buckets (0-9)
+
+        // Distribute the numbers into buckets based on the current digit
+        for (const num of arr) {
+          const digitValue = Math.floor(num / Math.pow(10, digit)) % 10; // Extract the digit
+          buckets[digitValue].push(num);
+        }
+
+        // Collect the numbers back from the buckets in sorted order
+        let index = 0;
+        for (let i = 0; i < 10; i++) {
+          const bucket = buckets[i];
+          for (const num of bucket) {
+            arr[index++] = num;
+          }
+        }
+      }
+
+      return arr;
+    }
+
+    // Example usage:
+    const unsortedArray = [122, 415, 2015, 657, 32, 436232, 7201, 3255];
+    const sortedArray = radixSort(unsortedArray);
+    console.log(sortedArray); // Output: [329, 355, 436, 457, 657, 720, 839]
+  </script>
+</body>
+
+</html>
