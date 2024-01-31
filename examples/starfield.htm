@@ -35,8 +35,8 @@
     class Star {
       constructor() {
         // Initialize star's position and depth
-        this.x = getRandomInt(-1 * canvasWidth, canvasWidth);
-        this.y = getRandomInt(-1 * canvasHeight, canvasHeight);
+        this.x = getRandomInt(-1 * canvasWidth / 2, canvasWidth / 2);
+        this.y = getRandomInt(-1 * canvasHeight / 2, canvasHeight / 2);
         this.z = getRandomInt(1, canvasWidth);
 
         // Set the rendering context
@@ -53,8 +53,8 @@
 
         if (this.z < 1) {
           this.z = canvasWidth;
-          this.x = getRandomInt(-1 * canvasWidth, canvasHeight);
-          this.y = getRandomInt(-1 * canvasWidth, canvasHeight);
+          this.x = getRandomInt(-1 * canvasWidth / 2, canvasHeight / 2);
+          this.y = getRandomInt(-1 * canvasWidth / 2, canvasHeight / 2);
 
           this.speed = getRandomInt(1, 5);
           this.radiusMax = 1 + Math.random() * 10;
@@ -91,7 +91,7 @@
 
     // Function to initialize stars and populate the stars array
     function setup() {
-      for (let i = 0; i < 2000; i++) {
+      for (let i = 0; i < 500; i++) {
         let star = new Star();
         stars.push(star);
       }
