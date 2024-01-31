@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counting Sort</title>
+</head>
+
+<body>
+  <script>
+    function countingSort(arr) {
+      // Handle empty arrays 
+      if (arr.length <= 1) return arr;
+
+      // Find the range of the input array
+      let max = Math.max(...arr);
+      let min = Math.min(...arr);
+      let range = max - min + 1;
+
+      // Create the count array and initialize to zero
+      let count = new Array(range).fill(0);
+
+      // Count the occurrences of each element
+      for (let i = 0; i < arr.length; i++) {
+        count[arr[i] - min]++;
+      }
+
+      // Calculate positions in the output array
+      for (let i = 1; i < count.length; i++) {
+        count[i] += count[i - 1];
+      }
+
+      // Build the output array
+      let output = new Array(arr.length);
+      for (let i = arr.length - 1; i >= 0; i--) {
+        output[count[arr[i] - min] - 1] = arr[i];
+        count[arr[i] - min]--;
+      }
+
+      return output;
+    }
+
+    // Live example!
+    let unsortedArray = [5, 2, 9, 5, 1, 4, 20, 55, 0, -2, 3];
+    let sortedArray = countingSort(unsortedArray);
+    console.log(sortedArray); // Output: [-2, 0, 1, 2, 3, 4, 5, 5, 9, 20, 55]
+  </script>
+</body>
+
+</html>
