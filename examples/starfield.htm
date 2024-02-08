@@ -1,135 +1,133 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Starfield Example</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated 3D Starfield Effect</title>
+<style>
+	  h1, p {
+		  font-family: monospace;
+		  margin-bottom: 50px;
+		  margin-top: 50px;
+	  }
     #outerspace {
+      border: 1px solid #111;
       border-radius: 10px;
       filter: drop-shadow(0px 0px 10px #333);
     }
+
     body {
       margin: 100px;
     }
   </style>
 </head>
-
 <body>
-  <canvas id="outerspace" height="500" width="500"></canvas>
-
-  <script>
-    // Get the canvas element and its 2d rendering context
+<h1>Animated 3D Starfield Effect</h1>
+<canvas id="outerspace" height="500" width="500"></canvas>
+<p>Read the tutorial <a href="https://www.kirupa.com/animations/animated_3d_starfield_effect.htm">here</a>!</p>
+<script>
     let outerspace = document.querySelector("#outerspace");
     let mainContext = outerspace.getContext('2d');
 
-    // Get the width and height of the canvas
     let canvasWidth = outerspace.width;
     let canvasHeight = outerspace.height;
 
-    // Array to store star objects
+    let centerX = canvasWidth * 0.5;
+    let centerY = canvasHeight * 0.5;
+
+    let numberOfStars = 500;
+
     let stars = [];
 
-    // Define the Star class
+    let frames_per_second = 60;
+
+    let interval = Math.floor(1000 / frames_per_second);
+    let startTime = performance.now();
+    let previousTime = startTime;
+
+    let currentTime = 0;
+    let deltaTime = 0;
+
     class Star {
       constructor() {
-        // Initialize star's position and depth
-        this.x = getRandomInt(-1 * canvasWidth / 2, canvasWidth / 2);
-        this.y = getRandomInt(-1 * canvasHeight / 2, canvasHeight / 2);
-        this.z = getRandomInt(1, canvasWidth);
+        this.x = getRandomInt(-centerX, centerX);
+        this.y = getRandomInt(-centerY, centerY);
+        this.counter = getRandomInt(1, canvasWidth);
 
-        // Set the rendering context
-        this.context = mainContext;
-
-        // Set maximum radius and speed for the star
         this.radiusMax = 1 + Math.random() * 10;
         this.speed = getRandomInt(1, 5);
+
+        this.context = mainContext;
       }
 
-      // Update the star's position and reset if it goes out of the canvas
-      update() {
-        this.z -= this.speed;
+      drawStar() {
+        this.counter -= this.speed;
 
-        if (this.z < 1) {
-          this.z = canvasWidth;
-          this.x = getRandomInt(-1 * canvasWidth / 2, canvasHeight / 2);
-          this.y = getRandomInt(-1 * canvasWidth / 2, canvasHeight / 2);
+        if (this.counter < 1) {
+          this.counter = canvasWidth;
+          this.x = getRandomInt(-centerX, centerX);
+          this.y = getRandomInt(-centerY, centerY);
 
+          this.radiusMax = getRandomInt(1, 10);
           this.speed = getRandomInt(1, 5);
-          this.radiusMax = 1 + Math.random() * 10;
         }
-      }
 
-      // Draw the star on the canvas
-      draw() {
-        // Adjust the position of our stars
-        this.update();
-
-        // Begin drawing our ellipse (aka star)
-        mainContext.beginPath();
-
-        // Calculate the position of the star on the canvas
-        let xRatio = this.x / this.z;
-        let yRatio = this.y / this.z;
+        let xRatio = this.x / this.counter;
+        let yRatio = this.y / this.counter;
 
         let starX = remap(xRatio, 0, 1, 0, canvasWidth);
         let starY = remap(yRatio, 0, 1, 0, canvasHeight);
 
-        // Calculate the radius based on the depth
-        this.radius = remap(this.z, 0, canvasWidth, this.radiusMax, 0);
+        this.radius = remap(this.counter, 0, canvasWidth, this.radiusMax, 0);
 
-        // Draw the star as a filled circle
+        mainContext.beginPath();
+
         mainContext.arc(starX, starY, this.radius, 0, Math.PI * 2, false);
         mainContext.closePath();
 
-        // Set the fill color to white
         mainContext.fillStyle = "#FFF";
         mainContext.fill();
       }
     }
 
-    // Function to initialize stars and populate the stars array
     function setup() {
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < numberOfStars; i++) {
         let star = new Star();
         stars.push(star);
       }
     }
     setup();
 
-    // Function to draw stars on the canvas and animate them
-    function drawStars() {
-      // Clear the canvas
-      mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
+    function draw(timestamp) {
+      currentTime = timestamp;
+      deltaTime = currentTime - previousTime;
 
-      // Fill the background with a dark color
-      mainContext.fillStyle = "#111";
-      mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
+      if (deltaTime > interval) {
+        previousTime = currentTime - (deltaTime % interval);
 
-      // Translate the coordinate system to the center of the canvas
-      mainContext.translate(canvasWidth / 2, canvasHeight / 2);
+        mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        mainContext.fillStyle = "#111";
+        mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
 
-      // Loop through the stars, update and draw each one
-      for (let i = 0; i < stars.length; i++) {
-        let star = stars[i];
-        star.draw();
+        mainContext.translate(centerX, centerY);
+
+        for (let i = 0; i < stars.length; i++) {
+          let star = stars[i];
+          star.drawStar();
+        }
+
+        mainContext.translate(-centerX, -centerY);
       }
 
-      // Reset the translation to the original coordinate system
-      mainContext.translate(-canvasWidth / 2, -canvasHeight / 2);
-
-      // Request the next animation frame
-      requestAnimationFrame(drawStars);
+      requestAnimationFrame(draw);
     }
-    drawStars();
+    draw();
 
-    // Function to get a random integer between min and max (inclusive)
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // Function to remap a value from one range to another
     function remap(value, istart, istop, ostart, ostop) {
       // Ensure values are numerical to avoid potential errors
       value = Number(value);
@@ -143,5 +141,4 @@
     }
   </script>
 </body>
-
 </html>
