@@ -1,16 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Animated 3D Starfield Effect Example</title>
-<style>
-	  h1, p {
-		  font-family: monospace;
-		  margin-bottom: 50px;
-		  margin-top: 50px;
-	  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated 3D Starfield Effect Example</title>
+  <style>
+    h1,
+    p {
+      font-family: monospace;
+      margin-bottom: 50px;
+      margin-top: 50px;
+    }
+
     #outerspace {
       border: 1px solid #111;
       border-radius: 10px;
@@ -22,11 +24,12 @@
     }
   </style>
 </head>
+
 <body>
-<h1>Animated 3D Starfield Effect</h1>
-<canvas id="outerspace" height="500" width="500"></canvas>
-<p>Read the tutorial <a href="https://www.kirupa.com/animations/animated_3d_starfield_effect.htm">here</a>!</p>
-<script>
+  <h1>Animated 3D Starfield Effect</h1>
+  <canvas id="outerspace" height="500" width="500"></canvas>
+  <p>Read the tutorial <a href="https://www.kirupa.com/animations/animated_3d_starfield_effect.htm">here</a>!</p>
+  <script>
     let outerspace = document.querySelector("#outerspace");
     let mainContext = outerspace.getContext('2d');
 
@@ -36,7 +39,7 @@
     let centerX = canvasWidth * 0.5;
     let centerY = canvasHeight * 0.5;
 
-    let numberOfStars = 500;
+    let numberOfStars = 100;
 
     let stars = [];
 
@@ -55,9 +58,6 @@
         this.y = getRandomInt(-centerY, centerY);
         this.counter = getRandomInt(1, canvasWidth);
 
-        this.prevX = this.x;
-        this.prevY = this.y;
-
         this.radiusMax = 1 + Math.random() * 10;
         this.speed = getRandomInt(1, 5);
 
@@ -67,43 +67,47 @@
       drawStar() {
         this.counter -= this.speed;
 
-        if (this.counter < 1) {
-          this.counter = canvasWidth;
+        if (this.counter < (this.speed * 2)) {
           this.x = getRandomInt(-centerX, centerX);
           this.y = getRandomInt(-centerY, centerY);
 
-          this.prevX = this.x;
-          this.prevY = this.y;
+          this.counter = canvasWidth;
 
           this.radiusMax = getRandomInt(1, 10);
           this.speed = getRandomInt(1, 5);
+
+          console.log("new star");
         }
 
         let xRatio = this.x / this.counter;
         let yRatio = this.y / this.counter;
 
-        let starX = remap(xRatio, 0, 1, 0, canvasWidth);
-        let starY = remap(yRatio, 0, 1, 0, canvasHeight);
+        let starX = Math.round(remap(xRatio, 0, 1, 0, canvasWidth));
+        let starY = Math.round(remap(yRatio, 0, 1, 0, canvasHeight));
 
-        this.radius = remap(this.counter, 0, canvasWidth, this.radiusMax, 0);
+        this.radius = remap(this.counter, 1, canvasWidth, this.radiusMax, 0);
 
+        let previous_starX = Math.round(starX * .8);
+        let previous_starY = Math.round(starY * .8);
+
+        let gradient = mainContext.createLinearGradient(previous_starX, previous_starY, starX, starY);
+        gradient.addColorStop(0, "rgba(255,255,255,0)");
+        gradient.addColorStop(1, "rgba(255,255,255,0)");
+       
         mainContext.beginPath();
-
+        mainContext.lineWidth = remap(this.counter, 1, canvasWidth, this.radiusMax, 0);
+        mainContext.strokeStyle = gradient;
         mainContext.moveTo(starX, starY);
-        mainContext.lineTo(this.prevX * .9, this.prevY * .9);
-        mainContext.lineWidth = remap(this.counter, 0, canvasWidth, 2, 0);
-        mainContext.strokeStyle = "#FFF";
+        mainContext.lineTo(previous_starX, previous_starY);
         mainContext.stroke();
-
-        mainContext.arc(starX, starY, this.radius, 0, Math.PI * 2, false);
         mainContext.closePath();
 
-        mainContext.fillStyle = "#FFF";
+
+        mainContext.arc(starX, starY, this.radius, 0, Math.PI * 2, true);
+        mainContext.fillStyle = "#FFF"
         mainContext.fill();
 
-        // Set previous position
-        this.prevX = starX;
-        this.prevY = starY;
+        //mainContext.closePath();
       }
     }
 
@@ -157,4 +161,5 @@
     }
   </script>
 </body>
+
 </html>

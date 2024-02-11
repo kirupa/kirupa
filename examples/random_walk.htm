@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Walk</title>
+
+  <style>
+    body {
+      margin: 50px;
+    }
+
+    #myCanvas {
+      border: 4px solid #111;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="myCanvas" width="500" height="500">
+  </canvas>
+
+  <script>
+    const canvas = document.querySelector('#myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Walker properties
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+
+    const stepSize = 5;
+
+    function drawWalker() {
+      // Choose a random direction
+      const direction = Math.floor(Math.random() * 4);
+
+      if (direction === 0) { // Right
+        x += stepSize;
+      } else if (direction === 1) { // Left
+        x -= stepSize;
+      } else if (direction === 2) { // Up
+        y -= stepSize;
+      } else { // Down
+        y += stepSize;
+      }
+
+      // Keep the walk within the canvas bounds
+      x = Math.max(0, Math.min(x, canvas.width));
+      y = Math.max(0, Math.min(y, canvas.height));
+
+      // Draw a line segment
+      ctx.beginPath();
+      ctx.moveTo(x - stepSize, y - stepSize);
+      ctx.lineTo(x, y);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = `rgba(0, 0, 255, .5)`;
+      ctx.stroke();
+    }
+
+    function animate() {
+      drawWalker();
+      requestAnimationFrame(animate);
+    }
+
+    animate(); // Start the animation
+  </script>
+</body>
+
+</html>
