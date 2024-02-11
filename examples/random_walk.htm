@@ -32,17 +32,41 @@
     const stepSize = 5;
 
     function drawWalker() {
-      // Choose a random direction
-      const direction = Math.floor(Math.random() * 4);
+      // Choose a random direction (0-8)
+      const direction = Math.floor(Math.random() * 9);
 
-      if (direction === 0) { // Right
-        x += stepSize;
-      } else if (direction === 1) { // Left
-        x -= stepSize;
-      } else if (direction === 2) { // Up
-        y -= stepSize;
-      } else { // Down
-        y += stepSize;
+      // Calculate movement based on chosen direction
+      switch (direction) {
+        case 0:  // Right
+          x += stepSize;
+          break;
+        case 1:  // Left
+          x -= stepSize;
+          break;
+        case 2:  // Up
+          y -= stepSize;
+          break;
+        case 3:  // Down
+          y += stepSize;
+          break;
+        case 4:  // Up-Right
+          x += stepSize;
+          y -= stepSize;
+          break;
+        case 5:  // Down-Right
+          x += stepSize;
+          y += stepSize;
+          break;
+        case 6: // Down-Left
+          x -= stepSize;
+          y += stepSize;
+          break;
+        case 7: // Up-Left
+          x -= stepSize;
+          y -= stepSize;
+          break;
+        case 8: // No movement (stay in place)
+          break;
       }
 
       // Keep the walk within the canvas bounds
