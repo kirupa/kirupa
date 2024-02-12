@@ -1,3 +1,4 @@
 {
-    "IDX.aI.enableInlineCompletion": true
+    "IDX.aI.enableInlineCompletion": true,
+    "editor.tabSize": 2
 }

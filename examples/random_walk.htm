@@ -31,9 +31,15 @@
 
     const stepSize = 5;
 
+    let prevX = 0;
+    let prevY = 0;
+
     function drawWalker() {
       // Choose a random direction (0-8)
-      const direction = Math.floor(Math.random() * 9);
+      const direction = Math.floor(Math.random() * 4);
+
+      prevX = x;
+      prevY = y;
 
       // Calculate movement based on chosen direction
       switch (direction) {
@@ -49,25 +55,9 @@
         case 3:  // Down
           y += stepSize;
           break;
-        case 4:  // Up-Right
-          x += stepSize;
-          y -= stepSize;
-          break;
-        case 5:  // Down-Right
-          x += stepSize;
-          y += stepSize;
-          break;
-        case 6: // Down-Left
-          x -= stepSize;
-          y += stepSize;
-          break;
-        case 7: // Up-Left
-          x -= stepSize;
-          y -= stepSize;
-          break;
-        case 8: // No movement (stay in place)
-          break;
       }
+
+      console.log(x + y)
 
       // Keep the walk within the canvas bounds
       x = Math.max(0, Math.min(x, canvas.width));
@@ -75,11 +65,12 @@
 
       // Draw a line segment
       ctx.beginPath();
-      ctx.moveTo(x - stepSize, y - stepSize);
+      ctx.moveTo(prevX, prevY);
       ctx.lineTo(x, y);
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 2;
       ctx.strokeStyle = `rgba(0, 0, 255, .5)`;
       ctx.stroke();
+      ctx.closePath();
     }
 
     function animate() {
@@ -88,6 +79,10 @@
     }
 
     animate(); // Start the animation
+
+    canvas.addEventListener("click", () => {
+      drawWalker();
+    });
   </script>
 </body>
 
