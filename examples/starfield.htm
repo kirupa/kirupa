@@ -1,16 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Animated 3D Starfield Effect Example</title>
-<style>
-	  h1, p {
-		  font-family: monospace;
-		  margin-bottom: 50px;
-		  margin-top: 50px;
-	  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated 3D Starfield Effect</title>
+  <style>
+    h1,
+    p {
+      font-family: monospace;
+      margin-bottom: 50px;
+      margin-top: 50px;
+    }
+
     #outerspace {
       border: 1px solid #111;
       border-radius: 10px;
@@ -22,11 +24,12 @@
     }
   </style>
 </head>
+
 <body>
-<h1>Animated 3D Starfield Effect</h1>
-<canvas id="outerspace" height="500" width="500"></canvas>
-<p>Read the tutorial <a href="https://www.kirupa.com/animations/animated_3d_starfield_effect.htm">here</a>!</p>
-<script>
+  <h1>Animated 3D Starfield Effect</h1>
+  <canvas id="outerspace" height="500" width="500"></canvas>
+  <p>Read the tutorial <a href="https://www.kirupa.com/animations/animated_3d_starfield_effect.htm">here</a>!</p>
+  <script>
     let outerspace = document.querySelector("#outerspace");
     let mainContext = outerspace.getContext('2d');
 
@@ -51,44 +54,37 @@
 
     class Star {
       constructor() {
-        // Initialize star's position and depth
-        this.x = getRandomInt(-1 * canvasWidth / 2, canvasWidth / 2);
-        this.y = getRandomInt(-1 * canvasHeight / 2, canvasHeight / 2);
-        this.z = getRandomInt(1, canvasWidth);
+        this.x = getRandomInt(-centerX, centerX);
+        this.y = getRandomInt(-centerY, centerY);
+        this.counter = getRandomInt(1, canvasWidth);
 
         this.radiusMax = 1 + Math.random() * 10;
         this.speed = getRandomInt(1, 5);
+
+        this.context = mainContext;
       }
 
-      // Update the star's position and reset if it goes out of the canvas
-      update() {
-        this.z -= this.speed;
+      drawStar() {
+        this.counter -= this.speed;
 
-        if (this.z < 1) {
-          this.z = canvasWidth;
-          this.x = getRandomInt(-1 * canvasWidth / 2, canvasHeight / 2);
-          this.y = getRandomInt(-1 * canvasWidth / 2, canvasHeight / 2);
+        if (this.counter < 1) {
+          this.counter = canvasWidth;
+          this.x = getRandomInt(-centerX, centerX);
+          this.y = getRandomInt(-centerY, centerY);
 
+          this.radiusMax = getRandomInt(1, 10);
           this.speed = getRandomInt(1, 5);
         }
 
-      // Draw the star on the canvas
-      draw() {
-        // Adjust the position of our stars
-        this.update();
-
-        // Begin drawing our ellipse (aka star)
-        mainContext.beginPath();
-
-        // Calculate the position of the star on the canvas
-        let xRatio = this.x / this.z;
-        let yRatio = this.y / this.z;
+        let xRatio = this.x / this.counter;
+        let yRatio = this.y / this.counter;
 
         let starX = remap(xRatio, 0, 1, 0, canvasWidth);
         let starY = remap(yRatio, 0, 1, 0, canvasHeight);
 
-        // Calculate the radius based on the depth
-        this.radius = remap(this.z, 0, canvasWidth, this.radiusMax, 0);
+        this.radius = remap(this.counter, 0, canvasWidth, this.radiusMax, 0);
+
+        mainContext.beginPath();
 
         mainContext.arc(starX, starY, this.radius, 0, Math.PI * 2, false);
         mainContext.closePath();
@@ -148,4 +144,5 @@
     }
   </script>
 </body>
+
 </html>
