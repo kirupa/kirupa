@@ -97,7 +97,7 @@
         while (current) {
           if (current.data === afterData) {
             newNode.next = current.next;
-            
+
             if (current === this.tail) {
               this.tail = newNode;
             }
@@ -162,34 +162,6 @@
         prev.next = null;
         this.tail = prev;
         this.size--;
-      }
-
-      removeData(data) {
-        if (this.size === 0) {
-          throw new Error("List is empty");
-        }
-
-        if (this.head.data === data) {
-          this.head = this.head.next;
-          this.size--;
-          return;
-        }
-        let current = this.head;
-
-        while (current.next) {
-          if (current.next.data === data) {
-            if (current.next === this.tail) {
-              this.tail = current;
-            }
-            current.next = current.next.next;
-            this.size--;
-            return;
-          }
-
-          current = current.next;
-        }
-
-        throw new Error(`Node with data '${data}' not found in list!`);
       }
 
       remove(data) {
