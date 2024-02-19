@@ -179,9 +179,11 @@
 
         while (current.next) {
           if (current.next.data === data) {
+
             if (current.next === this.tail) {
               this.tail = current;
             }
+            
             current.next = current.next.next;
             this.size--;
             return;
