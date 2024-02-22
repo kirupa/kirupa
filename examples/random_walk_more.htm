@@ -93,25 +93,61 @@
       }
     }
 
-    let walker = new Walker("blue");
-    let walker2 = new Walker("green");
-    let walker3 = new Walker("black");
-    let walker4 = new Walker("pink");
+
+
+    let h_range = [0, 360];
+    let s_range = [90, 100];
+    let l_range = [0, 90];
+    let a_range = [.1, .2];
+
+    let color = getRandomColor(h_range, s_range, l_range, a_range);
+    let color2 = getRandomColor(h_range, s_range, l_range, a_range);
+    let color3 = getRandomColor(h_range, s_range, l_range, a_range);
+    let color4 = getRandomColor(h_range, s_range, l_range, a_range);
+
+    let walker = new Walker(color.hslaValue);
+    let walker2 = new Walker(color2.hslaValue);
+    let walker3 = new Walker(color3.hslaValue);
+    let walker4 = new Walker(color4.hslaValue);
 
     function animate() {
-      walker.draw();
-      walker2.draw();
-      walker3.draw();
-      walker4.draw();
+
+      for (let i = 0; i < 100; i++) {
+        walker.draw();
+        walker2.draw();
+        walker3.draw();
+        walker4.draw();
+      }
 
       requestAnimationFrame(animate);
     }
 
-    animate(); // Start the animation
+    animate();
 
-    canvas.addEventListener("click", () => {
-      drawWalker();
-    });
+
+    function getRandomColor(h, s, l, a) {
+      let hue = getRandomNumber(h[0], h[1]);
+      let saturation = getRandomNumber(s[0], s[1]);
+      let lightness = getRandomNumber(l[0], l[1]);
+      let alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
+
+      return {
+        h: hue,
+        s: saturation,
+        l: lightness,
+        a: alpha,
+        hslaValue: getHSLAColor(hue, saturation, lightness, alpha)
+      }
+    }
+
+    function getRandomNumber(low, high) {
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
+      return r;
+    }
+
+    function getHSLAColor(h, s, l, a) {
+      return `hsl(${h}, ${s}%, ${l}%, ${a})`;
+    }
   </script>
 </body>
 
