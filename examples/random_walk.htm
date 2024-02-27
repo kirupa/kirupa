@@ -13,7 +13,6 @@
 
     #myCanvas {
       border: 4px solid #111;
-      border-radius: 10px;
     }
   </style>
 </head>
@@ -30,7 +29,7 @@
     let x = canvas.width / 2;
     let y = canvas.height / 2;
 
-    const stepSize = 5;
+    const stepSize = 10;
 
     let prevX = 0;
     let prevY = 0;
@@ -40,7 +39,7 @@
       prevY = y;
 
       // Choose a random direction (0-8)
-      const direction = Math.floor(Math.random() * 9);
+      const direction = Math.floor(Math.random() * 4);
 
       // Calculate movement based on chosen direction
       switch (direction) {
@@ -56,24 +55,6 @@
         case 3:  // Down
           y += stepSize;
           break;
-        case 4:  // Up-Right
-          x += stepSize;
-          y -= stepSize;
-          break;
-        case 5:  // Down-Right
-          x += stepSize;
-          y += stepSize;
-          break;
-        case 6: // Down-Left
-          x -= stepSize;
-          y += stepSize;
-          break;
-        case 7: // Up-Left
-          x -= stepSize;
-          y -= stepSize;
-          break;
-        case 8: // No movement (stay in place)
-          break;
       }
 
       console.log(x + y)
@@ -86,22 +67,24 @@
       ctx.beginPath();
       ctx.moveTo(prevX, prevY);
       ctx.lineTo(x, y);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = `rgba(0, 0, 255, .5)`;
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "rgba(59, 136, 195, .75)";
       ctx.stroke();
       ctx.closePath();
     }
+
+    function setup() {
+      ctx.fillStyle = "#E7F3FF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      animate();
+    }
+    setup();
 
     function animate() {
       drawWalker();
       requestAnimationFrame(animate);
     }
-
-    animate(); // Start the animation
-
-    canvas.addEventListener("click", () => {
-      drawWalker();
-    });
   </script>
 </body>
 
