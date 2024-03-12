@@ -13,7 +13,6 @@
 
     #myCanvas {
       border: 4px solid #111;
-      border-radius: 10px;
     }
   </style>
 </head>
@@ -34,6 +33,36 @@
         this.prevY = this.y;
         this.color = color;
         this.stepSize = stepSize;
+    // Walker properties
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+
+    const stepSize = 10;
+
+    let prevX = 0;
+    let prevY = 0;
+
+    function drawWalker() {
+      prevX = x;
+      prevY = y;
+
+      // Choose a random direction (0-8)
+      const direction = Math.floor(Math.random() * 4);
+
+      // Calculate movement based on chosen direction
+      switch (direction) {
+        case 0:  // Right
+          x += stepSize;
+          break;
+        case 1:  // Left
+          x -= stepSize;
+          break;
+        case 2:  // Up
+          y -= stepSize;
+          break;
+        case 3:  // Down
+          y += stepSize;
+          break;
       }
 
       draw() {

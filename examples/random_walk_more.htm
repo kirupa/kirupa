@@ -92,20 +92,24 @@
       }
     }
 
-    let walker = new Walker("oklch(70% 0.17 224.47 / 30%)", 5);
-    let walker2 = new Walker("oklch(70% 0.2074 128 / 30%)", 5);
-    let walker3 = new Walker("oklch(94% 0.2343 110.12 / 30%)", 5);
-    let walker4 = new Walker("oklch(70% 0.261 356.82 / 30%)", 5);
+    let walker = new Walker("blue");
+    let walker2 = new Walker("green");
+    let walker3 = new Walker("black");
+    let walker4 = new Walker("pink");
 
     function animate() {
-      walker.draw();
-      walker2.draw();
-      walker3.draw();
-      walker4.draw();
+
+      for (let i = 0; i < 100; i++) {
+        walker.draw();
+        walker2.draw();
+        walker3.draw();
+        walker4.draw();
+      }
 
       requestAnimationFrame(animate);
     }
-    animate();
+
+    animate(); // Start the animation
 
     canvas.addEventListener("click", () => {
       drawWalker();

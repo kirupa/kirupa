@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Search Traversal</title>
+</head>
+
+<body>
+  <script src="https://www.kirupa.com/js/queue_v1.js"></script>
+  <script src="https://www.kirupa.com/js/stack_v1.js"></script>
+
+  <script>
+    class Node {
+      constructor(data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+      }
+    }
+
+    const rootNodeA = new Node("A");
+    const nodeB = new Node("B");
+    const nodeC = new Node("C");
+    const nodeD = new Node("D");
+    const nodeE = new Node("E");
+    const nodeF = new Node("F");
+    const nodeG = new Node("G");
+    const nodeH = new Node("H");
+    const nodeI = new Node("I");
+
+    rootNodeA.left = nodeB;
+    rootNodeA.right = nodeC;
+
+    nodeB.left = nodeD;
+    nodeB.right = nodeE;
+
+    nodeC.left = nodeF;
+    nodeC.right = nodeG;
+
+    nodeD.left = nodeH;
+    nodeD.right = nodeI;
+
+    //
+    // Breadth First Traversal
+    //
+    function breadthFirstTraversal(root) {
+      if (!root) {
+        return;
+      }
+
+      let explored = [];
+
+      // Create a queue and add the root to it
+      const discovered = new Queue();
+      discovered.enqueue(root);
+
+      while (discovered.length > 0) {
+        // Remove (dequeue) the first item from our queue of observed nodes
+        const current = discovered.dequeue();
+
+        // Process the current node
+        explored.push(current);
+
+        // Store all unvisited children of the current node
+        if (current.left) {
+          discovered.enqueue(current.left);
+        }
+
+        if (current.right) {
+          discovered.enqueue(current.right);
+        }
+      }
+
+      return explored;
+    }
+
+    let fullTree = breadthFirstTraversal(rootNodeA);
+    console.log("Binary search results!");
+    console.log(fullTree);
+
+    //
+    // Depth First Traversal
+    //
+    function depthFirstTraversal(root) {
+      if (!root) {
+        return;
+      }
+
+      let explored = [];
+
+      // Create a stack and add the root to it
+      const discovered = new Stack();
+      discovered.push(root);
+
+      while (discovered.length > 0) {
+        // Remove the last item from our list of observed nodes
+        const current = discovered.pop();
+
+        // Process the current node
+        explored.push(current);
+
+        // Store all unvisited children of the current node in reverse order
+        if (current.right) {
+          discovered.push(current.right);
+        }
+
+        if (current.left) {
+          discovered.push(current.left);
+        }
+      }
+
+      return explored;
+    }
+
+    let fullTreeTwo = depthFirstTraversal(rootNodeA);
+    console.log("Depth first search results!");
+    console.log(fullTreeTwo);
+  </script>
+</body>
+
+</html>
