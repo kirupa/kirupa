@@ -26,52 +26,52 @@
     const ctx = canvas.getContext('2d');
 
     class Walker {
-  constructor(color, stepSize) {
-    this.x = canvas.width / 2;
-    this.y = canvas.height / 2;
-    this.prevX = this.x;
-    this.prevY = this.y;
-    this.color = color;
-    this.stepSize = stepSize;
-  }
+      constructor(color, stepSize) {
+        this.x = canvas.width / 2;
+        this.y = canvas.height / 2;
+        this.prevX = this.x;
+        this.prevY = this.y;
+        this.color = color;
+        this.stepSize = stepSize;
+      }
 
-  draw() {
-    this.prevX = this.x;
-    this.prevY = this.y;
+      draw() {
+        this.prevX = this.x;
+        this.prevY = this.y;
 
-    // Choose a random direction (0-8)
-    const direction = Math.floor(Math.random() * 9);
+        // Choose a random direction (0-8)
+        const direction = Math.floor(Math.random() * 9);
 
-    // Calculate movement based on chosen direction
-    switch (direction) {
-      case 0:  // Right
-        this.x += this.stepSize;
-        break;
-      case 1:  // Left
-        this.x -= this.stepSize;
-        break;
-      case 2:  // Up
-        this.y -= this.stepSize;
-        break;
-      case 3:  // Down
-        this.y += this.stepSize;
-        break;
+        // Calculate movement based on chosen direction
+        switch (direction) {
+          case 0:  // Right
+            this.x += this.stepSize;
+            break;
+          case 1:  // Left
+            this.x -= this.stepSize;
+            break;
+          case 2:  // Up
+            this.y -= this.stepSize;
+            break;
+          case 3:  // Down
+            this.y += this.stepSize;
+            break;
+        }
+
+        // Keep the walk within the canvas bounds
+        this.x = Math.max(0, Math.min(this.x, canvas.width));
+        this.y = Math.max(0, Math.min(this.y, canvas.height));
+
+        // Draw a line segment
+        ctx.beginPath();
+        ctx.moveTo(this.prevX, this.prevY);
+        ctx.lineTo(this.x, this.y);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = this.color;
+        ctx.stroke();
+        ctx.closePath();
+      }
     }
-
-    // Keep the walk within the canvas bounds
-    this.x = Math.max(0, Math.min(this.x, canvas.width));
-    this.y = Math.max(0, Math.min(this.y, canvas.height));
-
-    // Draw a line segment
-    ctx.beginPath();
-    ctx.moveTo(this.prevX, this.prevY);
-    ctx.lineTo(this.x, this.y);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = this.color;
-    ctx.stroke();
-    ctx.closePath();
-  }
-}
 
     let walker = new Walker("blue", 10);
 
