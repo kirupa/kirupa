@@ -26,14 +26,15 @@
     const canvas = document.querySelector('#myCanvas');
     const ctx = canvas.getContext('2d');
 
+    const stepSize = 3;
+
     class Walker {
-      constructor(color, stepSize) {
+      constructor(color) {
         this.x = canvas.width / 2;
         this.y = canvas.height / 2;
         this.prevX = this.x;
         this.prevY = this.y;
         this.color = color;
-        this.stepSize = stepSize;
       }
 
       draw() {
@@ -46,32 +47,32 @@
         // Calculate movement based on chosen direction
         switch (direction) {
           case 0:  // Right
-            this.x += this.stepSize;
+            this.x += stepSize;
             break;
           case 1:  // Left
-            this.x -= this.stepSize;
+            this.x -= stepSize;
             break;
           case 2:  // Up
-            this.y -= this.stepSize;
+            this.y -= stepSize;
             break;
           case 3:  // Down
-            this.y += this.stepSize;
+            this.y += stepSize;
             break;
           case 4:  // Up-Right
-            this.x += this.stepSize;
-            this.y -= this.stepSize;
+            this.x += stepSize;
+            this.y -= stepSize;
             break;
           case 5:  // Down-Right
-            this.x += this.stepSize;
-            this.y += this.stepSize;
+            this.x += stepSize;
+            this.y += stepSize;
             break;
           case 6: // Down-Left
-            this.x -= this.stepSize;
-            this.y += this.stepSize;
+            this.x -= stepSize;
+            this.y += stepSize;
             break;
           case 7: // Up-Left
-            this.x -= this.stepSize;
-            this.y -= this.stepSize;
+            this.x -= stepSize;
+            this.y -= stepSize;
             break;
           case 8: // No movement (stay in place)
             break;
@@ -85,31 +86,68 @@
         ctx.beginPath();
         ctx.moveTo(this.prevX, this.prevY);
         ctx.lineTo(this.x, this.y);
-        ctx.lineWidth = 2;
+        ctx.lineWidth = stepSize;
         ctx.strokeStyle = this.color;
         ctx.stroke();
         ctx.closePath();
       }
     }
 
-    let walker = new Walker("oklch(70% 0.17 224.47 / 30%)", 5);
-    let walker2 = new Walker("oklch(70% 0.2074 128 / 30%)", 5);
-    let walker3 = new Walker("oklch(94% 0.2343 110.12 / 30%)", 5);
-    let walker4 = new Walker("oklch(70% 0.261 356.82 / 30%)", 5);
+
+
+    let h_range = [0, 360];
+    let s_range = [90, 100];
+    let l_range = [0, 90];
+    let a_range = [.1, .2];
+
+    let color = getRandomColor(h_range, s_range, l_range, a_range);
+    let color2 = getRandomColor(h_range, s_range, l_range, a_range);
+    let color3 = getRandomColor(h_range, s_range, l_range, a_range);
+    let color4 = getRandomColor(h_range, s_range, l_range, a_range);
+
+    let walker = new Walker(color.hslaValue);
+    let walker2 = new Walker(color2.hslaValue);
+    let walker3 = new Walker(color3.hslaValue);
+    let walker4 = new Walker(color4.hslaValue);
 
     function animate() {
-      walker.draw();
-      walker2.draw();
-      walker3.draw();
-      walker4.draw();
+
+      for (let i = 0; i < 100; i++) {
+        walker.draw();
+        walker2.draw();
+        walker3.draw();
+        walker4.draw();
+      }
 
       requestAnimationFrame(animate);
     }
+
     animate();
 
-    canvas.addEventListener("click", () => {
-      drawWalker();
-    });
+
+    function getRandomColor(h, s, l, a) {
+      let hue = getRandomNumber(h[0], h[1]);
+      let saturation = getRandomNumber(s[0], s[1]);
+      let lightness = getRandomNumber(l[0], l[1]);
+      let alpha = getRandomNumber(a[0] * 100, a[1] * 100) / 100;
+
+      return {
+        h: hue,
+        s: saturation,
+        l: lightness,
+        a: alpha,
+        hslaValue: getHSLAColor(hue, saturation, lightness, alpha)
+      }
+    }
+
+    function getRandomNumber(low, high) {
+      let r = Math.floor(Math.random() * (high - low + 1)) + low;
+      return r;
+    }
+
+    function getHSLAColor(h, s, l, a) {
+      return `hsl(${h}, ${s}%, ${l}%, ${a})`;
+    }
   </script>
 </body>
 
