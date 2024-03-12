@@ -13,7 +13,6 @@
 
     #myCanvas {
       border: 4px solid #111;
-      border-radius: 10px;
     }
   </style>
 </head>
@@ -57,24 +56,6 @@
           case 3:  // Down
             this.y += this.stepSize;
             break;
-          case 4:  // Up-Right
-            this.x += this.stepSize;
-            this.y -= this.stepSize;
-            break;
-          case 5:  // Down-Right
-            this.x += this.stepSize;
-            this.y += this.stepSize;
-            break;
-          case 6: // Down-Left
-            this.x -= this.stepSize;
-            this.y += this.stepSize;
-            break;
-          case 7: // Up-Left
-            this.x -= this.stepSize;
-            this.y -= this.stepSize;
-            break;
-          case 8: // No movement (stay in place)
-            break;
         }
 
         // Keep the walk within the canvas bounds
@@ -92,28 +73,20 @@
       }
     }
 
-    let walker = new Walker("blue");
-    let walker2 = new Walker("green");
-    let walker3 = new Walker("black");
-    let walker4 = new Walker("pink");
+    let walker = new Walker("oklch(70% 0.17 224.47 / 30%)", 5);
+    let walker2 = new Walker("oklch(70% 0.2074 128 / 30%)", 5);
+    let walker3 = new Walker("oklch(94% 0.2343 110.12 / 30%)", 5);
+    let walker4 = new Walker("oklch(70% 0.261 356.82 / 30%)", 5);
 
     function animate() {
-
-      for (let i = 0; i < 100; i++) {
-        walker.draw();
-        walker2.draw();
-        walker3.draw();
-        walker4.draw();
-      }
+      walker.draw();
+      walker2.draw();
+      walker3.draw();
+      walker4.draw();
 
       requestAnimationFrame(animate);
     }
-
-    animate(); // Start the animation
-
-    canvas.addEventListener("click", () => {
-      drawWalker();
-    });
+    animate();
   </script>
 </body>
 
