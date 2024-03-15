@@ -79,10 +79,13 @@
     let walker4 = new Walker("oklch(70% 0.261 356.82 / 30%)", 5);
 
     function animate() {
-      walker.draw();
-      walker2.draw();
-      walker3.draw();
-      walker4.draw();
+
+      for (let i = 0; i < 10; i++) {
+        walker.draw();
+        walker2.draw();
+        walker3.draw();
+        walker4.draw();
+      }
 
       requestAnimationFrame(animate);
     }
