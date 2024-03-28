@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testing Loading Multiple Files</title>
+</head>
+<body>
+  <script>
+    function drawImage() {
+      let imageElement = document.createElement("img");
+      imageElement.setAttribute("id", "smiley");
+      imageElement.src = "https://www.kirupa.com/pixel_icons/smiley-happy.gif";
+      document.body.appendChild(imageElement);
+    }
+    drawImage();
+  </script>
+
+  <style>
+    #smiley {
+      width: 100px;
+      height: 100px;
+      image-rendering: pixelated;
+      filter: drop-shadow(0px 0px 10px #CCC);
+      margin: 50px;
+      transition: transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    #smiley:hover {
+      transform: scale(1.5, 1.5) rotate(10deg);
+    }
+  </style>
+</body>
+</html>
