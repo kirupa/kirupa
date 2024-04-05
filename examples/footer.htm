@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://www.kirupa.com/ssi/newDesign/kirupa.css?id=1304" rel="stylesheet" type="text/css">
+
+  <style>
+    :root {
+      --primary: #0798FF;
+      --textOnPrimary: #FFFFFF;
+      --primaryDarker: #0267AF;
+      --primaryLighter: #AADCFF;
+      --primaryLightest: #EAF7FF;
+      --backgroundStart: #f5fcff;
+
+      --light: #F3F3F3;
+      --lighter: #FAFAFA;
+      --highlighter: #FFE561;
+      --highlighterTwo: #FFE561;
+      --highlighterThree: #DCFFB2;
+
+      --inputBackground: #FFF;
+      --inputBorder: #AADCFF;
+
+      --headerBackground: #EAF7FF;
+
+      /* This is not a bug. It's deliberately malformed 
+	   to allow for further tweaking using JS! */
+      --headerCircles: "rgba(7, 152, 255, ";
+
+      --darkText: #222222;
+      --headerText: #222222;
+      --bodyText: #373d42;
+      --darkTextSecondary: #5b5b5b;
+      --navigationLinkColor: #333333;
+
+      --serifFonts: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --monoFonts: "SF Mono", Menlo, monospace, "SF Pro Icons";
+
+      --pageBackground: #FFFFFF;
+
+      --linkForeground: #0071bf;
+      --linkBackground: hsla(209, 100%, 52%, 0.07);
+      --linkHoverForeground: hsla(50, 100%, 25%, 1);
+      --linkHoverBackground: hsla(50, 100%, 50%, 0.51);
+
+      --linkFilter: "none";
+      --linkFilterHover: "none";
+
+      --orangeBigLeaf: #008000;
+      --orangeSmallLeaf: #01C201;
+      --orangeBodyTop: #FFD500;
+      --orangeBodyMiddle: #FFA601;
+      --orangeBodyBottom: #FF8000;
+      --orangeBorder: #333333;
+      --orangeBackground: #FFFFFF;
+
+      --logoTextColor: #0798FF;
+      /* should be the same as primary */
+      --logoTextShadow: #000000;
+
+      --structureBorder: #EEE;
+      --darkStructureBorder: #666;
+      --mediaBorder: #333;
+      --tableBorder: 1px solid #CCC;
+
+      --codeFilter: none;
+    }
+
+    #newFooter {
+      width: 1250px;
+      display: grid;
+      grid-template-columns: 33% 33% 33%;
+    }
+
+    .newFooterFirst {
+
+      display: flex;
+      flex-direction: column;
+
+      padding: 20px;
+
+    }
+
+    .newFooterFirst .footerSocials {
+      padding-left: 0px;
+      margin: 0;
+    }
+
+    .newFooterFirst .footerSocials li {
+      display: inline-block;
+      margin-right: 16px;
+    }
+
+    .newFooterSecond {
+      border: 1px solid var(--structureBorder);
+      border-bottom: 0px;
+      border-top: 0px;
+
+      padding: 20px;
+    }
+
+    .newFooterSecond .popularTags {
+      padding-left: 0px;
+      margin: 0;
+    }
+
+    .newFooterSecond .popularTags li {
+      display: inline-block;
+    }
+
+    .newFooterSecond .popularTags a {
+      line-height: 30px;
+      font-weight: bold;
+      margin: 3px;
+    }
+
+    .newFooterThird {
+      padding: 20px;
+    }
+
+    .newFooterThird .aboutFooter li {
+      list-style-type: none;
+      margin-bottom: 20px;
+    }
+
+    .newFooterThird .aboutFooter {
+      padding-left: 0px;
+    }
+
+    .newFooterThird .aboutFooter a {
+      padding-left: 40px;
+      background-repeat: no-repeat;
+      image-rendering: pixelated;
+      background-position: 10px center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="newFooter">
+    <div class="newFooterFirst">
+      <div>
+        <a href="https://web.archive.org/web/20200707052128/https://www.kirupa.com/">
+          <svg xmlns="http://www.w3.org/2000/svg" width="227" height="53" fill="none">
+            <path fill="#000"
+              d="M82 25V13h-6v12h6ZM70 43V31h6v-6h-6V13h-6v30h6Zm12 0V31h-6v12h6Zm18 0V13h-6v30h6Zm24-12v12h6V31h-6Zm-.24-6H118v-6h5.76v6Zm.24 6v-6h6V13h-18v30h6V31h6Zm36 12V13h-6v24h-6V13h-6v30h18Zm18 0V31h12V13h-18v30h6Zm6-18h-6v-6h6v6Zm24 18V31h6v12h6V13h-18v30h6Zm6-18h-6v-6h6v6Z" />
+            <path fill="#0798FF"
+              d="M81 24V12h-6v12h6ZM69 42V30h6v-6h-6V12h-6v30h6Zm12 0V30h-6v12h6Zm18 0V12h-6v30h6Zm24-12v12h6V30h-6Zm-.24-6H117v-6h5.76v6Zm.24 6v-6h6V12h-18v30h6V30h6Zm36 12V12h-6v24h-6V12h-6v30h18Zm18 0V30h12V12h-18v30h6Zm6-18h-6v-6h6v6Zm24 18V30h6v12h6V12h-18v30h6Zm6-18h-6v-6h6v6Z" />
+            <path fill="#fff"
+              d="M28.5 51C40.93 51 51 40.82 51 28.26 51 15.7 40.93 5.52 28.5 5.52S6 15.7 6 28.26C6 40.82 16.07 51 28.5 51Z" />
+            <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.5"
+              d="M15.15 4.13c-.18.46-.33.9-.46 1.34-.95 3.38-.12 6.12 2.49 8.2.08.08.18.15.3.2 1.68-2.86 1.34-5.66-1.01-8.4-.39-.44-.83-.89-1.32-1.34ZM3.13 7.56a5.56 5.56 0 0 1 2.42 3.09l.47 1.38.31.9a6.33 6.33 0 0 0 3.48 3.85c1.66.76 3.37.92 5.1.46a1.72 1.72 0 0 0 1.16-1.05 2.43 2.43 0 0 0-.02-1.88 8.57 8.57 0 0 0-3.26-3.92 20.48 20.48 0 0 0-4.64-2.16h-.03c-.7-.23-1.4-.4-2.1-.5a13.6 13.6 0 0 0-2.89-.17Z"
+              clip-rule="evenodd" />
+            <path fill="#01C201"
+              d="M17.57 13.83c1.98-3.37 1.2-6.64-2.36-9.83-1.62 4.04-.93 7.25 2.05 9.63.09.08.2.15.3.2Z" />
+            <path fill="green"
+              d="M16.12 14.28a8.63 8.63 0 0 0-3.31-3.96 20.85 20.85 0 0 0-4.72-2.19 13.9 13.9 0 0 0-2.16-.5C4.96 7.47 4 7.41 3 7.46a5.62 5.62 0 0 1 2.45 3.12l.48 1.39c.1.3.22.6.32.92a6.4 6.4 0 0 0 3.53 3.87c1.7.77 3.42.93 5.19.47a1.75 1.75 0 0 0 1.17-1.06c.25-.62.24-1.25-.02-1.9Z" />
+            <path fill="#FF8000"
+              d="M15.17 34.3c.71 1.6 1.73 3.08 3.05 4.42a14.09 14.09 0 0 0 10.37 4.33 15.03 15.03 0 0 0 4.75-.74 15.29 15.29 0 0 0 8.6-7.82c.12-.26.23-.53.33-.8-.38.28-.76.55-1.14.8a24.99 24.99 0 0 1-9.31 3.92 19.43 19.43 0 0 1-5.79.17c-3.6-.44-7.23-1.87-10.86-4.28Z" />
+            <path fill="#FFA601"
+              d="M43.25 28.2a14.44 14.44 0 0 0-4.77-10.98c.33.64.5 1.32.5 2.04 0 1.56-.78 2.92-2.33 4.08a13.96 13.96 0 0 1-8.25 2.43c-2.91 0-5.4-.64-7.47-1.9-.28-.18-.54-.35-.78-.53-1.54-1.16-2.32-2.52-2.32-4.08 0-.46.07-.9.2-1.32H18a15 15 0 0 0-1.91 2.47l-.06.08a14.14 14.14 0 0 0-2.01 6.11 15.68 15.68 0 0 0 1.16 7.7c3.63 2.41 7.25 3.84 10.86 4.28a98.98 98.98 0 0 0 .68.07 19.43 19.43 0 0 0 5.9-.4c2.84-.61 5.69-1.87 8.52-3.76.38-.25.76-.52 1.14-.8a15.47 15.47 0 0 0 .99-5.5Z" />
+            <path fill="#FFD500"
+              d="M34.4 15.1a11.92 11.92 0 0 0-5.94-1.4c-2.32 0-4.3.47-5.93 1.4-1.65.92-2.47 2.03-2.47 3.33 0 1.31.82 2.43 2.47 3.35 1.63.92 3.6 1.38 5.93 1.38 2.32 0 4.3-.46 5.94-1.38 1.64-.92 2.45-2.04 2.45-3.35 0-1.3-.81-2.41-2.45-3.33Z" />
+            <path stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+              d="M11.15 21.05c-.9 2.22-1.4 4.66-1.4 7.2 0 10.47 8.4 18.96 18.75 18.96a18.85 18.85 0 0 0 18.75-18.95c0-10.47-8.4-18.95-18.75-18.95-2.06 0-4.04.33-5.9.95" />
+          </svg>
+        </a>
+      </div>
+      <p>Creating engaging and entertaining content for designers and developers since 1998.</p>
+      <p>Follow:</p>
+      <ul class="footerSocials">
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="red"
+              d="M22 7V5h-2V4H4v1H2v2H1v10h1v2h2v1h16v-1h2v-2h1V7h-1Zm-10 8h-2V9h2v1h2v1h2v2h-2v1h-2v1Z" />
+          </svg></li>
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="#000"
+              d="M15.5 10V9h1V8h1V7h1V6h1V5h1V4h1V3h1V2h-3v1h-1v1h-1v1h-1v1h-1v1h-1v1h-2V7h-1V6h-1V4h-1V3h-1V2h-7v1h1v1h1v1h1v2h1v1h1v2h1v1h1v2h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h3v-1h1v-1h1v-1h1v-1h1v-1h1v-1h2v1h1v1h1v2h1v1h1v1h7v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h1Zm0 4v1h1v2h1v1h1v2h-3v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-1h-1v-2h-1V9h-1V7h-1V6h-1V4h3v1h1v2h1v1h1v2h1v1h1v1h1v2h1Z" />
+          </svg></li>
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="#0FF"
+              d="M11.3 17.3V0h.7v18.8h-.8v.7h-.7v.8H8.2v-.8H6.8v-.8h3V18h.7v-.8h.8ZM18.8 4.5v-.7h.7v.7h2.3v.8h-2.3v-.8h-.8ZM6.8 8.3v-.8H9V9H6v.8H4.5v.7h-.8v.8H3v.7h-.8v1.5h-.7v5.3h.8v1.4H3v.8h-.8v-.8h-.7v-1.4H.7v-2.3H0v-2.3h.8V12h.7v-1.5h.8v-.8H3V9h1.5v-.8h2.3Z" />
+            <path fill="red" fill-rule="evenodd"
+              d="M15.8 0h.7v.8h.8v1.4h-.8v-.7h-.8V0Zm6 6h.7v3.8h-3V9h-2.3v-.8h-.7v11.3h-.8V21H15v.8h-.8v.7h-.7v.8H12v.7H6v-.8H4.5v-.7h-.8v-.8h.8v.8H6v.8h3.8v-.8H12v-.8h.8V21h.7v-.8h.8v-.7h.7V18h.8V7.5h1.4v.8h2.3V9h2.3V6ZM9 9h1.5v4.5H6.7v.8H6V18h-.8v-.8h-.7v-3h.8v-1.4H6V12h3V9Z"
+              clip-rule="evenodd" />
+            <path fill="#fff"
+              d="M0 14.3V0h11.3v17.3h-.8v.7h-.8v.8H6v-4.6h.8v-.7h3.7V9H9V7.5H6.7v.8H4.5V9H3v.8h-.8v.7h-.7V12H.7v2.3H0ZM16.5.8V0H24v24H12v-.8h1.5v-.7h.8v-.8h.7V21h.8v-1.5h.7V8.2h.8V9h2.2v.8h3V6h-.8V4.5h-2.2v-.8H18V3h-.8V.7h-.7ZM0 24v-7.5h.8v2.3h.7v1.4h.8v.8h1.5v1.5h.7v.8H6v.7H0Z" />
+            <path fill="#000"
+              d="M12 18.8V0h3.8v1.5h.7v.8h.8V3h.7v.8h.8v.7h.7v.8h2.3V9h-2.3v-.8h-2.3v-.7h-1.4V18H15v1.5h-.8v.8h-.7v.7h-.8v.8H12v.7H9.7v.8H6v-.8H4.5v-.8h-.8V21H3v-.8h-.8v-1.4h-.7v-5.3h.8V12H3v-.8h.8v-.7h.7v-.8H6V9h3v3H6v.8h-.8v1.4h-.7v3h.8v.8H6v.8h.8v.7h1.5v.8h2.2v-.8h.8v-.8h.7Z" />
+          </svg></li>
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="#00497D"
+              d="M23 9v6h-1v2h-1v2h-1v1h-1v1h-2v1h-2v1h-1v-8h2v-1h1v-2h-3V9h1V8h2V5h-4v1h-2v2h-1v4H7v3h3v8H9v-1H7v-1H5v-1H4v-1H3v-2H2v-2H1V9h1V7h1V5h1V4h1V3h2V2h2V1h6v1h2v1h2v1h1v1h1v2h1v2h1Z" />
+          </svg></li>
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="#DA2D75"
+              d="M17 9V8h-1V7h-1V6H9v1H8v1H7v1H6v6h1v1h1v1h1v1h6v-1h1v-1h1v-1h1V9h-1Zm-1 5h-1v1h-1v1h-4v-1H9v-1H8v-4h1V9h1V8h4v1h1v1h1v4Z" />
+            <path fill="#DA2D75"
+              d="M22 5V3h-1V2h-2V1H5v1H3v1H2v2H1v14h1v2h1v1h2v1h14v-1h2v-1h1v-2h1V5h-1Zm-1 14h-1v1h-1v1H5v-1H4v-1H3V5h1V4h1V3h14v1h1v1h1v14Z" />
+            <path fill="#DA2D75" d="M19 5h-2v2h2V5Z" />
+          </svg></li>
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="#007EBB"
+              d="M22 2V1H2v1H1v20h1v1h20v-1h1V2h-1Zm-9 10v8h-3V9h3v1h1V9h4v1h1v10h-3v-8h-3ZM4 8V5h3v3H4Zm3 1v11H4V9h3Z" />
+          </svg></li>
+        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+            <path fill="#585858"
+              d="M9 14H8v-2h3v-1H8V9h3V8H8V6h3V5H8V3h1V2h1V1h4v1h1v1h1v2h-3v1h3v2h-3v1h3v2h-3v1h3v2h-1v1h-1v1h-4v-1H9v-1Z" />
+            <path fill="#585858"
+              d="M19 12v3h-1v2h-1v1h-2v1h-2v2h3v2H8v-2h3v-2H9v-1H7v-1H6v-2H5v-3h1v2h1v2h1v1h2v1h4v-1h2v-1h1v-2h1v-2h1Z" />
+          </svg></li>
+      </ul>
+    </div>
+    <div class="newFooterSecond">
+      <p>Popular</p>
+      <ul class="popularTags">
+        <li><a class="grayEmphasis" href="#">JavaScript</a></li>
+        <li><a class="grayEmphasis" href="#">Animation</a></li>
+        <li><a class="grayEmphasis" href="#">CSS</a></li>
+        <li><a class="grayEmphasis" href="#">Algorithms</a></li>
+        <li><a class="grayEmphasis" href="#">Data Structures</a></li>
+        <li><a class="grayEmphasis" href="#">React</a></li>
+        <li><a class="grayEmphasis" href="#">UX</a></li>
+        <li><a class="grayEmphasis" href="#">Canvas</a></li>
+        <li><a class="grayEmphasis" href="#">Arrays</a></li>
+        <li><a class="grayEmphasis" href="#">FUNdamentals</a></li>
+        <li><a class="grayEmphasis" href="#">Flash + ActionScript</a></li>
+        <li><a class="grayEmphasis" href="#">Books</a></li>
+        <li><a class="grayEmphasis" href="#">Forum</a></li>
+        <li><a class="grayEmphasis" href="#">Newsletter</a></li>
+      </ul>
+    </div>
+    <div class="newFooterThird">
+      <p>Loose Ends</p>
+      <ul class="aboutFooter">
+        <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/orange.gif');" href="#">What is a
+            Kirupa?</a></li>
+        <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/heart3.gif');" href="#">About the
+            Site</a></li>
+        <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/coffee.gif');" href="#">Handy Tools</a>
+        </li>
+        <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/smiley-silly.gif');" href="#">Get
+            Help</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>
