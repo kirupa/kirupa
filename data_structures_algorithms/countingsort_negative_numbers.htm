@@ -9,7 +9,7 @@
 
 <body>
   <script>
-    function countingSort(input) {
+    function countingSort_enhanced(input) {
       // Find the smallest element (to account for negative values)
       const min = Math.min(...input);
 
@@ -51,9 +51,9 @@
     }
 
     // Live example!
-    let unsortedArray = [5, -2, -1, 3, 4, 1, 0, 0, 4, 7, 2, -4];
-    let sortedArray = countingSort(unsortedArray);
-    console.log(sortedArray); // -4, -2, -1, 0, 0, 1, 2, 3, 4, 4, 5, 7
+    let unsortedArray = [1, 0, -2, 3, -5, 0, 3];
+    let sortedArray = countingSort_enhanced(unsortedArray);
+    console.log(sortedArray); // [-5, -2, 0, 0, 1, 3, 3]
   </script>
 </body>
 
