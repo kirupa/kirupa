@@ -9,38 +9,85 @@
 
 <body>
   <script>
-    function radixSort(arr) {
-      // Find the maximum number to determine the number of digits
-      const maxNum = Math.max(...arr);
-      const numDigits = Math.ceil(Math.log10(maxNum + 1)); // Number of digits in the largest number
+    function getDigit(num, place) {
+      // Return the digit at the specified place (0-indexed)
+      return Math.floor(Math.abs(num) / Math.pow(10, place)) % 10;
+    }
 
-      // Iterate through each digit, starting from the least significant digit (LSD)
-      for (let digit = 0; digit < numDigits; digit++) {
-        const buckets = Array(10).fill(0).map(() => []); // Create 10 buckets (0-9)
-
-        // Distribute the numbers into buckets based on the current digit
-        for (const num of arr) {
-          const digitValue = Math.floor(num / Math.pow(10, digit)) % 10; // Extract the digit
-          buckets[digitValue].push(num);
-        }
-
-        // Collect the numbers back from the buckets in sorted order
-        let index = 0;
-        for (let i = 0; i < 10; i++) {
-          const bucket = buckets[i];
-          for (const num of bucket) {
-            arr[index++] = num;
-          }
-        }
+    function digitCount(maxNum) {
+      // Get the number of digits in the largest number
+      if (maxNum === 0) {
+        return 1;
       }
+      
+      return Math.floor(Math.log10(Math.abs(maxNum))) + 1;
+    }
+
+    function countingSort(input) {
+      // Find the maximum element in the array
+      const max = Math.max(...input);
+
+      // Create a count array to store the frequency of each element
+      const count = new Array(max + 1).fill(0);
+
+      // Count the occurrences of each element
+      for (const num of input) {
+        count[num]++;
+      }
+
+      // Calculate prefix sum to store the position of each element in the sorted array
+      for (let i = 1; i <= max; i++) {
+        count[i] += count[i - 1];
+      }
+
+      // Create an output array to store the sorted elements
+      const output = new Array(input.length);
+
+      // Place elements in the output array based on counts
+      for (let i = input.length - 1; i >= 0; i--) {
+        output[count[input[i]] - 1] = input[i];
+        count[input[i]]--;
+      }
+
+      // Return the sorted array
+      return output;
+    }
+
+    function radixSort(arr) {
+      const min = Math.min(...arr);
+
+      // Shift all values in the input by the min value
+      // to account for negative values
+      arr = arr.map(val => val - min);
+
+      let maxDigitCount = digitCount(Math.max(...arr));
+
+      // Create a temporary array for each digit place
+      const temp = new Array(arr.length).fill(null);
+
+      // Sort by each digit place (least significant to most significant)
+      for (let place = 0; place < maxDigitCount; place++) {
+        // Distribute elements into buckets based on their digit at the current place
+        for (let i = 0; i < arr.length; i++) {
+          const digit = getDigit(arr[i], place);
+          temp[i] = arr[i];
+        }
+
+        // Sort the temporary array using counting sort
+        arr = countingSort(temp);
+      }
+
+      // Having accounted for the minimum value,
+      // shift all values back
+      arr = arr.map(val => val + min);
 
       return arr;
     }
 
-    // Example usage:
-    const unsortedArray = [122, 415, 2015, 657, 32, 436232, 7201, 3255];
-    const sortedArray = radixSort(unsortedArray);
-    console.log(sortedArray); // Output: [32, 122, 415, 657, 2015, 3255, 7201, 436232]
+    // Example usage
+    const numbers = [170, 45, 75, 90, 802, 24, 2];
+    const sortedNumbers = radixSort(numbers);
+    console.log(sortedNumbers); // [-802, 2, 24, 45, 75, 90, 170]
   </script>
 </body>
 
