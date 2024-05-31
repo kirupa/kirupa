@@ -1,9 +1,0 @@
-svg {
-  & > .primary {
-    fill: var(--text-2);
-  }
-
-  & > .secondary {
-    fill: light-dark(var(--color-5), var(--color-8));
-  }
-}
