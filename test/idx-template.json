@@ -5,9 +5,7 @@
       "Web app",
       "CSS"
     ],
-    "publisher": {},
-    "params": [
-  
-    ]
-  }
-  
+    "icon": "https://developers.google.com/static/maps/images/maps-icon.svg",
+    "publisher": "Adam Argyle",
+    "params": []
+}
