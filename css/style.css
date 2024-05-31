@@ -1,0 +1,41 @@
+@layer system, base, utilities, layouts, components;
+
+@import 'css/global/_vars.css' layer(system.props);
+
+@import 'css/global/page.css' layer(base);
+@import 'css/global/typography.css' layer(base);
+
+@import 'css/utilities/scrolling.css' layer(utilities);
+@import 'css/utilities/animation.css' layer(utilities);
+
+@import 'css/layouts/body.css' layer(layouts);
+@import 'css/layouts/nav.css' layer(layouts);
+@import 'css/layouts/aside.css' layer(layouts);
+@import 'css/layouts/main.css' layer(layouts);
+@import 'css/layouts/article.css' layer(layouts);
+@import 'css/layouts/header.css' layer(layouts);
+@import 'css/layouts/footer.css' layer(layouts);
+@import 'css/layouts/hero-chips.css' layer(layouts);
+@import 'css/layouts/hero-products-list.css' layer(layouts);
+@import 'css/layouts/hero-featured.css' layer(layouts);
+@import 'css/layouts/deal-card.css' layer(layouts);
+@import 'css/layouts/mural-card.css' layer(layouts);
+
+@import 'css/components/nav.css' layer(components);
+@import 'css/components/brand.css' layer(components);
+@import 'css/components/link.css' layer(components);
+@import 'css/components/header.css' layer(components);
+@import 'css/components/aside.css' layer(components);
+@import 'css/components/button.css' layer(components);
+@import 'css/components/button-list.css' layer(components);
+@import 'css/components/search.css' layer(components);
+@import 'css/components/greeting.css' layer(components);
+@import 'css/components/pagination.css' layer(components);
+@import 'css/components/picture.css' layer(components);
+@import 'css/components/svg.css' layer(components);
+@import 'css/components/dot.css' layer(components);
+@import 'css/components/money.css' layer(components);
+@import 'css/components/hero-chips.css' layer(components);
+@import 'css/components/hero-products-list.css' layer(components);
+@import 'css/components/deal-card.css' layer(components);
+@import 'css/components/mural-card.css' layer(components);

@@ -1,0 +1,8 @@
+data[money] {
+  color: var(--text-1);
+
+  & > sup {
+    color: var(--text-2);
+    font-size: 0.5em;
+  }
+}

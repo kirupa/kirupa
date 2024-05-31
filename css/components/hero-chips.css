@@ -1,0 +1,44 @@
+hero-chips {
+  & > figure {
+    margin: 0;
+    padding: 0.5rem;
+    border: 1px solid var(--surface-2);
+    border-radius: var(--brand-border_radius);
+  }
+
+  & img {
+    width: 10rem;
+    object-fit: contain;
+  }
+
+  & :is(p,h4,small) {
+    margin: 0;
+  }
+
+  & h4 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.1;
+
+    @media (min-resolution: 1.25dppx) {
+      font-weight: 400;
+    }
+  }
+
+  & small {
+    margin-top: 0.25rem;
+    color: var(--text-2);
+  }
+
+  & p {
+    font-size: 0.8rem;
+    color: var(--text-1);
+    margin: 0.5rem 0;
+  }
+
+  & span {
+    font-size: 0.8rem;
+    color: var(--brand-primary);
+    margin-bottom: 0.5rem;
+  }
+}

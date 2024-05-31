@@ -1,0 +1,27 @@
+/* aside > nav {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 1.25rem;
+} */
+
+aside > nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  position: sticky;
+  top: calc(var(--body-rails) + 1rem);
+
+  & > a:not(:last-of-type) {
+    margin-bottom: 1.25rem;
+  }
+
+  @media (width <= 768px) {
+    flex-direction: row;
+    height: auto;
+
+    & > a:not(:last-of-type) {
+      margin-right: 1.25rem;
+    }
+  }
+}
