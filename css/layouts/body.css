@@ -1,0 +1,15 @@
+body {
+  display: grid;
+  gap: 2rem;
+  grid-auto-flow: row;
+
+  & > .greeting {
+    margin: 0 1rem;
+  }
+
+  @media (width > 768px) {
+    & > :is(.greeting, main) {
+      margin-left: var(--body-rails);
+    }
+  }
+}

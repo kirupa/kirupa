@@ -1,0 +1,39 @@
+[horizontal-scroll] {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+  
+  @media (width <= 768px) {
+    scroll-padding: 1rem;
+    padding: 0 1rem 1rem;
+  }
+}
+
+[horizontal-snapping] > * {
+  scroll-snap-align: start;
+
+  /* fixes padding at end of container */
+  &:last-child {
+    position: relative;
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      right: -4rem;
+      width: 4rem;
+      height: 1px;
+
+      @media (width <= 768px) {
+        right: -1rem;
+        width: 1rem;
+      }
+    }
+  }
+}
+
+[hide-horizontal-overflow] {
+  overflow-x: hidden;
+}

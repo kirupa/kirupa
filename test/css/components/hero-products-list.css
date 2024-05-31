@@ -1,0 +1,10 @@
+hero-products-list {
+  & > picture {
+    border-radius: var(--brand-border_radius);
+    overflow: hidden;
+  }
+
+  & > figure {
+    margin: 0;
+  }
+}

@@ -1,0 +1,9 @@
+nav {
+  background: var(--surface-document);
+  z-index: 1;
+
+  aside > & {
+    background: none;
+    z-index: 0;
+  }
+}

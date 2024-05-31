@@ -1,0 +1,37 @@
+.mural-card {
+  display: grid;
+  align-items: flex-end;
+
+  & > * {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  & :is(picture, img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  & > figcaption {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
+    gap: 1rem;
+
+    & > h3 {
+      display: grid;
+      gap: .25rem;
+    }
+
+    & > p {
+      grid-column: 2;
+      justify-self: flex-end;
+      width: max-content;
+
+      display: inline-grid;
+      gap: .5rem;
+      grid-auto-flow: column;
+      align-items: flex-end;
+    }
+  }
+}
