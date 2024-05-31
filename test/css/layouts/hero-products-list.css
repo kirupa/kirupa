@@ -1,0 +1,42 @@
+hero-products-list {
+  display: grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+  grid-auto-columns: 20rem;
+  grid-template-rows: 20rem;
+
+  & > figure {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50% 50%;
+    place-content: center;
+
+    &[topleft] > * {
+      height: auto;
+
+      &:first-child {
+        grid-row: 1;
+        grid-column: 1;
+      }
+
+      &:last-child {
+        grid-row: 2;
+        grid-column: 2;
+      }
+    }
+
+    &[topright] > * {
+      height: auto;
+
+      &:first-child {
+        grid-row: 1;
+        grid-column: 2;
+      }
+
+      &:last-child {
+        grid-row: 2;
+        grid-column: 1;
+      }
+    }
+  }
+}
