@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radix Sort!</title>
+</head>
+
+<body>
+  <script>
+    function radixSort(input) {
+      // Get the max number of digits
+      const maxDigits = Math.max(...input).toString().length;
+
+      // Loop through each digit (place value)
+      for (let digit = 0; digit < maxDigits; digit++) {
+        const buckets = Array.from({ length: 10 }, () => []);
+
+        // Distribute elements into buckets based on their digit at the current place value
+        for (const num of input) {
+          const digitValue = getDigit(num, digit);
+          buckets[digitValue].push(num);
+        }
+
+        // Combine elements back into the array in order
+        input.splice(0, input.length, ...buckets.flat());
+      }
+
+      return input;
+    }
+
+    // Helper function to get the digit at a specific place value
+    function getDigit(num, place) {
+      return Math.floor(Math.abs(num) / Math.pow(10, place)) % 10;
+    }
+
+    // Example usage
+    const numbers = [170, 0, 4, 45, 95, 50, 4, 24, 2];
+    const sortedNumbers = radixSort(numbers);
+    console.log(sortedNumbers); // [-802, 2, 24, 45, 75, 90, 170]
+  </script>
+</body>
+
+</html>
