@@ -93,6 +93,15 @@
 
     // Function to perform radix sort on an array of numbers
     function radixSort(input) {
+      // Find the smallest element (to account for negative values)
+      const min = Math.min(...input);
+
+      // Shift all values in the input by the min value
+      input = input.map(val => val - min);
+
+      // Find the maximum element in the array
+      const max = Math.max(...input);
+
       // Find the maximum number of digits in the array of numbers
       const maxLength = mostDigits(input);
 
@@ -102,13 +111,17 @@
         input = countingSort(input, digit);
       }
 
+      // Having accounted for the minimum value,
+      // shift all values back
+      input = input.map(val => val + min);
+
       // Return the sorted array of numbers
       return input;
     }
 
-    const numbers = [170, 45, 75, 90, 802, 24, 2, 66];
+    const numbers = [170, 45, -75, 90, -802, 24, 2, -66];
     const sortedNumbers = radixSort(numbers);
-    console.log(sortedNumbers); // Output: [2, 24, 45, 66, 75, 90, 170, 802]
+    console.log(sortedNumbers); // Output: [-802,-75, -66, 2, 24, 45, 90, 170]
   </script>
 </body>
 

@@ -1,7 +1,0 @@
-<tile>
-  <visual version="2">
-    <binding template="TileSquare150x150Text04" fallback="TileSquareText04">
-      <text id="1">Hello world!</text>
-    </binding>  
-  </visual>
-</tile>
