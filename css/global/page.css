@@ -1,9 +1,0 @@
-html {
-  color-scheme: light dark;
-  background: var(--surface-document);
-  color: var(--text-1);
-}
-
-body {
-  margin: 0;
-}

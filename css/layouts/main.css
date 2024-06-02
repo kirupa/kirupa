@@ -1,8 +1,0 @@
-main {
-  display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
-
-  @media (width <= 768px) {
-    display: contents;
-  }
-}
