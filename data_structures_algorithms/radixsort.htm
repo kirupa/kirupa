@@ -50,16 +50,15 @@
     }
 
     // Function to perform counting sort on an array of numbers based on a specific place
-    function countingSort(arr, place) {
+    function countingSort(input, place) {
       // Create an output array to store the sorted numbers
-      const output = new Array(arr.length);
+      const output = new Array(input.length);
 
       // Create a count array to store the count of each digit (0-9)
       const count = new Array(10).fill(0);
-      
 
       // Iterate through the array of numbers
-      for (const num of arr) {
+      for (const num of input) {
         // Get the digit at the specified place in the current number
         const digit = getDigit(num, place);
 
@@ -73,15 +72,15 @@
       }
 
       // Iterate through the array of numbers in reverse order
-      for (let i = arr.length - 1; i >= 0; i--) {
+      for (let i = input.length - 1; i >= 0; i--) {
         // Get the digit at the specified place in the current number
-        const digit = getDigit(arr[i], place);
+        const digit = getDigit(input[i], place);
 
         // Calculate the index of the current number in the output array
         const index = count[digit] - 1;
 
         // Store the current number in the output array at the calculated index
-        output[index] = arr[i];
+        output[index] = input[i];
 
         // Decrement the count of the digit
         count[digit]--;
@@ -119,9 +118,9 @@
       return input;
     }
 
-    const numbers = [170, 45, -75, 90, -802, 24, 2, -66];
+    const numbers = [100, 43, 2310, 67, 512, 99, 104];
     const sortedNumbers = radixSort(numbers);
-    console.log(sortedNumbers); // Output: [-802,-75, -66, 2, 24, 45, 90, 170]
+    console.log(sortedNumbers); // Output: [43, 67, 99, 100, 104, 512, 2310]
   </script>
 </body>
 
