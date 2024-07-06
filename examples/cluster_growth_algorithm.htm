@@ -7,11 +7,8 @@
   <title>Cluster Growth Animation</title>
   <style>
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       height: 100vh;
-      margin: 0;
+      margin: 50px;
       background-color: #f0f0f0;
     }
 
@@ -23,7 +20,10 @@
 
 <body>
   <canvas id="canvas" width="400" height="400"></canvas>
+  <p id="logger">test</p>
   <script>
+    let logger = document.querySelector("#logger");
+
     class ClusterGrowth {
       constructor() {
         // Get the canvas element and its 2D context
@@ -33,19 +33,18 @@
         this.height = this.canvas.height;
         this.grid = this.createEmptyGrid(); // Initialize the grid
         this.growthProbability = this.random(0.05, 0.2); // Set initial growth probability
-        this.holdTime = 300; // Set initial hold time
+        this.sparseness = 2;
 
         this.init(); // Initialize the grid and seed the cluster
         this.animate(); // Start the animation loop
       }
 
       // Initialize the grid and seed the cluster
-      init() {
-        this.holdTime = 300; // Reset hold time
+      init() {        
         this.growthProbability = this.random(0.05, 0.2); // Reset growth probability
         this.grid = this.createEmptyGrid(); // Create a new empty grid
         // Seed the cluster at a random position with a size of 2
-        this.seedCluster(Math.floor(this.random(this.width)), Math.floor(this.random(this.height)), 2);
+        this.seedCluster(Math.floor(Math.random() * this.width / (2 * this.sparseness)), Math.floor(Math.random() * this.height /  (2 * this.sparseness)), 2); 
       }
 
       // Animation loop
@@ -57,30 +56,35 @@
       // Draw the current state of the grid
       draw() {
         this.ctx.clearRect(0, 0, this.width, this.height); // Clear the canvas
-        this.ctx.strokeStyle = 'white'; // Set stroke color to white
-        this.ctx.lineWidth = 1; // Set line width to 1
+       
 
         this.updateGrid(); // Update the grid based on growth probability
         this.displayGrid(); // Display the grid on the canvas
 
         // Calculate the total number of cells and the total sum of the grid values
-        let totalGrid = (this.width * this.height) / 3;
+        let totalGrid = ((this.width / this.sparseness) * (this.height / this.sparseness));
         let totalSum = 0;
         
         for (let i = 0; i < this.width; i++) {
           for (let j = 0; j < this.height; j++) {
-            totalSum += this.grid[i][j];
+            totalSum += (this.grid[i][j]);
           }
         }
 
+        logger.innerText = totalSum + " " + totalGrid + " " + this.holdTime;
+
+        if (totalSum >= totalGrid) {
+          this.init();
+        }
+        /*
         // Check if the grid is fully grown and reset if needed
         if (totalGrid >= totalSum) {
           this.holdTime--;
           if (this.holdTime < 0) {
             this.init(); // Reset the grid and seed a new cluster
-            console.log("Time to start over!");
           }
         }
+        */
       }
 
       // Update the grid based on growth probability
@@ -110,7 +114,7 @@
         for (let x = 0; x < this.width; x++) {
           for (let y = 0; y < this.height; y++) {
             if (this.grid[x][y] === 1) {
-              this.ctx.fillRect(x * 2, y * 2, 2, 2); // Draw a filled rectangle for each cell
+              this.ctx.fillRect(x * this.sparseness, y * this.sparseness, 2, 2); // Draw a filled rectangle for each cell
             }
           }
         }
