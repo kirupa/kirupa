@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sieve of Erathosthenes</title>
+  </head>
+  <body>
+    <script>
+      function sieveOfEratosthenes(n) {
+        // Create a boolean array "prime[0..n]" and initialize
+        // all entries it as true. A value in prime[i] will
+        // finally be false if i is Not a prime, true otherwise.
+        let prime = Array(n + 1).fill(true);
+        prime[0] = prime[1] = false; // 0 and 1 are not prime numbers
+
+        for (let p = 2; p * p <= n; p++) {
+          // If prime[p] is not changed, then it is a prime
+          if (prime[p] === true) {
+            // Update all multiples of p to false indicating not prime
+            for (let i = p * p; i <= n; i += p) {
+              prime[i] = false;
+            }
+          }
+        }
+
+        // Collecting all prime numbers
+        let primes = [];
+        for (let i = 2; i <= n; i++) {
+          if (prime[i]) {
+            primes.push(i);
+          }
+        }
+
+        return primes;
+      }
+
+      // Example usage:
+      const n = 100;
+      const primesUpToN = sieveOfEratosthenes(n);
+      console.log(`Prime numbers up to ${n}:`, primesUpToN);
+    </script>
+  </body>
+</html>
