@@ -24,6 +24,27 @@
 <body>
   <canvas id="canvas" width="400" height="400"></canvas>
   <script>
+    let lightColors = [];
+
+    const dark_colors = [
+      "#9D0000",  // Dark Red
+      "#C70039",  // Deep Pink
+      "#800080",  // Purple
+      "#4C3378",  // Dark Purple (bluish)
+      "#003080",  // Navy Blue (more vivid)
+      "#007BFF",  // Material Blue (darker, vivid)
+      "#388E3C",  // Dark Green (vivid)
+      "#00695C",  // Dark Teal
+      "#663399",  // Dark Amethyst
+      "#8B0000",  // Maroon (more vivid)
+      "#A020F0",  // Deep Purple (more intense)
+      "#B32830",  // Dark Red (brownish)
+      "#BF360C",  // Dark Orange
+      "#C2C255",  // Dark Lime (more muted)
+      "#FF9933",  // Dark Orange (reddish)
+    ];
+
+
     class ClusterGrowth {
       constructor() {
         // Get the canvas element and its 2D context
@@ -32,9 +53,10 @@
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.grid = this.createEmptyGrid(); // Initialize the grid
-        this.growthProbability = this.random(0.05, 0.2); // Set initial growth probability
+        this.growthProbability = this.random(0.05, 0.4); // Set initial growth probability
         this.holdTime = 120; // Set initial hold time
         this.filledCells = 0;
+        this.count = 0;
 
         this.init(); // Initialize the grid and seed the cluster
         this.animate(); // Start the animation loop
@@ -48,7 +70,12 @@
         // Seed the cluster at a random position with a size of 2
         //this.seedCluster(Math.floor(this.random(this.width)), Math.floor(this.random(this.height)), 2);
         this.seedCluster(this.width / 2, this.height / 2, 2);
-        this.color = getRandomColor();
+
+        if (this.count % 2 === 0) {
+          this.color = getRandomColor();
+        } else {
+          this.color = "white";
+        }
       }
 
       // Animation loop
@@ -78,6 +105,7 @@
         if (totalGrid >= totalSum) {
           this.holdTime--;
           if (this.holdTime < 0) {
+            this.count++;
             this.init(); // Reset the grid and seed a new cluster
           }
         }
