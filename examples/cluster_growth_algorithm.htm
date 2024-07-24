@@ -1,219 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cluster Growth Animation</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f0f0f0;
-    }
-
-    canvas {
-      border: 1px solid black;
-    }
-  </style>
-</head>
-
-<body>
-  <canvas id="canvas" width="400" height="400"></canvas>
-  <script>
-    let lightColors = [];
-
-    const dark_colors = [
-      "#9D0000",  // Dark Red
-      "#C70039",  // Deep Pink
-      "#800080",  // Purple
-      "#4C3378",  // Dark Purple (bluish)
-      "#003080",  // Navy Blue (more vivid)
-      "#007BFF",  // Material Blue (darker, vivid)
-      "#388E3C",  // Dark Green (vivid)
-      "#00695C",  // Dark Teal
-      "#663399",  // Dark Amethyst
-      "#8B0000",  // Maroon (more vivid)
-      "#A020F0",  // Deep Purple (more intense)
-      "#B32830",  // Dark Red (brownish)
-      "#BF360C",  // Dark Orange
-      "#C2C255",  // Dark Lime (more muted)
-      "#FF9933",  // Dark Orange (reddish)
-    ];
-
-
-    class ClusterGrowth {
-      constructor() {
-        // Get the canvas element and its 2D context
-        this.canvas = document.getElementById("canvas");
-        this.ctx = this.canvas.getContext("2d");
-        this.width = this.canvas.width;
-        this.height = this.canvas.height;
-        this.grid = this.createEmptyGrid(); // Initialize the grid
-        this.growthProbability = this.random(0.05, 0.4); // Set initial growth probability
-        this.holdTime = 120; // Set initial hold time
-        this.filledCells = 0;
-        this.count = 0;
-
-        this.init(); // Initialize the grid and seed the cluster
-        this.animate(); // Start the animation loop
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cluster Growth Animation</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
       }
 
-      // Initialize the grid and seed the cluster
-      init() {
-        this.holdTime = 200; // Reset hold time
-        this.growthProbability = this.random(0.1, 0.3); // Reset growth probability
-        this.grid = this.createEmptyGrid(); // Create a new empty grid
-        // Seed the cluster at a random position with a size of 2
-        //this.seedCluster(Math.floor(this.random(this.width)), Math.floor(this.random(this.height)), 2);
-        this.seedCluster(this.width / 2, this.height / 2, 2);
-
-        if (this.count % 2 === 0) {
-          this.color = getRandomColor();
-        } else {
-          this.color = "white";
-        }
+      canvas {
+        border: 1px solid black;
       }
+    </style>
+  </head>
 
-      // Animation loop
-      animate() {
-        this.draw(); // Draw the current state of the grid
-        requestAnimationFrame(this.animate.bind(this)); // Request the next frame
-      }
+  <body>
+    <canvas id="canvas" width="480" height="480"></canvas>
+    <script>
+      let myCanvas = document.getElementById("canvas");
+      let ctx = myCanvas.getContext("2d");
 
-      // Draw the current state of the grid
-      draw() {
-        //this.ctx.clearRect(0, 0, this.width, this.height); // Clear the canvas
-        this.ctx.fillStyle = this.color;
+      let width = myCanvas.width;
+      let height = myCanvas.height;
 
-        this.updateGrid(); // Update the grid based on growth probability
-        this.displayGrid(); // Display the grid on the canvas
+      let growthSpacing = 4;
+      let drawCount = 0;
 
-        // Calculate the total number of cells and the total sum of the grid values
-        let totalGrid = this.width * this.height;
-        let totalSum = 0;
-        for (let i = 0; i < this.width; i++) {
-          for (let j = 0; j < this.height; j++) {
-            totalSum += this.grid[i][j];
-          }
-        }
+      let tempGrid = createEmptyGrid();
 
-        // Check if the grid is fully grown and reset if needed
-        if (totalGrid >= totalSum) {
-          this.holdTime--;
-          if (this.holdTime < 0) {
-            this.count++;
-            this.init(); // Reset the grid and seed a new cluster
-          }
-        }
-      }
+      let activeCells = 0;
+      let iterations = 0;
 
-      // Update the grid based on growth probability
-      updateGrid() {
-        let updatedGrid = this.createEmptyGrid(); // Create a new empty grid
+      let cellSize = 1; // Size of each cell
+      let gap = 3; // Size of the gap between cells
 
-        // Iterate through each cell in the grid
-        for (let i = 1; i < this.grid.length - 1; i++) {
-          for (let j = 1; j < this.grid[0].length - 1; j++) {
-            let neighbors = this.countNeighbors(this.grid, i, j); // Count the number of neighboring cells
+      let totalOffset = cellSize + gap;
 
-            // Apply growth probability if the cell is empty and has neighbors
-            if (this.grid[i][j] === 0 && neighbors > 0) {
-              if (this.random(1) < this.growthProbability) {
-                updatedGrid[i][j] = 1; // Grow a new cell
-              }
-            } else {
-              updatedGrid[i][j] = this.grid[i][j]; // Keep the existing cell
-            }
-          }
-        }
-        this.grid = updatedGrid; // Update the grid
-      }
+      let growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
 
-      // Display the grid on the canvas
-      displayGrid() {
-        for (let x = 0; x < this.width; x++) {
-          for (let y = 0; y < this.height; y++) {
-            if (this.grid[x][y] === 1) {
-              let xPos = (x * 4) - (this.width * 1.5);
-              let yPos = (y * 4) - (this.height * 1.5)
-              this.ctx.fillRect(xPos, yPos, 2, 2); // Draw a filled rectangle for each cell
-            }
-          }
-        }
-      }
+      const dark_colors = [
+        "#9D0000", // Dark Red
+        "#C70039", // Deep Pink
+        "#800080", // Purple
+        "#4C3378", // Dark Purple (bluish)
+        "#003080", // Navy Blue (more vivid)
+        "#007BFF", // Material Blue (darker, vivid)
+        "#388E3C", // Dark Green (vivid)
+        "#00695C", // Dark Teal
+        "#663399", // Dark Amethyst
+        "#8B0000", // Maroon (more vivid)
+        "#A020F0", // Deep Purple (more intense)
+        "#B32830", // Dark Red (brownish)
+        "#BF360C", // Dark Orange
+        "#C2C255", // Dark Lime (more muted)
+        "#FF9933", // Dark Orange (reddish)
+      ];
 
-      // Create a new empty grid
-      createEmptyGrid() {
+      let color = getRandomColor(dark_colors);
+
+      function createEmptyGrid() {
         let emptyGrid = [];
-        for (let i = 0; i < this.width + 1; i++) {
+        for (let i = 0; i < width + 1; i++) {
           let row = [];
-          for (let j = 0; j < this.height + 1; j++) {
+          for (let j = 0; j < height + 1; j++) {
             row.push(0); // Initialize each cell to 0
           }
           emptyGrid.push(row);
         }
+
         return emptyGrid;
       }
 
-      // Count the number of neighboring cells
-      countNeighbors(grid, x, y) {
-        let sum = 0;
-        for (let i = -1; i <= 1; i++) {
-          for (let j = -1; j <= 1; j++) {
-            sum += grid[x + i][y + j]; // Sum the values of the neighboring cells
-          }
-        }
-        sum -= grid[x][y]; // Subtract the value of the current cell
-        return sum;
-      }
-
-      // Seed a cluster at a given position and size
-      seedCluster(x, y, size) {
+      function setInitialCluster(x, y, size) {
         for (let i = x - size / 2; i < x + size / 2; i++) {
           for (let j = y - size / 2; j < y + size / 2; j++) {
-            if (i >= 0 && i < this.width && j >= 0 && j < this.height) {
-              this.grid[i][j] = 1; // Set the cell to 1
+            if (i >= 0 && i < width && j >= 0 && j < height) {
+              tempGrid[i][j] = 1;
+            }
+          }
+        }
+      }
+      
+      //ctx.color="black";
+      //ctx.fillRect(width / 2, height / 2, 4, 4);
+
+      ctx.translate(-715, -715);
+
+      function draw() {
+        ctx.fillStyle = color;
+
+
+        for (let x = 0; x < width; x++) {
+          for (let y = 0; y < height; y++) {
+            if (tempGrid[x][y] === 1) {
+              let xPos = x * totalOffset;
+              let yPos = y * totalOffset;
+              ctx.fillRect(xPos, yPos, 3, 3);
             }
           }
         }
       }
 
-      // Generate a random number between min and max
-      random(min, max) {
-        if (arguments.length === 1) {
-          return Math.random() * min;
-        } else {
-          return Math.random() * (max - min) + min;
+      function updateGrid() {
+        let updatedGrid = createEmptyGrid(); // Create a new empty grid
+
+        // Iterate through each cell in the grid
+        for (let i = 1; i < tempGrid.length - 1; i++) {
+          for (let j = 1; j < tempGrid[0].length - 1; j++) {
+            let neighbors = countNeighbors(tempGrid, i, j); // Count the number of neighboring cells
+
+            // Apply growth probability if the cell is empty and has neighbors
+            if (tempGrid[i][j] === 0 && neighbors > 0) {
+              if (Math.random() < growthProbability) {
+                updatedGrid[i][j] = 1; // Grow a new cell
+                activeCells++;
+              }
+            } else {
+              updatedGrid[i][j] = tempGrid[i][j]; // Keep the existing cell
+            }
+          }
         }
-      }
-    }
-
-    // Initialize the ClusterGrowth class when the DOM is fully loaded
-    document.addEventListener("DOMContentLoaded", () => {
-      new ClusterGrowth();
-    });
-
-    function getRandomColor() {
-      let characters = "0123456789ABCDEF";
-      let color = "#";
-
-      for (let i = 0; i < 6; i++) {
-        color += characters[getRandomNumber(0, 15)];
+        tempGrid = updatedGrid; // Update the grid
       }
 
-      return color;
-    }
+      function customRandom(min, max) {
+        return Math.random() * (max - min) + min;
+      }
 
-    function getRandomNumber(low, high) {
-      let r = Math.floor(Math.random() * (high - low + 1)) + low;
-      return r;
-    }
+      // Count the number of neighboring cells
+      function countNeighbors(grid, x, y) {
+        let sum = 0;
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            sum += tempGrid[x + i][y + j]; // Sum the values of the neighboring cells
+          }
+        }
+        sum -= tempGrid[x][y]; // Subtract the value of the current cell
+        return sum;
+      }
 
-  </script>
-</body>
+      function reset() {
+        tempGrid = createEmptyGrid();
+        setInitialCluster(width / 2, height / 2, 4);
 
+        growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
+
+        if (iterations % 2 !== 0) {
+          color = getRandomColor(dark_colors);
+        } else {
+          color = "white";
+        }
+
+        iterations++;
+
+        activeCells = 0;
+        drawCount = 0;
+      }
+
+      function getRandomColor(colors) {
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      setInitialCluster(width / 2, height / 2, 4);
+
+      function growClusters() {
+        drawCount++;
+
+        updateGrid();
+        draw();
+        if (activeCells >= (width * height) / growthSpacing) {
+          reset();
+        }
+
+        requestAnimationFrame(growClusters);
+      }
+      growClusters();
+    </script>
+  </body>
 </html>
