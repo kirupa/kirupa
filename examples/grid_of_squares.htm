@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid of Squares</title>
+
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+      let myCanvas = document.getElementById("canvas");
+      let ctx = myCanvas.getContext("2d");
+
+      let width = myCanvas.width;
+      let height = myCanvas.height;
+
+      let squareSize = 4;
+      let gap = 10;
+      let shift = 5;
+
+      let offSetSize = squareSize + gap;
+
+      function drawGrid() {
+
+        let xPos = 0;
+        let yPos = 0;
+
+        ctx.clearRect(0, 0, width, height);
+        
+        for (let i = 0; i < Math.ceil(width / offSetSize); i++) {
+          for (let j = 0; j < Math.ceil(height / offSetSize); j++) {
+            ctx.fillStyle = "black";
+
+            xPos = i * offSetSize + shift;
+            yPos = j * offSetSize + shift;
+
+            ctx.fillRect(xPos, yPos, squareSize, squareSize);
+          }
+        }
+      }
+
+      drawGrid();
+
+
+    </script>
+</head>
+<body>
+  
+</body>
+</html>
