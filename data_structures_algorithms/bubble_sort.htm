@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bubble Sort Example</title>
+  </head>
+  <body>
+    <script>
+      function bubbleSort(input) {
+        let swapSignal = true;
+
+        while (swapSignal) {
+          swapSignal = false;
+
+          for (let i = 0; i < input.length - 1; i++) {
+            console.log("Moving...");
+
+            if (input[i] > input[i + 1]) {
+              console.log("Swapping! " + input[i] + " " + input[i + 1]);
+
+              let temp = input[i];
+              input[i] = input[i + 1];
+              input[i + 1] = temp;
+
+              swapSignal = true;
+            }
+          }
+        }
+      }
+
+      let myData = [64, 21, 0, 29, 41, 77, 48, 14, 8, 5, 93];
+      bubbleSort(myData);
+
+      console.log(myData);
+    </script>
+  </body>
+</html>
