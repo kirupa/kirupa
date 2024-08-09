@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selection Sort</title>
+  </head>
+  <body>
+    <script>
+      function selectionSort(input) {
+        for (let i = 0; i < input.length; i++) {
+          // assume the item in the first position is the smallest
+          let smallestPosition = i;
+
+          // go through the unsorted region
+          for (let j = i + 1; j < input.length; j++) {
+            if (input[j] < input[smallestPosition]) {
+              // a new smallest number is found
+              smallestPosition = j;
+            }
+          }
+
+          // swap the min value if it changed
+          if (smallestPosition != i) {
+            let temp = input[smallestPosition];
+            input[smallestPosition] = input[i];
+            input[i] = temp;
+          }
+        }
+      }
+
+      let myinput = [24, 10, 17, 9, 5, 9, 1, 23, 300];
+      selectionSort(myinput);
+
+      console.log(myinput);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selection Sort (Two Collection Variation)</title>
+  </head>
+  <body>
+    <script>
+      function selectionSortTwoCollection(input) {
+        let sortedArray = [];
+
+        while (input.length > 0) {
+          // Find the index of the minimum element in the unsorted array
+          let minIndex = 0;
+          for (let i = 1; i < input.length; i++) {
+            if (input[i] < input[minIndex]) {
+              minIndex = i;
+            }
+          }
+
+          // Remove the minimum element from the unsorted array and add it to the sorted array
+          sortedArray.push(input.splice(minIndex, 1)[0]);
+        }
+
+        return sortedArray;
+      }
+
+      let myinput = [24, 10, 17, 9, 5, 9, 1, 23, 300];
+      let sortedArray = selectionSortTwoCollection(myinput);
+
+      console.log(sortedArray);
+    </script>
+  </body>
+</html>
