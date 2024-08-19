@@ -21,27 +21,26 @@
   </head>
 
   <body>
-    <canvas id="canvas" width="480" height="480"></canvas>
+    <canvas id="canvas" width="500" height="500"></canvas>
     <script>
       let myCanvas = document.getElementById("canvas");
       let ctx = myCanvas.getContext("2d");
 
-      let width = myCanvas.width;
-      let height = myCanvas.height;
-
-      let growthSpacing = 4;
+      let growthSpacing = 2;
       let drawCount = 0;
-
-      let tempGrid = createEmptyGrid();
 
       let activeCells = 0;
       let iterations = 0;
 
-      let cellSize = 1; // Size of each cell
-      let gap = 3; // Size of the gap between cells
+      let cellSize = 2; // Size of each cell
+      let gap = 8; // Size of the gap between cells
 
       let totalOffset = cellSize + gap;
 
+      let width = Math.ceil(myCanvas.width / totalOffset);
+      let height = Math.ceil(myCanvas.height / totalOffset);
+
+      let tempGrid = createEmptyGrid();
       let growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
 
       const dark_colors = [
@@ -90,18 +89,18 @@
       //ctx.color="black";
       //ctx.fillRect(width / 2, height / 2, 4, 4);
 
-      ctx.translate(-715, -715);
+      ctx.translate(-width / totalOffset, -height / totalOffset);
 
       function draw() {
         ctx.fillStyle = color;
-
 
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < height; y++) {
             if (tempGrid[x][y] === 1) {
               let xPos = x * totalOffset;
               let yPos = y * totalOffset;
-              ctx.fillRect(xPos, yPos, 3, 3);
+
+              ctx.fillRect(xPos, yPos, cellSize, cellSize);
             }
           }
         }
@@ -120,12 +119,14 @@
               if (Math.random() < growthProbability) {
                 updatedGrid[i][j] = 1; // Grow a new cell
                 activeCells++;
+                console.log(activeCells);
               }
             } else {
               updatedGrid[i][j] = tempGrid[i][j]; // Keep the existing cell
             }
           }
         }
+        
         tempGrid = updatedGrid; // Update the grid
       }
 
@@ -146,8 +147,10 @@
       }
 
       function reset() {
+        console.log("Active cells are: " + activeCells);
+        
         tempGrid = createEmptyGrid();
-        setInitialCluster(width / 2, height / 2, 4);
+        setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 4);
 
         growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
 
@@ -167,14 +170,15 @@
         return colors[Math.floor(Math.random() * colors.length)];
       }
 
-      setInitialCluster(width / 2, height / 2, 4);
+      setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 4);
 
       function growClusters() {
         drawCount++;
 
         updateGrid();
         draw();
-        if (activeCells >= (width * height) / growthSpacing) {
+
+        if (activeCells >= 2000) {
           reset();
         }
 
