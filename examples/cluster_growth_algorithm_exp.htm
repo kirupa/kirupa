@@ -21,7 +21,7 @@
   </head>
 
   <body>
-    <canvas id="canvas" width="500" height="500"></canvas>
+    <canvas id="canvas" width="420" height="420"></canvas>
     <script>
       let myCanvas = document.getElementById("canvas");
       let ctx = myCanvas.getContext("2d");
@@ -87,6 +87,7 @@
             }
           }
         }
+        console.log("Initial: " + activeCells);
       }
 
       function draw() {
@@ -95,8 +96,8 @@
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < height; y++) {
             if (tempGrid[x][y] === 1) {
-              let xPos = x * totalOffset;
-              let yPos = y * totalOffset;
+              let xPos = x * totalOffset - gap;
+              let yPos = y * totalOffset - gap;
 
               ctx.fillRect(xPos, yPos, cellSize, cellSize);
             }
@@ -117,7 +118,7 @@
               if (Math.random() < growthProbability) {
                 updatedGrid[i][j] = 1; // Grow a new cell
                 activeCells++;
-                console.log(activeCells + " " + totalCells);
+                //console.log(activeCells + " " + totalCells);
               }
             } else {
               updatedGrid[i][j] = tempGrid[i][j]; // Keep the existing cell
@@ -146,6 +147,8 @@
 
       function reset() {
         console.log("Active cells are: " + activeCells);
+
+        activeCells = 0;
         
         tempGrid = createEmptyGrid();
         setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 4);
@@ -160,7 +163,7 @@
 
         iterations++;
 
-        activeCells = 0;
+        
         drawCount = 0;
       }
 
