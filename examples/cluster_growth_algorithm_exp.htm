@@ -32,13 +32,15 @@
       let activeCells = 0;
       let iterations = 0;
 
-      let cellSize = 2; // Size of each cell
-      let gap = 8; // Size of the gap between cells
+      let cellSize = 3; // Size of each cell
+      let gap = 2; // Size of the gap between cells
 
       let totalOffset = cellSize + gap;
 
-      let width = Math.ceil(myCanvas.width / totalOffset);
-      let height = Math.ceil(myCanvas.height / totalOffset);
+      let width = Math.floor(myCanvas.width / totalOffset);
+      let height = Math.floor(myCanvas.height / totalOffset);
+
+      let totalCells = (width - 1) * (height - 1);
 
       let tempGrid = createEmptyGrid();
       let growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
@@ -81,15 +83,11 @@
           for (let j = y - size / 2; j < y + size / 2; j++) {
             if (i >= 0 && i < width && j >= 0 && j < height) {
               tempGrid[i][j] = 1;
+              activeCells++;
             }
           }
         }
       }
-      
-      //ctx.color="black";
-      //ctx.fillRect(width / 2, height / 2, 4, 4);
-
-      ctx.translate(-width / totalOffset, -height / totalOffset);
 
       function draw() {
         ctx.fillStyle = color;
@@ -119,7 +117,7 @@
               if (Math.random() < growthProbability) {
                 updatedGrid[i][j] = 1; // Grow a new cell
                 activeCells++;
-                console.log(activeCells);
+                console.log(activeCells + " " + totalCells);
               }
             } else {
               updatedGrid[i][j] = tempGrid[i][j]; // Keep the existing cell
@@ -178,7 +176,8 @@
         updateGrid();
         draw();
 
-        if (activeCells >= 2000) {
+        if (activeCells >= totalCells) {
+          console.log(activeCells + " " + totalCells);
           reset();
         }
 

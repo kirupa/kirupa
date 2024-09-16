@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Array Values Generator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-size: 20px 20px;
+        background-image: radial-gradient(
+          circle,
+          #ccc 1px,
+          rgba(0, 0, 0, 0) 1px
+        );
+        background-color: #eee;
+      }
+
+      h1 {
+        font-family: "Monomaniac One", sans-serif;
+        font-size: 3em;
+        font-weight: 100;
+        background-color: #fff;
+        border-radius: 10px;
+        display: inline-block;
+        padding-left: 25px;
+        padding-right: 25px;
+        margin: 0;
+        padding-bottom: 10px;
+      }
+      h2 {
+        font-family: "Monomaniac One", sans-serif;
+        font-size: 2em;
+        font-weight: 100;
+      }
+
+      label {
+        font-family: "Monomaniac One", sans-serif;
+      }
+
+      #output,
+      #input {
+        width: 600px;
+        height: 300px;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+        margin-bottom: 30px;
+      }
+
+      #generate {
+        font-family: "Monomaniac One", sans-serif;
+        font-size: 1.5em;
+        font-weight: 800;
+        border-radius: 10px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-top: 25px;
+      }
+
+      .sidebyside {
+        display: flex;
+        margin-bottom: 10px;
+      }
+      .sidebyside input {
+        margin-left: 10px;
+        margin-top: 2px;
+        width: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Random Array Number Generator</h1>
+
+    <h2>Output</h2>
+
+    <textarea id="output"></textarea>
+
+
+    <div class="customizations">
+      <div class="sidebyside">
+        <label for="numValues">Number of values:</label><br />
+        <input
+          type="number"
+          id="numValues"
+          name="numValues"
+          value="100"
+          min="0"
+        />
+      </div>
+      <div class="sidebyside">
+        <label for="smallestValue">Smallest value:</label><br />
+        <input
+          type="number"
+          id="smallestValue"
+          name="smallestValue"
+          value="0"
+          min="0"
+        />
+      </div>
+
+      <div class="sidebyside">
+        <label for="largestValue">Largest value:</label><br />
+        <input
+          type="number"
+          id="largestValue"
+          name="largestValue"
+          value="300"
+          min="0"
+        />
+      </div>
+
+      <p>
+        <button id="generate">Generate</button>
+      </p>
+    </div>
+  </body>
+</html>
