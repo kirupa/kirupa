@@ -16,6 +16,7 @@
 
       canvas {
         border: 1px solid black;
+        background-color: #fff;
       }
     </style>
   </head>
@@ -33,7 +34,7 @@
       let iterations = 0;
 
       let cellSize = 3; // Size of each cell
-      let gap = 2; // Size of the gap between cells
+      let gap = 3; // Size of the gap between cells
 
       let totalOffset = cellSize + gap;
 
@@ -96,8 +97,8 @@
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < height; y++) {
             if (tempGrid[x][y] === 1) {
-              let xPos = x * totalOffset - gap;
-              let yPos = y * totalOffset - gap;
+              let xPos = x * totalOffset;
+              let yPos = y * totalOffset;
 
               ctx.fillRect(xPos, yPos, cellSize, cellSize);
             }
@@ -118,7 +119,6 @@
               if (Math.random() < growthProbability) {
                 updatedGrid[i][j] = 1; // Grow a new cell
                 activeCells++;
-                //console.log(activeCells + " " + totalCells);
               }
             } else {
               updatedGrid[i][j] = tempGrid[i][j]; // Keep the existing cell
