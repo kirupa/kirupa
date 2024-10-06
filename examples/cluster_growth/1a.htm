@@ -32,8 +32,8 @@
       let drawCount = 0;
       let activeCells = 0;
       let iterations = 0;
-      let cellSize = 1; // Size of each cell in pixels
-      let gap = 1; // Size of the gap between cells in pixels
+      let cellSize = 2; // Size of each cell in pixels
+      let gap = 2; // Size of the gap between cells in pixels
       let totalOffset = cellSize + gap;
 
       // Calculate the grid dimensions based on canvas size and cell size
@@ -143,7 +143,7 @@
 
       // Function to reset the animation
       function reset() {
-        ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+        //ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
         activeCells = 0;
         grid = createEmptyGrid();
         frontier.clear();
