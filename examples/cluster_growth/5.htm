@@ -32,9 +32,11 @@
       let drawCount = 0;
       let activeCells = 0;
       let iterations = 0;
-      let cellSize = 3; // Size of each cell in pixels
-      let gap = 3; // Size of the gap between cells in pixels
+      let cellSize = 4; // Size of each cell in pixels
+      let gap = 0; // Size of the gap between cells in pixels
       let totalOffset = cellSize + gap;
+
+      let colorToggle = true;
 
       // Calculate the grid dimensions based on canvas size and cell size
       let width = Math.floor(myCanvas.width / totalOffset);
@@ -43,29 +45,10 @@
 
       // Create an empty grid to start with
       let tempGrid = createEmptyGrid();
-      let growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
-
-      // Array of dark colors for the clusters
-      const dark_colors = [
-        "#9D0000", // Dark Red
-        "#C70039", // Deep Pink
-        "#800080", // Purple
-        "#4C3378", // Dark Purple (bluish)
-        "#003080", // Navy Blue (more vivid)
-        "#007BFF", // Material Blue (darker, vivid)
-        "#388E3C", // Dark Green (vivid)
-        "#00695C", // Dark Teal
-        "#663399", // Dark Amethyst
-        "#8B0000", // Maroon (more vivid)
-        "#A020F0", // Deep Purple (more intense)
-        "#B32830", // Dark Red (brownish)
-        "#BF360C", // Dark Orange
-        "#C2C255", // Dark Lime (more muted)
-        "#FF9933", // Dark Orange (reddish)
-      ];
+      let growthProbability = customRandom(0.05, 0.07); // Set initial growth probability
 
       // Select a random color for the current iteration
-      let color = getRandomColor(dark_colors);
+      let color = getRandomColorCustom();
 
       // Function to create an empty grid filled with zeros
       function createEmptyGrid() {
@@ -99,8 +82,27 @@
       }
 
       // Function to draw the current state of the grid
-      function drawCell(x, y) {
+      function draw() {
         ctx.fillStyle = color;
+        for (let x = 0; x < width; x++) {
+          for (let y = 0; y < height; y++) {
+            if (tempGrid[x][y] === 1) {
+              let xPos = x * totalOffset;
+              let yPos = y * totalOffset;
+              ctx.fillRect(xPos, yPos, cellSize, cellSize);
+            }
+          }
+        }
+      }
+
+      // Function to draw the current state of the grid
+      function drawCell(x, y) {
+
+        if (colorToggle) {
+          ctx.fillStyle = getRandomColorCustom();
+        } else {
+          ctx.fillStyle = "white";
+        }
 
         let xPos = x * totalOffset;
         let yPos = y * totalOffset;
@@ -153,13 +155,13 @@
       function reset() {
         activeCells = 0;
         tempGrid = createEmptyGrid();
-        growthProbability = customRandom(0.05, 0.2); // Set new growth probability
+        growthProbability = customRandom(0.05, 0.07); // Set new growth probability
 
         // Alternate between colored and white clusters
         if (iterations % 2 !== 0) {
-          color = getRandomColor(dark_colors);
+          colorToggle = true;
         } else {
-          color = "white";
+          colorToggle = false;
         }
 
         setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 2);
@@ -195,6 +197,24 @@
       // Utility function to generate a random number within a range
       function customRandom(min, max) {
         return Math.random() * (max - min) + min;
+      }
+
+      // Utility function to return a random color
+      function getRandomColorCustom() {
+        let characters = "0123456789ABCDEF";
+        let color = "#";
+
+        for (let i = 0; i < 6; i++) {
+          color += characters[getRandomNumber(0, 15)];
+        }
+
+        return color;
+      }
+
+      // Utility function to get a random number
+      function getRandomNumber(low, high) {
+        let r = Math.floor(Math.random() * (high - low + 1)) + low;
+        return r;
       }
     </script>
   </body>
