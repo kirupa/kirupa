@@ -32,19 +32,19 @@
       let drawCount = 0;
       let activeCells = 0;
       let iterations = 0;
-      let cellSize = 2; // Size of each cell in pixels
-      let gap = 2; // Size of the gap between cells in pixels
+      let cellSize = 40; // Size of each cell in pixels
+      let gap = 20; // Size of the gap between cells in pixels
       let totalOffset = cellSize + gap;
 
       // Calculate the grid dimensions based on canvas size and cell size
-      let width = Math.floor(myCanvas.width / totalOffset);
-      let height = Math.floor(myCanvas.height / totalOffset);
+      let width = Math.ceil(myCanvas.width / totalOffset);
+      let height = Math.ceil(myCanvas.height / totalOffset);
       let totalCells = (width - 1) * (height - 1);
 
       // Create an empty grid to start with
       let grid = createEmptyGrid();
       let frontier = new Set(); // Set to store the frontier cells
-      let growthProbability = customRandom(0.05, 0.2); // Set initial growth probability
+      let growthProbability = customRandom(0.05, 0.1); // Set initial growth probability
 
       // Array of dark colors for the clusters
       const dark_colors = [
@@ -82,11 +82,12 @@
             if (i >= 0 && i < width && j >= 0 && j < height) {
               grid[i][j] = 1;
               drawCell(i, j);
-              activeCells++;
               addToFrontier(i, j);
             }
           }
         }
+
+        console.log("Active cells: " + activeCells);
       }
 
       // Function to draw a single cell
@@ -123,10 +124,10 @@
 
         for (let cell of frontier) {
           let [x, y] = cell.split(",").map(Number);
+          
           if (growthProbability > Math.random()) {
             grid[x][y] = 1;
             newCells.push([x, y]);
-            activeCells++;
             addToFrontier(x, y);
           } else {
             newFrontier.add(cell);
@@ -136,7 +137,9 @@
         frontier = newFrontier;
 
         // Draw only the new cells
-        newCells.forEach(([x, y]) => drawCell(x, y));
+        newCells.forEach(([x, y]) => {
+          drawCell(x, y);
+       });
 
         return newCells.length > 0;
       }
@@ -147,7 +150,7 @@
         activeCells = 0;
         grid = createEmptyGrid();
         frontier.clear();
-        growthProbability = customRandom(0.05, 0.2);
+        growthProbability = customRandom(0.05, 0.1);
 
         // Alternate between colored and white clusters
         color = iterations % 2 !== 0 ? getRandomColor(dark_colors) : "white";
@@ -162,16 +165,22 @@
       setInitialCluster(Math.floor(width / 2), Math.floor(height / 2), 2);
 
       // Main animation function
+      let rafId = "";
+
       function growClusters() {
         drawCount++;
         let hasNewCells = updateGrid();
 
         // Reset if the entire grid is filled or no new cells were added
-        if (activeCells >= totalCells || !hasNewCells) {
-          reset();
+        if (!hasNewCells) {
+          
+          //reset();
+          return;
         }
 
-        requestAnimationFrame(growClusters);
+        console.log(activeCells + " +++ " + totalCells);
+
+        rafId = requestAnimationFrame(growClusters);
       }
 
       // Start the animation
