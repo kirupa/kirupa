@@ -102,8 +102,8 @@
       function drawCell(x, y) {
         ctx.fillStyle = color;
 
-        let xPos = x * totalOffset;
-        let yPos = y * totalOffset;
+        let xPos = Math.round(x * totalOffset - cellSize / 2);
+        let yPos = Math.round(y * totalOffset - cellSize / 2)
         ctx.fillRect(xPos, yPos, cellSize, cellSize);
       }
 
