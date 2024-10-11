@@ -27,7 +27,7 @@
 
       let width = Math.floor(myCanvas.width / totalOffset);
       let height = Math.floor(myCanvas.height / totalOffset);
-      let totalCells = (width) * (height);
+      let totalCells = (width - 1) * (height - 1);
 
       let activeCells = 0;
 
@@ -68,7 +68,6 @@
             if (i >= 0 && i < width && j >= 0 && j < height) {
               newCells.push([i, j]);
               tempGrid[i][j] = 1;
-              //activeCells++;
             }
           }
         }
@@ -104,11 +103,10 @@
                 if (.2 > Math.random()) {
                   newCells.push([i, j]);
                   updatedGrid[i][j] = 1;
-                 // activeCells++;
                 }
-              } else {
-                updatedGrid[i][j] = tempGrid[i][j];
               }
+            } else {
+              updatedGrid[i][j] = tempGrid[i][j];
             }
           }
         }

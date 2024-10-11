@@ -29,7 +29,6 @@
       let ctx = myCanvas.getContext("2d");
 
       // Configuration variables
-      let drawCount = 0;
       let activeCells = 0;
       let iterations = 0;
       let cellSize = 3; // Size of each cell in pixels
@@ -167,7 +166,6 @@
         setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 2);
 
         iterations++;
-        drawCount = 0;
       }
 
       // Set the initial cluster in the center of the grid
@@ -175,7 +173,6 @@
 
       // Main animation function
       function growClusters() {
-        drawCount++;
         updateGrid();
 
         // Reset if the entire grid is filled
