@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cluster Growth Algorithm</title>
+  <style>
+
+    #canvas {
+      border: 1px solid black;
+      background-color: #FFF;
+      margin: 50px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+
+  <script>
+      let myCanvas = document.getElementById("canvas");
+      let ctx = myCanvas.getContext("2d");
+
+      let cellSize = 17;
+      let gapSize = 3;
+      let totalOffset = cellSize + gapSize;
+
+      let width = Math.floor(myCanvas.width / totalOffset);
+      let height = Math.floor(myCanvas.height / totalOffset);
+      let totalCells = (width) * (height);
+
+      let activeCells = 0;
+
+      let tempGrid = createEmptyGrid();
+
+      let color = "blue";
+
+      function drawCell(x, y) {
+        ctx.fillStyle = color;
+
+        let xPos = Math.round(x * totalOffset);
+        let yPos = Math.round(y * totalOffset);
+
+        ctx.fillRect(xPos, yPos, cellSize, cellSize);
+
+        activeCells++;
+      }
+
+      function createEmptyGrid() {
+        let emptyGrid = [];
+
+        for (let i = 0; i < width; i++) {
+          let row = [];
+
+          for (let j = 0; j < height; j++) {
+            row.push(0);
+          }
+          emptyGrid.push(row);
+        }
+        return emptyGrid;
+      }
+
+      function setInitialCluster(x, y, size) {
+        let newCells = [];
+
+        for (let i = x - size; i < x + size; i++) {
+          for (let j = y - size; j < y + size; j++) {
+            if (i >= 0 && i < width && j >= 0 && j < height) {
+              newCells.push([i, j]);
+              tempGrid[i][j] = 1;
+              //activeCells++;
+            }
+          }
+        }
+
+        newCells.forEach(([x, y]) => drawCell(x, y));
+      }
+
+      setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 2);
+
+      function countNeighbors(grid, x, y) {
+        let sum = 0;
+
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            sum += tempGrid[x + i][y + j];
+          }
+        }
+
+        return sum;
+      }
+
+      function updateGrid() {
+        let newCells = [];
+
+        let updatedGrid = createEmptyGrid();
+
+        for (let i = 1; i < tempGrid.length - 1; i++) {
+          for (let j = 1; j < tempGrid[0].length - 1; j++) {
+            if (tempGrid[i][j] === 0) {
+              let neighbors = countNeighbors(tempGrid, i, j);
+
+              if (neighbors > 0) {
+                if (.2 > Math.random()) {
+                  newCells.push([i, j]);
+                  updatedGrid[i][j] = 1;
+                 // activeCells++;
+                }
+              } else {
+                updatedGrid[i][j] = tempGrid[i][j];
+              }
+            }
+          }
+        }
+
+        newCells.forEach(([x,y]) => drawCell(x, y));
+
+        tempGrid = updatedGrid;
+      }
+
+      function reset() {
+        activeCells = 0;
+        tempGrid = createEmptyGrid();
+
+        color = "white";
+
+        setInitialCluster(Math.ceil(width / 2), Math.ceil(height / 2), 2);
+      }
+
+      function growClusters() {
+        updateGrid();
+        console.log(activeCells + " " + totalCells);
+
+        if (activeCells >= totalCells){
+          reset();
+        }
+
+        requestAnimationFrame(growClusters);
+      }
+
+      growClusters();
+  </script>
+</body>
+</html>

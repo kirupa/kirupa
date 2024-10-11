@@ -89,7 +89,6 @@
             if (i >= 0 && i < width && j >= 0 && j < height) {
               tempGrid[i][j] = 1;
               newCells.push([i, j]);
-              activeCells++;
             }
           }
         }
@@ -105,6 +104,8 @@
         let xPos = Math.round(x * totalOffset - cellSize / 2);
         let yPos = Math.round(y * totalOffset - cellSize / 2)
         ctx.fillRect(xPos, yPos, cellSize, cellSize);
+
+        activeCells++;
       }
 
       // Function to update the grid based on growth rules
@@ -123,7 +124,6 @@
                 if (growthProbability > Math.random()) {
                   newCells.push([i, j]);
                   updatedGrid[i][j] = 1; // Grow a new cell
-                  activeCells++;
                 }
               }
             } else {
@@ -141,11 +141,13 @@
       // Function to count the number of active neighboring cells
       function countNeighbors(grid, x, y) {
         let sum = 0;
+
         for (let i = -1; i <= 1; i++) {
           for (let j = -1; j <= 1; j++) {
             sum += tempGrid[x + i][y + j]; // Sum the values of the neighboring cells
           }
         }
+        
         return sum;
       }
 
