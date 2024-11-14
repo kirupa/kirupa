@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which came first?</title>
+  <style>
+    body {
+      margin: 50px;
+    }
+    h1, p {
+      font-family: monospace;
+    }
+    p {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Which came first?</h1>
+  <p id="results"></p>
+  <script>
+    let chicken = "🐔";
+    let egg = "🥚";
+
+    let array = [egg, chicken];
+    let sortedArray = array.sort();
+
+    document.querySelector("#results").textContent = `The ${sortedArray[0]} came first!`;
+
+    let eggCodepoint = egg.codePointAt(0).toString(16);
+    let chickenCodepoint = chicken.codePointAt(0).toString(16);
+
+    console.log("Egg is: " + eggCodepoint);
+    console.log("Chicken is: " + chickenCodepoint);
+  </script>
+</body>
+</html>
