@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="550px" height="350px"></canvas>
+
+  <script>
+    var canvas = document.querySelector("#myCanvas");
+    var context = canvas.getContext("2d");
+
+    var canvasPos = getPosition(canvas);
+    var mouseX = 0;
+    var mouseY = 0;
+
+    canvas.addEventListener("mousemove", setMousePosition, false);
+
+    function setMousePosition(e) {
+      mouseX = e.clientX - canvasPos.x;
+      mouseY = e.clientY - canvasPos.y;
+    }
+
+    var totalPositionsToStore = 10;
+    var positions = [];
+
+    function storeLastPositions(xPos, yPos) {
+      // push an item
+      positions.push({
+        x: xPos,
+        y: yPos
+      });
+
+      if (positions.length > totalPositionsToStore) {
+        positions.shift();
+      }
+    }
+
+    function update() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (var i = 0; i < positions.length; i++) {
+        drawCircle(positions[i].x, positions[i].y, i / positions.length);
+      }
+
+      drawCircle(mouseX, mouseY, "primary");
+      storeLastPositions(mouseX, mouseY);
+
+      requestAnimationFrame(update);
+    }
+    update();
+
+    function drawCircle(x, y, a) {
+      var alpha;
+      var scale;
+
+      if (a == "primary") {
+        // don't bother fading or scaling the trail "leader" :P
+        alpha = 1;
+        scale = 1;
+      } else {
+        // adjust the transparency and scale
+        alpha = a / 2;
+        scale = a;
+      }
+
+      context.beginPath();
+      context.arc(x, y, scale * 50, 0, 2 * Math.PI, true);
+      context.fillStyle = "rgba(204, 102, 153, " + alpha + ")";
+      context.fill();
+    }
+
+    // deal with the page getting resized or scrolled
+    window.addEventListener("scroll", updatePosition, false);
+    window.addEventListener("resize", updatePosition, false);
+
+    function updatePosition() {
+      canvasPos = getPosition(canvas);
+    }
+
+    // helper function to get an element's exact position
+    function getPosition(el) {
+      var xPosition = 0;
+      var yPosition = 0;
+
+      while (el) {
+        if (el.tagName == "BODY") {
+          // deal with browser quirks with body/window/document and page scroll
+          var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
+          var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
+
+          xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
+          yPosition += (el.offsetTop - yScrollPos + el.clientTop);
+        } else {
+          xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+          yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
+        }
+
+        el = el.offsetParent;
+      }
+      return {
+        x: xPosition,
+        y: yPosition
+      };
+    }
+
+    function accountForDPI(canvas) {
+        // Get device pixel ratio
+        const dpr = window.devicePixelRatio || 1;
+
+        // Get the canvas size from CSS
+        const rect = canvas.getBoundingClientRect();
+
+        // Calculate grid dimensions
+        width = rect.width;
+        height = rect.height;
+
+        // Set the canvas internal dimensions to match DPI
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        // Scale all canvas operations to account for DPI
+        context.scale(dpr, dpr);
+
+        // Reset the canvas display size
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+      }
+
+      accountForDPI(canvas);
+  </script>
+</body>
+</html>
