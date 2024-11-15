@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="500" height="500"> </canvas>
+
+    <script>
+      let myCanvas = document.querySelector("#myCanvas");
+
+      let width = "";
+      let height = "";
+
+      // Get the canvas context
+      const ctx = myCanvas.getContext("2d");
+
+      function accountForDPI(canvas) {
+        // Get device pixel ratio
+        const dpr = window.devicePixelRatio || 1;
+
+        // Get the canvas size from CSS
+        const rect = canvas.getBoundingClientRect();
+
+        // Calculate grid dimensions
+        width = rect.width;
+        height = rect.height;
+
+        // Set the canvas internal dimensions to match DPI
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        // Scale all canvas operations to account for DPI
+        ctx.scale(dpr, dpr);
+
+        // Reset the canvas display size
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+      }
+
+      accountForDPI(myCanvas);
+
+      function drawGrid(canvas, cellSize = 50, color = "#e0e0e0") {
+        // Set line properties
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+
+        // Draw vertical lines
+        for (let x = 0; x <= width; x += cellSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+
+        // Draw horizontal lines
+        for (let y = 0; y <= height; y += cellSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+      }
+
+      drawGrid(myCanvas, 20, "#CCC");
+    </script>
+  </body>
+</html>
