@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      cursor: none;
+      background: #f0f0f0;
+      overflow: hidden;
+    }
+
+    /* Show default cursor for interactive elements */
+    a, button, input, textarea, select, [role="button"] {
+      cursor: auto !important;
+    }
+
+    #cursor {
+      position: fixed;
+      pointer-events: none;
+      width: 20px;
+      height: 20px;
+      transform-origin: center;
+      left: 0;
+      top: 0;
+      z-index: 9999;
+      will-change: transform;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    #cursor.hidden {
+      opacity: 0;
+    }
+
+    #playground {
+      padding: 20px;
+      font-family: system-ui;
+      color: #333;
+    }
+
+    .interactive {
+      background: #fff;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Test elements for different cursors */
+    .link {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer !important;
+    }
+
+    .text-input {
+      padding: 8px;
+      margin: 10px 0;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <svg id="cursor" viewBox="0 0 32 32">
+    <path 
+      fill="#2563eb"
+      d="M16,0 L32,32 L16,24 L0,32 Z"
+    />
+  </svg>
+
+  <div id="playground">
+    <h1>Custom Rotating Cursor Demo</h1>
+    <p>Move your mouse around to see the smooth cursor rotation!</p>
+    
+    <div class="interactive">
+      <h3>Interactive Elements Test</h3>
+      <p>Try hovering over these elements:</p>
+      
+      <a href="#" class="link">Clickable Link</a><br><br>
+      
+      <input type="text" class="text-input" placeholder="Type some text..."><br>
+      
+      <button>Click Me</button><br><br>
+      
+      <select>
+        <option>Dropdown Option 1</option>
+        <option>Dropdown Option 2</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    let lastX = 0;
+    let lastY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let currentRotation = 0;
+    let targetRotation = 0;
+    
+    const SMOOTHING = 0.15;
+    const MOVEMENT_THRESHOLD = 0.1;
+    const MAX_ROTATION_SPEED = 10;
+
+    function lerp(start, end, factor) {
+      return start + (end - start) * factor;
+    }
+
+    function angleDifference(angle1, angle2) {
+      const diff = ((angle2 - angle1 + 180) % 360) - 180;
+      return diff < -180 ? diff + 360 : diff;
+    }
+
+    function updateCursor(e) {
+      targetX = e.clientX;
+      targetY = e.clientY;
+
+      // Check if the target element is interactive
+      const targetElement = e.target;
+      const isInteractive = targetElement.matches('a, button, input, textarea, select, [role="button"], [contenteditable="true"]');
+      
+      // Toggle cursor visibility
+      cursor.classList.toggle('hidden', isInteractive);
+    }
+
+    function animate() {
+      currentX = lerp(currentX, targetX - 10, SMOOTHING);
+      currentY = lerp(currentY, targetY - 10, SMOOTHING);
+      
+      const deltaX = targetX - lastX;
+      const deltaY = targetY - lastY;
+      const movement = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+      if (movement > MOVEMENT_THRESHOLD) {
+        const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI + 90;
+        targetRotation = angle;
+        
+        const rotationDiff = angleDifference(currentRotation, targetRotation);
+        
+        const rotationDelta = Math.min(
+          Math.abs(rotationDiff),
+          MAX_ROTATION_SPEED
+        ) * Math.sign(rotationDiff);
+        
+        currentRotation += rotationDelta;
+        currentRotation = ((currentRotation + 180) % 360) - 180;
+      }
+
+      cursor.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${currentRotation}deg)`;
+
+      lastX = targetX;
+      lastY = targetY;
+
+      requestAnimationFrame(animate);
+    }
+
+    // Start animation loop
+    requestAnimationFrame(animate);
+    
+    // Add event listener
+    document.addEventListener('mousemove', updateCursor);
+  </script>
+</body>
+</html>
