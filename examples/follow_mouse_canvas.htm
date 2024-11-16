@@ -1,78 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Canvas Follow Mouse</title>
   <style>
     canvas {
-      border: #333 10px solid;
+      border: 1px solid #ccc;
+      background: #f0f0f0;
     }
-
     body {
-      padding: 50px;
-    }
-
-    #coordinates {
-      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: white;
     }
   </style>
 </head>
-
 <body>
-  <canvas id="myCanvas" width="550px" height="350px"></canvas>
-
-  <p id="coordinates">Coordinates go here</p>
+  <canvas id="canvas" width="400" height="300"></canvas>
 
   <script>
-    let canvas = document.querySelector("#myCanvas");
-    let context = canvas.getContext("2d");
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Circle properties
+    const circle = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 20,
+      color: '#3498db'
+    };
 
-    let coordinates = document.querySelector("#coordinates");
-
-    function getPosition(el) {
-      let xPosition = 0;
-      let yPosition = 0;
-
-      while (el) {
-        xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-        yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-        el = el.offsetParent;
-      }
-      return {
-        x: xPosition,
-        y: yPosition
-      };
-    }
-
-    let canvasPos = getPosition(canvas);
+    // Track mouse position
     let mouseX = 0;
     let mouseY = 0;
 
-    canvas.addEventListener("mousemove", setMousePosition, false);
+    // Cache canvas position
+    let canvasRect = canvas.getBoundingClientRect();
 
-    function setMousePosition(e) {
-      mouseX = e.clientX - canvasPos.x;
-      mouseY = e.clientY - canvasPos.y;
+    // Update canvas position on window resize or scroll
+    function updateCanvasPosition() {
+      canvasRect = canvas.getBoundingClientRect();
     }
 
-    function update() {
-      context.clearRect(0, 0, canvas.width, canvas.height);
+    // Add listeners for events that could change canvas position
+    window.addEventListener('resize', updateCanvasPosition);
+    window.addEventListener('scroll', updateCanvasPosition);
+    
+    // Update mouse position using cached canvas position
+    canvas.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX - canvasRect.left;
+      mouseY = e.clientY - canvasRect.top;
+    });
 
-      context.beginPath();
-      context.arc(mouseX, mouseY, 50, 0, 2 * Math.PI, true);
-      context.fillStyle = "#FF6A6A";
-      context.fill();
-
-      requestAnimationFrame(update);
-
-      coordinates.innerHTML = "Mouse position: (" + mouseX + ", " + mouseY + ")";
+    // Animation loop
+    function animate() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw circle at mouse position
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, circle.radius, 0, Math.PI * 2);
+      ctx.fillStyle = circle.color;
+      ctx.fill();
+      ctx.closePath();
+      
+      // Continue animation
+      requestAnimationFrame(animate);
     }
-    update();
 
+    // Start animation
+    animate();
+
+    function accountForDPI(canvas) {
+        // Get device pixel ratio
+        const dpr = window.devicePixelRatio || 1;
+
+        // Get the canvas size from CSS
+        const rect = canvas.getBoundingClientRect();
+
+        // Calculate grid dimensions
+        width = rect.width;
+        height = rect.height;
+
+        // Set the canvas internal dimensions to match DPI
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        // Scale all canvas operations to account for DPI
+        ctx.scale(dpr, dpr);
+
+        // Reset the canvas display size
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+      }
+
+      accountForDPI(canvas);
   </script>
-
 </body>
-
 </html>
