@@ -3,11 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>A Perfect Grid</title>
 
     <style>
       #myCanvas {
         outline: 2px solid #333;
+      }
+      
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
       }
     </style>
   </head>
@@ -15,16 +22,14 @@
     <canvas id="myCanvas" width="500" height="500"> </canvas>
 
     <script>
-      let myCanvas = document.querySelector("#myCanvas");
-
-      let width = "";
-      let height = "";
-
       // Get the canvas context
+      let myCanvas = document.querySelector("#myCanvas");
       const ctx = myCanvas.getContext("2d");
 
+      let width = myCanvas.width;
+      let height = myCanvas.height;
+
       function accountForDPI(canvas) {
-        // Get device pixel ratio
         const dpr = window.devicePixelRatio || 1;
 
         // Get the canvas size from CSS
@@ -71,6 +76,7 @@
       }
 
       drawGrid(myCanvas, 20, "#CCC");
+
     </script>
   </body>
 </html>
