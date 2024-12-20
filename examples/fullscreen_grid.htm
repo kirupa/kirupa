@@ -7,17 +7,18 @@
   <title>A Perfect Fullscreen Grid</title>
 
   <style>
+    #myCanvas {
+      outline: 2px solid #333;
+      width: 100vw;
+      height: 100vh;
+    }
+
     body {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0; /* Remove default body margin */
-    }
-
-    #myCanvas {
-      width: 100vw; /* Take full viewport width */
-      height: 100vh; /* Take full viewport height */
+      padding: 0;
+      margin: 0;
     }
   </style>
 </head>
@@ -37,11 +38,16 @@
       // Get the canvas size from CSS
       const rect = myCanvas.getBoundingClientRect();
 
-      // Set the canvas dimensions
-      myCanvas.width = window.innerWidth * dpr;
-      myCanvas.height = window.innerHeight * dpr;
+      // Set the canvas internal dimensions to match DPI
+      myCanvas.width = rect.width * dpr;
+      myCanvas.height = rect.height * dpr;
 
+      // Scale all canvas operations to account for DPI
       ctx.scale(dpr, dpr);
+
+      // Reset the canvas display size
+      myCanvas.style.width = `${rect.width}px`;
+      myCanvas.style.height = `${rect.height}px`;
     }
 
     accountForDPI();
@@ -72,14 +78,17 @@
       }
     }
 
-    drawGrid(1, 20, 20, "#CCC");
+    drawGrid(1, 20, 20, "#000");
 
-    // Add event listener for window resize
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       requestAnimationFrame(() => {
+
+        myCanvas.style.width = window.innerWidth + "px";
+        myCanvas.style.height = window.innerHeight + "px";
+
         accountForDPI();
-        drawGrid(1, 20, 20, "#CCC");
-      })
+        drawGrid(1, 20, 20, "#000");
+      });
     });
   </script>
 </body>

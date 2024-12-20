@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infinite Scrolling Grid</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+
+    #myCanvas {
+      outline: 2px solid #333;
+      width: 100vw;
+      height: 100vh;
+      touch-action: none;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="myCanvas"></canvas>
+  <script>
+    const myCanvas = document.querySelector("#myCanvas");
+    const ctx = myCanvas.getContext("2d");
+
+    const cellSize = 20;
+
+    // Animation settings
+    let offset = 0;
+    let animationSpeed = 1; // pixels per frame
+    let animationId;
+
+    function accountForDPI() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = myCanvas.getBoundingClientRect();
+
+      myCanvas.width = rect.width * dpr;
+      myCanvas.height = rect.height * dpr;
+
+      ctx.scale(dpr, dpr);
+
+      myCanvas.style.width = `${rect.width}px`;
+      myCanvas.style.height = `${rect.height}px`;
+    }
+
+    function drawGrid(lineWidth, cellWidth, cellHeight, color) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+
+      const dpr = window.devicePixelRatio || 1;
+      const width = myCanvas.width / dpr;
+      const height = myCanvas.height / dpr;
+
+      // Clear previous frame
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw vertical lines with offset
+      for (let x = 0; x <= width + cellWidth; x += cellWidth) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+
+      // Draw horizontal lines with offset
+      for (let y = -cellHeight + (offset % cellHeight); y <= height + cellHeight; y += cellHeight) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+    }
+
+    function animate() {
+      offset = (offset + animationSpeed) % cellSize; // Reset at cell size to prevent floating point errors
+      drawGrid(1, cellSize, cellSize, "#333");
+      animationId = requestAnimationFrame(animate);
+    }
+
+    function initializeGrid() {
+      // Cancel any existing animation
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+
+      accountForDPI();
+      animate();
+    }
+
+    // Initial setup
+    initializeGrid();
+
+    // Handle window resizing
+    window.addEventListener("resize", () => {
+      requestAnimationFrame(() => {
+        myCanvas.style.width = window.innerWidth + "px";
+        myCanvas.style.height = window.innerHeight + "px";
+        initializeGrid();
+      });
+    });
+
+    /*
+    // Add controls for animation speed
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          animationSpeed = Math.min(animationSpeed + 0.5, 10);
+          break;
+        case 'ArrowDown':
+          animationSpeed = Math.max(animationSpeed - 0.5, 0);
+          break;
+        case ' ': // Space bar
+          if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+          } else {
+            animate();
+          }
+          break;
+      }
+    });*/
+  </script>
+</body>
+
+</html>
