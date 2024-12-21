@@ -55,9 +55,8 @@
       ctx.strokeStyle = color;
       ctx.lineWidth = lineWidth;
 
-      const dpr = window.devicePixelRatio || 1;
-      const width = myCanvas.width / dpr;
-      const height = myCanvas.height / dpr;
+      const width = myCanvas.width;
+      const height = myCanvas.height;
 
       // Clear previous frame
       ctx.clearRect(0, 0, width, height);
@@ -79,9 +78,23 @@
       }
     }
 
-    function animate() {
+    // set the expected frame rate
+    let frames_per_second = 60;
+    let previousTime = performance.now();
+
+    let frame_interval = 1000 / frames_per_second;
+    let delta_time_multiplier = 1;
+    let delta_time = 0;
+
+    function animate(currentTime) {
+      delta_time = currentTime - previousTime;
+      delta_time_multiplier = delta_time / frame_interval;
+
       offset = (offset + animationSpeed) % cellSize; // Reset at cell size to prevent floating point errors
       drawGrid(1, cellSize, cellSize, "#333");
+
+      previousTime = currentTime;
+
       animationId = requestAnimationFrame(animate);
     }
 

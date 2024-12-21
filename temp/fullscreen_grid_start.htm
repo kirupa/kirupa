@@ -20,7 +20,6 @@
       outline: 2px solid #333;
       width: 100vw;
       height: 100vh;
-      touch-action: none;
     }
   </style>
 </head>
@@ -106,27 +105,6 @@
         initializeGrid();
       });
     });
-
-    /*
-    // Add controls for animation speed
-    document.addEventListener('keydown', (e) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          animationSpeed = Math.min(animationSpeed + 0.5, 10);
-          break;
-        case 'ArrowDown':
-          animationSpeed = Math.max(animationSpeed - 0.5, 0);
-          break;
-        case ' ': // Space bar
-          if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-          } else {
-            animate();
-          }
-          break;
-      }
-    });*/
   </script>
 </body>
 
