@@ -90,8 +90,8 @@
       delta_time = currentTime - previousTime;
       delta_time_multiplier = delta_time / frame_interval;
 
-      offset = (offset + animationSpeed) % cellSize; // Reset at cell size to prevent floating point errors
-      drawGrid(1, cellSize, cellSize, "#333");
+      offset = (offset + (delta_time_multiplier * animationSpeed)) % cellSize; // Reset at cell size to prevent floating point errors
+      drawGrid(1, cellSize, cellSize, "#000");
 
       previousTime = currentTime;
 
@@ -105,7 +105,7 @@
       }
 
       accountForDPI();
-      animate();
+      requestAnimationFrame(animate);
     }
 
     // Initial setup
