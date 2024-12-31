@@ -1,0 +1,686 @@
+<div class="horizontal_line"></div>
+<div id="sigNewsletter">
+  <div class="newsletterContainer">
+
+    <h4>The KIRUPA Newsletter</h4>
+    <p>Thought provoking content that lives at the intersection of design ðŸŽ¨, development ðŸ¤–, and business ðŸ’° -
+      delivered weekly to over a <strong>bazillion</strong> subscribers!</p>
+
+
+
+    <p>
+      <a href="https://www.kirupa.chat" class="greenButton">SUBSCRIBE NOW</a>
+    </p>
+    <!--<iframe src="https://kirupa.substack.com/embed" width="480" height="320" style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe> -->
+  </div>
+</div>
+<div class="horizontal_line"></div>
+
+
+<div id="scriptContainer"></div>
+
+<script async src="//www.kirupa.com/ssi/newDesign/kirupa.js?v=121241w33"></script>
+
+<script>
+
+  let docSearchScriptLoaded = false;
+
+  let totalFiles = 2;
+  let totalLoaded = 0;
+
+  document.getElementById("searchSite").addEventListener("click", function () {
+
+    if (docSearchScriptLoaded == false) {
+      let myDocSearchScript = document.createElement("script");
+      myDocSearchScript.setAttribute("src", "https://www.kirupa.com/ssi/newDesign/search.js");
+      document.body.appendChild(myDocSearchScript);
+
+      myDocSearchScript.addEventListener("load", docSearchLoaded, false);
+      docSearchScriptLoaded = true;
+
+      let myDocSearchCSS = document.createElement("link");
+      myDocSearchCSS.setAttribute("href", "https://www.kirupa.com/ssi/newDesign/docsearch.css?q=7");
+      myDocSearchCSS.setAttribute("rel", "stylesheet");
+      myDocSearchCSS.setAttribute("type", "text/css");
+
+      document.body.appendChild(myDocSearchCSS);
+      myDocSearchCSS.addEventListener("load", docSearchLoaded, false);
+
+    } else {
+      invokeDocSearch();
+    }
+  });
+
+  function invokeDocSearch() {
+    let docSearchButton = document.getElementsByClassName("DocSearch-Button")[0];
+    console.log("clicking!");
+    console.log(docSearchButton);
+
+    docSearchButton.click();
+  }
+
+  function docSearchLoaded() {
+    totalLoaded++;
+
+    if (totalLoaded == totalFiles) {
+      console.log("Loading docsearch!");
+
+      docsearch({
+        apiKey: '106c893173c1cc77210617b538bdd5c1',
+        appId: 'P83GGI8725',
+        indexName: 'kirupa',
+        container: '.searchRegion',
+        debug: false // Set debug to true if you want to inspect the dropdown
+      });
+
+      invokeDocSearch();
+    }
+  }
+</script>
+
+<!--<script src="https://www.kirupa.com/ssi/newDesign/search.js" defer async onload="docSearchLoaded()"></script>-->
+
+
+<style>
+  .DocSearch-Button {
+    background: none;
+    width: 20px;
+    margin: 0;
+    padding: 5px;
+  }
+
+  .DocSearch-Button-Container {
+    margin-top: 5px;
+  }
+
+  .DocSearch-Container {
+    background: #2f2f2fe0;
+  }
+
+  .DocSearch-Form {
+    box-shadow: inset 0 0 0 2px var(--primary);
+  }
+
+
+  .DocSearch-Button:active,
+  .DocSearch-Button:focus,
+  .DocSearch-Button:hover {
+    background: none;
+    box-shadow: none;
+    color: var(--docsearch-text-color);
+    outline: none;
+  }
+
+  .DocSearch-Button-Placeholder {
+    display: none;
+  }
+
+  .DocSearch-Button-Key {
+    display: none;
+  }
+</style>
+
+
+</script>
+
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@analytics-debugger/ga4mp@latest/dist/ga4mp.umd.min.js"></script>
+<script>
+            const ga4track = ga4mp(["G-7046T26GXD"], {
+                user_id: undefined,
+                non_personalized_ads: true,
+               debug: true
+            });            
+</script>
+-->
+
+<!--
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7046T26GXD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-7046T26GXD');
+</script>
+-->
+
+<!-- 100% privacy-first analytics -->
+<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
+    referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+<style>
+  #newFooter {
+    width: 1250px;
+    display: grid;
+    grid-template-columns: 35% 40% 25%;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1249px) {
+    #newFooter {
+      grid-template-columns: unset;
+      width: 100%;
+    }
+
+    .newFooterFirst {
+      order: 3;
+    }
+
+    .newFooterSecond {
+      order: 2;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--structureBorder) !important;
+      padding-bottom: 40px !important;
+    }
+
+    .newFooterThird {
+      order: 1;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--structureBorder) !important;
+    }
+  }
+
+  #newFooter .newFooterFirst,
+  #newFooter .newFooterSecond,
+  #newFooter .newFooterThird {
+    padding-bottom: 0px;
+  }
+
+
+  .newFooterFirst {
+    padding: 20px;
+    padding-top: 0px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .newFooterFirst p {
+    font-size: 1em;
+    margin-top: 5px;
+  }
+
+  .newFooterFirst .footerSocials {
+    padding-left: 0px;
+    margin: 0;
+    filter: drop-shadow(1px 1px 0px #FFF);
+  }
+
+  .newFooterFirst .footerSocials li {
+    display: inline-block;
+    margin-right: 9px;
+  }
+
+  .newFooterFirst .footerSocials li a {
+    background-color: #ffffffa6;
+    padding: 5px;
+    padding-bottom: 0px;
+    padding-top: 9px;
+    border-radius: 5px;
+  }
+
+  .newFooterFirst .footerSocials li:hover {
+    transform: scale(1.2);
+  }
+
+  .newFooterSecond {
+    border: 1px solid var(--structureBorder);
+    border-bottom: 0px;
+    border-top: 0px;
+
+    padding: 20px;
+    padding-top: 0px;
+  }
+
+  .newFooterSecond h3 {
+    margin-bottom: 3px;
+  }
+
+  .newFooterSecond .popularTags {
+    padding-left: 0px;
+    margin: 0;
+  }
+
+  .newFooterSecond .popularTags li {
+    display: inline-block;
+  }
+
+  .newFooterSecond .popularTags a {
+    line-height: 40px;
+    /* font-weight: bold; */
+    margin: 3px;
+    padding: 5px;
+    font-family: 'kirupapixel';
+    font-size: 1.5em;
+  }
+
+  .newFooterThird {
+    padding: 20px;
+    padding-top: 0px;
+  }
+
+  .newFooterThird .aboutFooter li {
+    list-style-type: none;
+    margin-bottom: 20px;
+  }
+
+  .newFooterThird .aboutFooter {
+    padding-left: 0px;
+  }
+
+  .newFooterThird .aboutFooter a {
+    padding-left: 40px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    background-position: 10px center;
+
+    font-size: 16px;
+    font-weight: 100;
+    color: var(--darkText);
+    line-height: 1.5em;
+    font-family: kirupapixel;
+    -webkit-font-smoothing: none;
+  }
+
+  .newFooterThird .aboutFooter a:hover {
+    text-decoration: underline;
+  }
+
+  #newFooter h3 {
+    margin-top: 0px;
+    border-bottom: none;
+    font-size: 1.5em;
+  }
+
+  #newFooter h4 {
+    margin-top: 0px;
+    font-size: 16px;
+    margin-bottom: -8px;
+  }
+
+  .kirupaKopyright {
+    text-align: center;
+    font-size: 1em;
+    opacity: .5;
+    translate: 0 -18px;
+    font-family: 'kirupapixel';
+  }
+</style>
+
+<div id="newFooter">
+  <div class="newFooterFirst">
+    <div>
+      <a href="https://www.kirupa.com/" style="
+    image-rendering: pixelated;
+    filter: drop-shadow(1px 1px 0px #FFF);
+
+">
+        <svg xmlns="http://www.w3.org/2000/svg" width="229" height="62" fill="none">
+          <path fill="#000"
+            d="M80 32V20h-6v12h6ZM68 50V38h6v-6h-6V20h-6v30h6Zm12 0V38h-6v12h6Zm18 0V20h-6v30h6Zm24-12v12h6V38h-6Zm-.24-6H116v-6h5.76v6Zm.24 6v-6h6V20h-18v30h6V38h6Zm36 12V20h-6v24h-6V20h-6v30h18Zm18 0V38h12V20h-18v30h6Zm6-18h-6v-6h6v6Zm24 18V38h6v12h6V20h-18v30h6Zm6-18h-6v-6h6v6Z" />
+          <path fill="#0798FF"
+            d="M78 30V18h-6v12h6ZM66 48V36h6v-6h-6V18h-6v30h6Zm12 0V36h-6v12h6Zm18 0V18h-6v30h6Zm24-12v12h6V36h-6Zm-.24-6H114v-6h5.76v6Zm.24 6v-6h6V18h-18v30h6V36h6Zm36 12V18h-6v24h-6V18h-6v30h18Zm18 0V36h12V18h-18v30h6Zm6-18h-6v-6h6v6Zm24 18V36h6v12h6V18h-18v30h6Zm6-18h-6v-6h6v6Z" />
+          <path fill="#000"
+            d="M15 18h15v3H15v-3Zm15 3h6v3h-6v-3Zm6 3h3v3h-3v-3Zm3 3h3v15h-3V27Zm-3 15h3v6h-3v-6Zm-6 6h6v3h-6v-3Zm-12 3h12v3H18v-3Zm-6-3h6v3h-6v-3Zm-3-6h3v6H9v-6ZM6 27h3v15H6V27Zm3-3h3v3H9v-3Zm3-3h3v3h-3v-3Zm9-6h3v3h-3v-3Zm6-6h3v3h-3V9Zm3-3h3v3h-3V6Z" />
+          <path fill="#00A900" d="M36 12h3v3h-3v-3Zm0-3h3v3h-3V9Zm-24 3h3v3h-3v-3Z" />
+          <path fill="#009300" d="M15 12h3v3h-3v-3Zm3-3h3v3h-3V9Zm21 6h3v3h-3v-3Z" />
+          <path fill="green" d="M33 15h6v3h-6v-3Zm-15-3h18v3H18v-3Zm-9 3h3v3H9v-3Z" />
+          <path fill="#00C200" d="M15 9h3v3h-3V9Z" />
+          <path fill="#009300" d="M42 18h3v3h-3v-3Z" />
+          <path fill="#009300" d="M42 18h3v3h-3v-3Z" />
+          <path fill="#00C200" d="M42 15h3v3h-3v-3Z" />
+          <path fill="#FF7200" d="M36 27h3v15h-3V27Zm-3-3h3v3h-3v-3Z" />
+          <path fill="#FF8C00" d="M9 39h3v3H9v-3Z" />
+          <path fill="#FF9400" d="M18 39h3v3h-3v-3Z" />
+          <path fill="#FFA600" d="M15 39h3v3h-3v-3Z" />
+          <path fill="#FFB000" d="M12 36h3v6h-3v-6Z" />
+          <path fill="#FFAC00" d="M9 36h3v3H9v-3Z" />
+          <path fill="#FFBE00" d="M18 36h3v3h-3v-3Z" />
+          <path fill="#FFA600" d="M21 39h3v3h-3v-3Z" />
+          <path fill="#FFB000" d="M21 36h3v3h-3v-3Z" />
+          <path fill="#FFBE00" d="M21 33h3v3h-3v-3Z" />
+          <path fill="gold" d="M24 33h3v3h-3v-3Z" />
+          <path fill="#FFA600" d="M27 33h3v3h-3v-3Z" />
+          <path fill="#FF9700" d="M27 36h3v3h-3v-3Z" />
+          <path fill="#FFC200" d="M24 36h3v3h-3v-3Z" />
+          <path fill="#FE0" d="M24 27h3v3h-3v-3Zm3 0h3v3h-3v-3Z" />
+          <path fill="#FF9400" d="M30 24h3v3h-3v-3Z" />
+          <path fill="#FFA600" d="M30 27h3v3h-3v-3Z" />
+          <path fill="#FFAC00" d="M30 30h3v3h-3v-3Z" />
+          <path fill="#FF9400" d="M30 33h3v3h-3v-3Z" />
+          <path fill="#FFDC00" d="M27 30h3v3h-3v-3Z" />
+          <path fill="#FE0" d="M24 30h3v3h-3v-3Z" />
+          <path fill="#FF9700" d="M24 39h3v3h-3v-3Z" />
+          <path fill="#FF8C00" d="M33 30h3v15h-3V30Z" />
+          <path fill="#FF8700" d="M33 27h3v3h-3v-3Zm-6 18h3v3h-3v-3Zm-3 3h3v3h-3v-3Z" />
+          <path fill="#FF8C00" d="M18 48h6v3h-6v-3Zm-3-3h12v3H15v-3Z" />
+          <path fill="#FF8700" d="M30 42h3v6h-3v-6Z" />
+          <path fill="#FF8C00" d="M30 36h3v6h-3v-6Zm-3 3h3v3h-3v-3Zm-3 3h6v3h-6v-3Z" />
+          <path fill="#fff" d="M18 21h3v3h-3v-3Z" />
+          <path fill="#FFFA00" d="M15 21h3v3h-3v-3Zm-3 3h3v3h-3v-3Z" />
+          <path fill="#FFBE00" d="M9 27h3v3H9v-3Z" />
+          <path fill="#FE0" d="M9 30h3v3H9v-3Z" />
+          <path fill="#FFC200" d="M9 33h3v3H9v-3Z" />
+          <path fill="#fff" d="M12 27h3v3h-3v-3Zm0 3h3v3h-3v-3Zm3 6h3v3h-3v-3Z" />
+          <path fill="#FFFFB7" d="M15 30h3v3h-3v-3Z" />
+          <path fill="#fff" d="M15 27h3v3h-3v-3Zm3 3h3v3h-3v-3Z" />
+          <path fill="#FFFA00" d="M21 24h3v3h-3v-3Zm-3 0h3v3h-3v-3Zm3 6h3v3h-3v-3Z" />
+          <path fill="#FFE700" d="M18 27h3v3h-3v-3Z" />
+          <path fill="#B78000" d="M24 24h3v3h-3v-3Z" />
+          <path fill="#B7AB00" d="M27 24h3v3h-3v-3Z" />
+          <path fill="#FE0" d="M21 27h9v3h-9v-3Z" />
+          <path fill="#fff" d="M15 24h3v3h-3v-3Zm-3 9h3v3h-3v-3Z" />
+          <path fill="#FFFA00" d="M15 33h6v3h-6v-3Z" />
+          <path fill="#B74F00" d="M21 21h3v3h-3v-3Z" />
+          <path fill="#D88000" d="M24 21h3v3h-3v-3Z" />
+          <path fill="#FF7900" d="M27 21h3v3h-3v-3Z" />
+          <path fill="#FF9400" d="M12 42h9v3h-9v-3Z" />
+          <path fill="#FF9400" d="M12 42h9v3h-9v-3Z" />
+          <path fill="#FF8700" d="M21 42h3v3h-3v-3Z" />
+          <path fill="#FF7200" d="M33 45h3v3h-3v-3Zm-6 3h3v3h-3v-3Zm-15-3h3v3h-3v-3Z" />
+          <path fill="#00C200" d="M39 12h3v3h-3v-3Z" />
+          <path fill="#00C200" d="M39 12h3v3h-3v-3Z" />
+        </svg>
+
+      </a>
+    </div>
+    <p>Creating engaging and entertaining content for designers and developers since 1998. </p>
+    <h4>Follow:
+      </p>
+    </h4>
+    <ul class="footerSocials">
+      <li><a href="https://www.youtube.com/kirupa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="18"
+            fill="none">
+            <path fill="red"
+              d="M22.83 3.58V1.42h-2.16V.33H3.33v1.09H1.17v2.16H.08v10.84h1.09v2.16h2.16v1.09h17.34v-1.09h2.16v-2.16h1.09V3.58h-1.09ZM12 12.25H9.83v-6.5H12v1.08h2.17v1.09h2.16v2.16h-2.16v1.09H12v1.08Z" />
+          </svg></a></li>
+      <li><a href="https://www.twitter.com/kirupa"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+            fill="none">
+            <path fill="#000"
+              d="M11.92 7.33V6.5h.83v-.83h.83v-.84h.84V4h.83v-.83h.83v-.84h.84V1.5h.83V.67h-2.5v.83h-.83v.83h-.84v.84h-.83V4h-.83v.83h-.84v.84H9.42v-.84h-.84V4h-.83V2.33h-.83V1.5h-.84V.67H.25v.83h.83v.83h.84v.84h.83v1.66h.83v.84h.84v1.66h.83v.84h.83v1.66h.84v.84h-.84v.83h-.83v.83h-.83v.84h-.84V14h-.83v.83h-.83v.84h-.84v.83H.25v.83h2.5v-.83h.83v-.83h.84v-.84h.83V14h.83v-.83h.84v-.84h1.66v.84h.84V14h.83v1.67h.83v.83h.84v.83h5.83v-.83h-.83v-.83h-.84v-.84h-.83v-1.66h-.83v-.84h-.84v-1.66h-.83v-.84h-.83V8.17h-.84v-.84h.84Zm0 3.34v.83h.83v1.67h.83V14h.84v1.67h-2.5V14h-.84v-.83h-.83v-.84h-.83v-1.66h-.84v-.84h-.83V9h-.83V7.33h-.84V6.5h-.83V4.83h-.83V4h-.84V2.33h2.5v.84h.84v1.66h.83v.84h.83v1.66h.84v.84h.83V9h.83v1.67h.84Z" />
+          </svg></a></li>
+      <li><a href="https://www.tiktok.com/@thekirupa"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            fill="none">
+            <path fill="#0FF"
+              d="M9.38 14.38V0H10v15.63h-.63v.62h-.62v.63H6.87v-.63H5.63v-.63h2.5V15h.63v-.63h.63Zm6.25-10.63v-.62h.62v.62h1.88v.63h-1.88v-.63h-.63Zm-10 3.13v-.63H7.5V7.5H5v.63H3.75v.62h-.63v.63H2.5V10h-.63v1.25h-.62v4.38h.63v1.24h.62v.63h-.63v-.63h-.62v-1.25H.62v-1.87H0v-1.88h.63V10h.62V8.75h.63v-.63h.62V7.5h1.25v-.63h1.88Z" />
+            <path fill="red" fill-rule="evenodd"
+              d="M13.13 0h.62v.63h.63v1.25h-.63v-.63h-.63V0Zm5 5h.62v3.13h-2.5V7.5h-1.88v-.63h-.62v9.38h-.63v1.25h-.62v.63h-.63v.62h-.62v.63H10V20H5v-.63H3.75v-.62h-.63v-.63h.63v.63H5v.63h3.13v-.63H10v-.63h.63v-.62h.62v-.63h.63v-.62h.62V15h.63V6.25h1.24v.63h1.88v.62h1.88V5ZM7.5 7.5h1.25v3.75H5.62v.63H5V15h-.63v-.63h-.62v-2.5h.63v-1.24H5V10h2.5V7.5Z"
+              clip-rule="evenodd" />
+            <path fill="#000"
+              d="M10 15.63V0h3.13v1.25h.62v.63h.63v.62H15v.63h.63v.62h.62v.63h1.88V7.5h-1.88v-.63h-1.88v-.62h-1.24V15h-.63v1.25h-.63v.63h-.62v.62h-.63v.63H10v.62H8.12v.63H5v-.63H3.75v-.63h-.63v-.62H2.5v-.63h-.63v-1.25h-.62v-4.37h.63V10h.62v-.63h.63v-.62h.62v-.63H5V7.5h2.5V10H5v.63h-.63v1.24h-.62v2.5h.63V15H5v.63h.63v.62h1.25v.63h1.87v-.63h.63v-.63H10Z" />
+          </svg></a></li>
+      <li><a href="https://www.facebook.com/kirupa"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_611_2552)">
+              <path
+                d="M19.1667 7.49967V12.4997H18.3333V14.1663H17.5V15.833H16.6667V16.6663H15.8333V17.4997H14.1667V18.333H12.5V19.1663H11.6667V12.4997H13.3333V11.6663H14.1667V9.99967H11.6667V7.49967H12.5V6.66634H14.1667V4.16634H10.8333V4.99967H9.16666V6.66634H8.33333V9.99967H5.83333V12.4997H8.33333V19.1663H7.49999V18.333H5.83333V17.4997H4.16666V16.6663H3.33333V15.833H2.49999V14.1663H1.66666V12.4997H0.833328V7.49967H1.66666V5.83301H2.49999V4.16634H3.33333V3.33301H4.16666V2.49967H5.83333V1.66634H7.49999V0.833008H12.5V1.66634H14.1667V2.49967H15.8333V3.33301H16.6667V4.16634H17.5V5.83301H18.3333V7.49967H19.1667Z"
+                fill="#00497D" />
+            </g>
+            <defs>
+              <clipPath id="clip0_611_2552">
+                <rect width="20" height="20" fill="white" />
+              </clipPath>
+            </defs>
+          </svg></a>
+      </li>
+      <li><a href="https://www.instagram.com/kirupac/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            fill="none">
+            <g fill="#DA2D75" clip-path="url(#a)">
+              <path
+                d="M14.17 7.5v-.83h-.84v-.84h-.83V5h-5v.83h-.83v.84h-.84v.83H5v5h.83v.83h.84v.84h.83V15h5v-.83h.83v-.84h.84v-.83H15v-5h-.83Zm-.84 4.17h-.83v.83h-.83v.83H8.33v-.83H7.5v-.83h-.83V8.33h.83V7.5h.83v-.83h3.34v.83h.83v.83h.83v3.34Z" />
+              <path
+                d="M18.33 4.17V2.5h-.83v-.83h-1.67V.83H4.17v.84H2.5v.83h-.83v1.67H.83v11.66h.84v1.67h.83v.83h1.67v.84h11.66v-.84h1.67v-.83h.83v-1.67h.84V4.17h-.84Zm-.83 11.66h-.83v.84h-.84v.83H4.17v-.83h-.84v-.84H2.5V4.17h.83v-.84h.84V2.5h11.66v.83h.84v.84h.83v11.66Z" />
+              <path d="M15.83 4.17h-1.66v1.66h1.66V4.17Z" />
+            </g>
+            <defs>
+              <clipPath id="a">
+                <path fill="#fff" d="M0 0h20v20H0z" />
+              </clipPath>
+            </defs>
+          </svg></a></li>
+      <li><a href="https://www.linkedin.com/in/kirupa/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            fill="none">
+            <g clip-path="url(#a)">
+              <path fill="#007EBB"
+                d="M18.33 1.67V.83H1.67v.84H.83v16.66h.84v.84h16.66v-.84h.84V1.67h-.84ZM10.83 10v6.67h-2.5V7.5h2.5v.83h.84V7.5H15v.83h.83v8.34h-2.5V10h-2.5Zm-7.5-3.33v-2.5h2.5v2.5h-2.5Zm2.5.83v9.17h-2.5V7.5h2.5Z" />
+            </g>
+            <defs>
+              <clipPath id="a">
+                <path fill="#fff" d="M0 0h20v20H0z" />
+              </clipPath>
+            </defs>
+          </svg></a></li>
+      <li><a href="https://github.com/kirupa"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            fill="none">
+            <g clip-path="url(#a)">
+              <path fill="#000"
+                d="M19.17 7.5v5h-.84v1.67h-.83v1.66h-.83v.84h-.84v.83H15v.83h-1.67v.84h-.83V15h-.83v-.83h.83v-.84h1.67v-.83H15v-.83h.83V7.5H15V5h-1.67v.83h-.83v.84h-.83v-.84H8.33v.84H7.5v-.84h-.83V5H5v2.5h-.83v4.17H5v.83h.83v.83H7.5V15H5.83v-.83H5v-.84H3.33v.84h.84v1.66H5v.84h2.5v2.5h-.83v-.84H5v-.83h-.83v-.83h-.84v-.84H2.5v-1.66h-.83V12.5H.83v-5h.84V5.83h.83V4.17h.83v-.84h.84V2.5h1.66v-.83H7.5V.83h5v.84h1.67v.83h1.66v.83h.84v.84h.83v1.66h.83V7.5h.84Z" />
+            </g>
+            <defs>
+              <clipPath id="a">
+                <path fill="#fff" d="M0 0h20v20H0z" />
+              </clipPath>
+            </defs>
+          </svg></a></li>
+      <li><a href="https://podcasters.spotify.com/pod/show/kirupa"><svg xmlns="http://www.w3.org/2000/svg" width="21"
+            height="21" fill="none">
+            <path fill="#585858"
+              d="M7.88 12.25H7V10.5h2.63v-.88H7V7.88h2.63V7H7V5.25h2.63v-.88H7V2.63h.88v-.87h.87V.87h3.5v.88h.88v.88H14v1.75h-2.63v.87H14V7h-2.63v.88H14v1.75h-2.63v.87H14v1.75h-.88v.88h-.87V14h-3.5v-.88h-.88v-.87Z" />
+            <path fill="#585858"
+              d="M16.63 10.5v2.63h-.88v1.74h-.88v.88h-1.74v.88h-1.76v1.75H14v1.75H7v-1.75h2.63v-1.75H7.87v-.88H6.13v-.88h-.87v-1.74h-.88V10.5h.88v1.75h.88V14H7v.88h1.75v.87h3.5v-.88H14V14h.88v-1.75h.87V10.5h.88Z" />
+          </svg></a></li>
+    </ul>
+  </div>
+  <div class="newFooterSecond">
+    <h3>Popular</h3>
+    <ul class="popularTags">
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/javascript/learn_javascript.htm">Learn JavaScript</a>
+      </li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/html5/learn_animation.htm">Web Animation</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/html5/learn_html_css.htm">CSS</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/data_structures_algorithms/index.htm#dsa">Algorithms</a>
+      </li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/data_structures_algorithms/index.htm#ds">Data
+          Structures</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/react/index.htm">React</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/learn/ui_index.htm">UX</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/canvas/index.htm">Canvas</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/javascript/learn_arrays.htm">Arrays</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/web/index.htm">FUNdamentals</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/developer/flash/index.htm">Flash + AS</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.com/book/index.htm">Books</a></li>
+      <li><a class="grayEmphasis" href="https://forum.kirupa.com">Forum</a></li>
+      <li><a class="grayEmphasis" href="https://www.kirupa.chat/">Newsletter</a></li>
+    </ul>
+  </div>
+  <div class="newFooterThird">
+    <h3>Loose Ends</h3>
+    <ul class="aboutFooter">
+      <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/orange.gif');"
+          href="https://www.kirupa.com/about/whatiskirupa.htm">What is a
+          Kirupa?</a></li>
+      <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/heart3.gif');"
+          href="https://www.kirupa.com/about/site.htm">About the
+          Site</a></li>
+      <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/coffee.gif');" href="#">Handy Tools</a>
+      </li>
+      <li><a style="background-image: url('https://www.kirupa.com/pixel_icons/smiley-silly.gif');"
+          href="https://forum.kirupa.com">Get
+          Help</a></li>
+    </ul>
+  </div>
+</div>
+<div class="horizontal_line"></div>
+<p class="kirupaKopyright">:: Copyright KIRUPA 2024 //--</p>
+<!--<div id="mainFooter">
+  <p>Serving you freshly baked content since 1998!<br>
+    <a  rel="noopener" href="https://darkproject.com/" target="_blank">Killer icons by Dark Project Studios</a>
+  </p>
+  <div>
+    <a  rel="noopener" href="https://twitter.com/intent/user?screen_name=kirupa" target="_blank"><img loading="lazy" width="20" height="20" src="https://www.kirupa.com/images/twitter_svg.svg"
+        alt="Twitter"></a>
+    <a rel="noopener" href="https://www.youtube.com/user/kirupa" target="_blank"><img loading="lazy" width="20" height="20"
+        src="https://www.kirupa.com/images/s/youtube.svg" alt="Youtube"></a>
+    <a rel="noopener" href="https://www.facebook.com/kirupa" target="_blank"><img loading="lazy" width="20" height="20"  src="https://www.kirupa.com/images/fb_svg.svg"
+        alt="Facebook"></a>
+    <a rel="noopener" href="https://www.pinterest.com/kirupa/" target="_blank"><img loading="lazy" width="20" height="20"
+        src="https://www.kirupa.com/images/s/pinterest.svg" alt="Pinterest"></a>
+    <a rel="noopener"  href="https://www.instagram.com/kirupac/" target="_blank"><img loading="lazy" width="20" height="20" 
+        src="https://www.kirupa.com/images/s/instagram.svg" alt="Instagram"></a>
+    <a rel="noopener" href="https://github.com/kirupa/kirupa" target="_blank"><img loading="lazy" width="20" height="20" src="https://www.kirupa.com/images/s/github.svg"
+        alt="Github"></a>
+  </div>
+</div>-->
+
+<!-- Chatling -->
+<script async data-id="9957747652" id="chatling-embed-script" type="text/javascript"
+  src="https://chatling.ai/js/embed.js"></script>
+
+
+<!-- Custom Cursor -->
+
+<svg id="customCursor" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g filter="url(#filter0_d_2_333)">
+    <path
+      d="M15.9231 18.0296C16.0985 18.4505 15.9299 20.0447 15 20.4142C14.0701 20.7837 12.882 20.4142 12.882 20.4142L10.726 16.1024L7 19.8284V3L18.4142 14.4142H14.1615C14.3702 14.8144 15.7003 17.4948 15.9231 18.0296Z"
+      fill="white" style="fill:white;fill-opacity:1;" />
+    <path fill-rule="evenodd" clip-rule="evenodd"
+      d="M8 5.41422V17.4142L11 14.4142L13.5 19.4142C13.5 19.4142 14.1763 19.63 14.5 19.4142C14.8237 19.1984 15.1457 18.7638 15 18.4142C14.3123 16.7638 12.5 13.4142 12.5 13.4142H16L8 5.41422Z"
+      fill="black" style="fill:black;fill-opacity:1;" />
+  </g>
+  <defs>
+    <filter id="filter0_d_2_333" x="5.2" y="2.2" width="15.0142" height="21.1784" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+        result="hardAlpha" />
+      <feOffset dy="1" />
+      <feGaussianBlur stdDeviation="0.9" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.65 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_333" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_333" result="shape" />
+    </filter>
+  </defs>
+</svg>
+
+<style>
+  body {
+    cursor: none;
+  }
+
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  p,
+  li,
+  ul,
+  pre,
+  code,
+  dialog {
+    cursor: auto !important;
+  }
+
+  a {
+    cursor: pointer !important;
+  }
+
+
+  #customCursor {
+    position: fixed;
+    pointer-events: none;
+    width: 30px;
+    height: 30px;
+    transform-origin: center;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    will-change: transform;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+    display: none;
+  }
+
+  #customCursor.hidden {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  const cursor = document.getElementById('customCursor');
+  let lastX = 0;
+  let lastY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let currentRotation = 0;
+  let targetRotation = 0;
+
+  const SMOOTHING = 0.2;
+  const MOVEMENT_THRESHOLD = 0.1;
+  const MAX_ROTATION_SPEED = 10;
+
+  function lerp(start, end, factor) {
+    return start + (end - start) * factor;
+  }
+
+  function angleDifference(angle1, angle2) {
+    const diff = ((angle2 - angle1 + 180) % 360) - 180;
+    return diff < -180 ? diff + 360 : diff;
+  }
+
+  function updateCursor(e) {
+    targetX = e.clientX;
+    targetY = e.clientY;
+
+    // Check if the target element is interactive
+    const targetElement = e.target;
+    const isInteractive = targetElement.matches('a, button, input, textarea, select, [role="button"], [contenteditable="true"], span, p, li, ul, pre, code, iframe, lite-youtube, img, dialog');
+
+    // Toggle cursor visibility
+    cursor.classList.toggle('hidden', isInteractive);
+    cursor.style.display = "block";
+
+    cursor.style.translate = `${targetX}px ${targetY}px`;
+  }
+
+  function animate() {
+    currentX = lerp(currentX, targetX - 10, SMOOTHING);
+    currentY = lerp(currentY, targetY - 10, SMOOTHING);
+
+    const deltaX = targetX - lastX;
+    const deltaY = targetY - lastY;
+    const movement = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    if (movement > MOVEMENT_THRESHOLD) {
+      const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI + 90;
+      targetRotation = angle;
+
+      const rotationDiff = angleDifference(currentRotation, targetRotation);
+
+      const rotationDelta = Math.min(
+        Math.abs(rotationDiff),
+        MAX_ROTATION_SPEED
+      ) * Math.sign(rotationDiff);
+
+      currentRotation += rotationDelta;
+      currentRotation = ((currentRotation + 180) % 360) - 180;
+    }
+
+    cursor.style.rotate = `${currentRotation}deg`;
+
+    lastX = targetX;
+    lastY = targetY;
+
+    requestAnimationFrame(animate);
+  }
+
+  // Start animation loop
+  requestAnimationFrame(animate);
+
+  // Add event listener
+  document.addEventListener('mousemove', updateCursor);
+</script>
