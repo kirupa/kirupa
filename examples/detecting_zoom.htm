@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detecting Zoom</title>
+
+  <h1 id="zoomText">100%</h1>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-color: #D3FAC7;
+    }
+
+    h1 {
+      font-family: sans-serif;
+      color: #32432c;
+      opacity: .7;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    class ZoomDetector {
+      constructor() {
+        this.lastWidth = window.innerWidth;
+        this.lastScale = this.getZoomLevel();
+        this.setupListeners();
+      }
+
+      getZoomLevel() {
+        return Math.round(window.outerWidth / window.innerWidth * 100);
+      }
+
+      setupListeners() {
+        // For browser zoom (CMD/CTRL +/-)
+        window.addEventListener('resize', () => {
+          // Ensuring the update happens at the next frame repaint
+          requestAnimationFrame(() => this.checkZoom());
+        });
+
+        // For pinch zoom and other viewport changes
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', () => {
+            // Only check if window width hasn't changed (to avoid double triggers)
+            if (window.innerWidth === this.lastWidth) {
+              this.checkZoom();
+            }
+          });
+        }
+      }
+
+      checkZoom() {
+        const currentScale = this.getZoomLevel();
+        const currentWidth = window.innerWidth;
+
+        // Only trigger if there's a real zoom change
+        if (currentScale !== this.lastScale || currentWidth !== this.lastWidth) {
+          const direction = currentScale > this.lastScale ? 'in' : 'out';
+          console.log(`Zoom ${direction} detected: ${currentScale}%`);
+
+          // Dispatch custom event
+          window.dispatchEvent(new CustomEvent('zoom', {
+            detail: {
+              oldScale: this.lastScale,
+              newScale: currentScale,
+              direction: direction,
+              isWindowResize: currentWidth !== this.lastWidth
+            }
+          }));
+
+          this.lastScale = currentScale;
+          this.lastWidth = currentWidth;
+        }
+      }
+    }
+
+    // Usage:
+    const zoomDetector = new ZoomDetector();
+    updateZoomText(zoomDetector.getZoomLevel());
+
+    // Listen for zoom changes
+    window.addEventListener('zoom', (e) => {
+      const { oldScale, newScale, direction, isWindowResize } = e.detail;
+      updateZoomText(newScale);
+    });
+
+    function updateZoomText(zoomValue) {
+      document.querySelector("#zoomText").innerText = "🔎 " + zoomValue + "%";
+    }
+  </script>
+</body>
+
+</html>
