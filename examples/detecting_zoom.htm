@@ -38,9 +38,9 @@
      */
     class ZoomDetector {
       /**
-       * Initialize the detector with initial window measurements
-       * Sets up event listeners for zoom detection
-       */
+      * Initialize the detector with initial window measurements
+      * Sets up event listeners for zoom detection
+      */
       constructor() {
         // Store initial window width for comparison
         this.lastWidth = window.innerWidth;
@@ -51,18 +51,18 @@
       }
 
       /**
-       * Calculate the current zoom level as a percentage
-       * Uses the ratio of outer window width to inner window width
-       * @returns {number} Zoom level as a percentage (e.g., 100 for 100%)
-       */
+      * Calculate the current zoom level as a percentage
+      * Uses the ratio of outer window width to inner window width
+      * @returns {number} Zoom level as a percentage (e.g., 100 for 100%)
+      */
       getZoomLevel() {
         return Math.round(window.outerWidth / window.innerWidth * 100);
       }
 
       /**
-       * Set up event listeners for different types of zoom events
-       * Handles both browser zoom and pinch-to-zoom gestures
-       */
+      * Set up event listeners for different types of zoom events
+      * Handles both browser zoom and pinch-to-zoom gestures
+      */
       setupListeners() {
         // Listen for browser window resize events (triggered by browser zoom)
         window.addEventListener('resize', () => {
@@ -84,9 +84,9 @@
       }
 
       /**
-       * Check if zoom level has changed and dispatch appropriate events
-       * Determines zoom direction and triggers custom zoom event
-       */
+      * Check if zoom level has changed and dispatch appropriate events
+      * Determines zoom direction and triggers custom zoom event
+      */
       checkZoom() {
         // Get current measurements
         const currentScale = this.getZoomLevel();
