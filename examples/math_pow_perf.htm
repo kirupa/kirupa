@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math.pow Speed?!!</title>
+</head>
+
+<body>
+  <script>
+    // Let's run a benchmark comparing Math.pow vs multiplication
+    const iterations = 10000000;
+    const x = 2;
+
+    console.log("Running performance test...");
+
+    // Test Math.pow
+    const startPow = performance.now();
+    for (let i = 0; i < iterations; i++) {
+      Math.pow(x, 4);
+    }
+    const endPow = performance.now();
+    const powTime = endPow - startPow;
+
+    // Test multiplication
+    const startMult = performance.now();
+    for (let i = 0; i < iterations; i++) {
+      x * x * x * x;
+    }
+    const endMult = performance.now();
+    const multTime = endMult - startMult;
+
+    console.log(`Math.pow time: ${powTime.toFixed(2)}ms`);
+    console.log(`Multiplication time: ${multTime.toFixed(2)}ms`);
+    console.log(`Math.pow is ${(powTime / multTime).toFixed(2)}x slower than multiplication`);
+  </script>
+</body>
+
+</html>
