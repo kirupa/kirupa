@@ -86,10 +86,8 @@
     }
 
     function dragEnd(e) {
+      // Reset position back to original starting point
       setTranslate(0, 0, dragItem);
-
-      initialX = 0;
-      initialY = 0;
       xOffset = yOffset = 0;
 
       active = false;
