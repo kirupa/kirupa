@@ -13,12 +13,25 @@
       margin: 0;
       background-color: #000;
     }
+    
+    @keyframes glitchJitter {
+      0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+      10% { transform: translate(-2px, 1px) rotate(-2deg); }
+      20% { transform: translate(2px, -1px) rotate(2deg); }
+      30% { transform: translate(-3px, 2px) rotate(-2deg); }
+      40% { transform: translate(3px, -2px) rotate(-1deg); }
+      50% { transform: translate(-1px, 3px) rotate(-3.5deg); }
+      60% { transform: translate(1px, -3px) rotate(0deg); }
+      70% { transform: translate(-2px, 2px) rotate(2.5deg); }
+      80% { transform: translate(2px, -2px) rotate(-1.5deg); }
+      90% { transform: translate(-1px, 1px) rotate(3.2deg); }
+    }
 
     canvas {
-      max-width: 300px;
-      max-height: 300px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
+      max-width: 500px;
+      max-height: 500px;
+      animation: glitchJitter 0.4s infinite;
+      animation-timing-function: step-end;
     }
   </style>
 </head>
@@ -244,7 +257,7 @@
 
     // Initialize the glitch animation when the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
-      const glitchAnimation = new AdvancedGlitchAnimation('images/kirupa.png', 'glitchCanvas');
+      const glitchAnimation = new AdvancedGlitchAnimation('images/space.jpg', 'glitchCanvas');
 
       // Optional: Add click to resume audio context on mobile/autoplay-restricted browsers
       document.addEventListener('click', () => {
