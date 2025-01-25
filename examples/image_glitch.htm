@@ -27,62 +27,146 @@
   <canvas id="glitchCanvas"></canvas>
 
   <script>
-    class GlitchImageAnimation {
+    class AdvancedGlitchAnimation {
       constructor(imageUrl, canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         this.image = new Image();
         this.image.src = imageUrl;
 
-        this.imageLoaded = false;
+        this.glitchChannels = ['red', 'green', 'blue'];
+        this.glitchEffects = ['shift', 'slice', 'distort'];
+
+        // Add glitch intensity control
+        this.glitchIntensity = 0.5; // Default intensity
+        this.glitchFrequency = 0.1; // How often glitches occur
+
         this.image.onload = () => {
           this.canvas.width = this.image.width;
           this.canvas.height = this.image.height;
-          this.imageLoaded = true;
           this.startAnimation();
         };
-
-        // Glitch effect parameters
-        this.glitchIntensity = 100;
-        this.glitchFrequency = 0.1;
       }
 
       startAnimation() {
-        if (!this.imageLoaded) return;
         this.animate();
       }
 
-      createGlitchEffect() {
+      randomGlitch() {
+        const ctx = this.ctx;
+        const canvas = this.canvas;
+        const img = this.image;
+
+        // Clear previous frame
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+
+        // Use class-level intensity and frequency
+        if (Math.random() < this.glitchFrequency) {
+          // Dynamically adjust intensity based on glitchIntensity
+          const intensity = this.glitchIntensity;
+
+          // Multiple glitch techniques
+          const effect = this.glitchEffects[Math.floor(Math.random() * this.glitchEffects.length)];
+
+          switch (effect) {
+            case 'shift':
+              this.colorShiftGlitch(intensity);
+              break;
+            case 'slice':
+              this.imageSliceGlitch(intensity);
+              break;
+            case 'distort':
+              this.pixelDistortGlitch(intensity);
+              break;
+          }
+        } else {
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.ctx.drawImage(this.image, 0, 0);
+        }
+      }
+
+      colorShiftGlitch(intensity) {
         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         const data = imageData.data;
 
+        // Scale offset range based on intensity
+        const maxOffset = Math.floor(100 * intensity);
+
         for (let i = 0; i < data.length; i += 4) {
-          if (Math.random() < this.glitchFrequency) {
-            // More dramatic color channel shift
-            const shift = Math.random() * this.glitchIntensity * 500;
-            const channel = Math.floor(Math.random() * 3);
+          if (Math.random() < intensity) {
+            const channel = this.glitchChannels[Math.floor(Math.random() * this.glitchChannels.length)];
+            const offset = Math.floor(Math.random() * maxOffset * 2 - maxOffset);
 
             switch (channel) {
-              case 0: // Red channel
-                data[i] = Math.min(255, Math.max(0, data[i] + shift - 250));
+              case 'red':
+                data[i] = Math.max(0, Math.min(255, data[i] + offset));
                 break;
-              case 1: // Green channel
-                data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + shift - 250));
+              case 'green':
+                data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + offset));
                 break;
-              case 2: // Blue channel
-                data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + shift - 250));
+              case 'blue':
+                data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + offset));
                 break;
             }
           }
+        }
 
-          // Larger and more frequent pixel displacement
-          if (Math.random() < this.glitchFrequency) {
-            const offsetX = Math.floor(Math.random() * this.canvas.width);
-            const offsetY = Math.floor(Math.random() * this.canvas.height);
+        this.ctx.putImageData(imageData, 0, 0);
+      }
 
-            const targetIndex = i + (offsetY * this.canvas.width * 4) + (offsetX * 4);
+      imageSliceGlitch(intensity) {
+        // Scale slice count and offset based on intensity
+        const sliceCount = Math.floor(Math.random() * (10 * intensity) + 3);
+        const maxOffset = Math.floor(50 * intensity);
+
+        for (let i = 0; i < sliceCount; i++) {
+          // Randomly choose between horizontal and vertical slices
+          const isVertical = Math.random() < 0.1;
+
+          if (isVertical) {
+            // Vertical slice
+            const sliceWidth = Math.floor(Math.random() * this.canvas.width * intensity / 4);
+            const sourceX = Math.floor(Math.random() * this.canvas.width);
+            const destX = Math.floor(Math.random() * this.canvas.width);
+            const offsetY = Math.floor(Math.random() * maxOffset * 2 - maxOffset);
+
+            this.ctx.drawImage(
+              this.canvas,
+              sourceX, 0, sliceWidth, this.canvas.height,
+              destX, offsetY, sliceWidth, this.canvas.height
+            );
+          } else {
+            // Horizontal slice (original implementation)
+            const sliceHeight = Math.floor(Math.random() * this.canvas.height * intensity / 4);
+            const sourceY = Math.floor(Math.random() * this.canvas.height);
+            const destY = Math.floor(Math.random() * this.canvas.height);
+            const offsetX = Math.floor(Math.random() * maxOffset * 2 - maxOffset);
+
+            this.ctx.drawImage(
+              this.canvas,
+              0, sourceY, this.canvas.width, sliceHeight,
+              offsetX, destY, this.canvas.width, sliceHeight
+            );
+          }
+        }
+      }
+
+      pixelDistortGlitch(intensity) {
+        const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        const data = imageData.data;
+
+        // Scale distortion range based on intensity
+        const maxDistort = Math.floor(20 * intensity);
+
+        for (let i = 0; i < data.length; i += 4) {
+          if (Math.random() < intensity) {
+            const distortX = Math.floor(Math.random() * maxDistort * 2 - maxDistort);
+            const distortY = Math.floor(Math.random() * maxDistort * 2 - maxDistort);
+
+            const targetIndex = i + (distortY * this.canvas.width * 4) + (distortX * 4);
+
             if (targetIndex >= 0 && targetIndex < data.length) {
-              // More dramatic pixel swap
               data[i] = data[targetIndex];
               data[i + 1] = data[targetIndex + 1];
               data[i + 2] = data[targetIndex + 2];
@@ -94,23 +178,14 @@
       }
 
       animate() {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Draw original image
-        this.ctx.drawImage(this.image, 0, 0);
-
-        // Apply glitch effect
-        this.createGlitchEffect();
-
-        // Continue animation
+        this.randomGlitch();
         requestAnimationFrame(() => this.animate());
       }
     }
 
     // Initialize glitch animation on page load
     document.addEventListener('DOMContentLoaded', () => {
-      const glitchAnimation = new GlitchImageAnimation('images/kirupa.png', 'glitchCanvas');
+      const glitchAnimation = new AdvancedGlitchAnimation('images/kirupa.png', 'glitchCanvas');
     });
   </script>
 </body>
