@@ -27,58 +27,110 @@
   <canvas id="glitchCanvas"></canvas>
 
   <script>
+    // Define a class for creating advanced glitch animations
     class AdvancedGlitchAnimation {
+      // Constructor initializes the class with image URL and canvas ID
       constructor(imageUrl, canvasId) {
+        // Get the canvas and its 2D rendering context
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
+        // Create a new image object
         this.image = new Image();
         this.image.src = imageUrl;
 
+        // Set up the AudioContext for sound effects
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Define the channels that will be affected by glitching
         this.glitchChannels = ['red', 'green', 'blue'];
+        // Define the types of effects that can occur
         this.glitchEffects = ['shift', 'slice', 'distort'];
 
-        // Add glitch intensity control
-        this.glitchIntensity = 0.5; // Default intensity
-        this.glitchFrequency = 0.1; // How often glitches occur
+        // Initialize glitch intensity and frequency
+        this.glitchIntensity = 0.5;
+        this.glitchFrequency = 0.1;
 
+        // When the image has loaded, set the canvas dimensions and start the animation
         this.image.onload = () => {
           this.canvas.width = this.image.width;
           this.canvas.height = this.image.height;
           this.startAnimation();
         };
       }
+      
+      // Function to create a static glitch sound effect
+      createStaticGlitch(intensity) {
+        // Calculate the buffer size for 100ms of static sound
+        const bufferSize = this.audioContext.sampleRate * 0.1; // 0.1 seconds (100ms) of static
+        // Create an audio buffer with one channel, the calculated buffer size, and the sample rate of the audio context
+        const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+        // Get the raw audio data for the buffer
+        const data = buffer.getChannelData(0);
 
-      startAnimation() {
-        this.animate();
+        // Fill the buffer with random noise values
+        // Loop through each sample in the buffer
+        for (let i = 0; i < bufferSize; i++) {
+          // Generate random numbers between -1 and 1 and store in the buffer
+          // This represents white noise, a random signal with equal intensity at different frequencies
+          data[i] = Math.random() * 2 - 1; // Random values between -1 and 1
+        }
+
+        // Create a buffer source node, which will play the audio buffer
+        const noiseSource = this.audioContext.createBufferSource();
+        noiseSource.buffer = buffer;
+
+        // Create gain node to control volume
+        const gainNode = this.audioContext.createGain();
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+
+        // Generate a random volume variation between 0.5 and 1
+        const randomMultiplier = (Math.random() * 0.5) + 0.5;
+        // Calculate the volume gain for the static effect
+        // Adjust the base volume using the 'intensity' parameter
+        const gainValue = intensity * 0.05 * randomMultiplier; // Reduced intensity for static
+        // Immediately set the gain to the calculated 'gainValue'
+        gainNode.gain.setValueAtTime(gainValue, this.audioContext.currentTime);
+        // Set the gain back to 0 after 100ms for a quick fade-out effect
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime + 0.1); // Fade out after 0.1 seconds (100ms)
+
+        // Connect the buffer source to the gain node
+        noiseSource.connect(gainNode);
+        // Connect the gain node to the audio destination, which is the device's speakers
+        gainNode.connect(this.audioContext.destination);
+
+        // Start playing the noise
+        noiseSource.start();
+        // Stop playing after 100ms, matching the duration of the buffer
+        noiseSource.stop(this.audioContext.currentTime + 0.1);
       }
 
+      // Function to apply a random glitch effect
       randomGlitch() {
-        const ctx = this.ctx;
+        // Store the canvas and image objects in local variables
         const canvas = this.canvas;
         const img = this.image;
 
-        // Clear previous frame
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
+        // Clear the canvas before drawing
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw the original image onto the canvas
+        this.ctx.drawImage(img, 0, 0);
 
-        // Use class-level intensity and frequency
+        // Randomly apply a glitch effect based on the glitch frequency
         if (Math.random() < this.glitchFrequency) {
-          // Dynamically adjust intensity based on glitchIntensity
+          // Store the current glitch intensity
           const intensity = this.glitchIntensity;
-
-          // Multiple glitch techniques
+          // Select a random effect from the list of glitch effects
           const effect = this.glitchEffects[Math.floor(Math.random() * this.glitchEffects.length)];
 
+          // Create the static glitch sound effect
+          this.createStaticGlitch(intensity);
+
+          // Apply the selected glitch effect
           switch (effect) {
-            case 'shift':
-              this.colorShiftGlitch(intensity);
-              break;
-            case 'slice':
-              this.imageSliceGlitch(intensity);
-              break;
-            case 'distort':
-              this.pixelDistortGlitch(intensity);
-              break;
+            case 'shift': this.colorShiftGlitch(intensity); break;
+            case 'slice': this.imageSliceGlitch(intensity); break;
+            case 'distort': this.pixelDistortGlitch(intensity); break;
+            default:
           }
         } else {
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -86,11 +138,12 @@
         }
       }
 
+      // Method to apply a color shift glitch effect
+      // This method randomly shifts the red, green, or blue color channels of the image
       colorShiftGlitch(intensity) {
         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         const data = imageData.data;
 
-        // Scale offset range based on intensity
         const maxOffset = Math.floor(100 * intensity);
 
         for (let i = 0; i < data.length; i += 4) {
@@ -115,17 +168,16 @@
         this.ctx.putImageData(imageData, 0, 0);
       }
 
+      // Method to apply an image slice glitch effect
+      // This method randomly slices and repositions portions of the image
       imageSliceGlitch(intensity) {
-        // Scale slice count and offset based on intensity
         const sliceCount = Math.floor(Math.random() * (10 * intensity) + 3);
         const maxOffset = Math.floor(50 * intensity);
 
         for (let i = 0; i < sliceCount; i++) {
-          // Randomly choose between horizontal and vertical slices
           const isVertical = Math.random() < 0.1;
 
           if (isVertical) {
-            // Vertical slice
             const sliceWidth = Math.floor(Math.random() * this.canvas.width * intensity / 4);
             const sourceX = Math.floor(Math.random() * this.canvas.width);
             const destX = Math.floor(Math.random() * this.canvas.width);
@@ -137,7 +189,6 @@
               destX, offsetY, sliceWidth, this.canvas.height
             );
           } else {
-            // Horizontal slice (original implementation)
             const sliceHeight = Math.floor(Math.random() * this.canvas.height * intensity / 4);
             const sourceY = Math.floor(Math.random() * this.canvas.height);
             const destY = Math.floor(Math.random() * this.canvas.height);
@@ -152,11 +203,12 @@
         }
       }
 
+      // Method to apply a pixel distort glitch effect
+      // This method shifts individual pixels to create a distortion effect
       pixelDistortGlitch(intensity) {
         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         const data = imageData.data;
 
-        // Scale distortion range based on intensity
         const maxDistort = Math.floor(20 * intensity);
 
         for (let i = 0; i < data.length; i += 4) {
@@ -177,15 +229,29 @@
         this.ctx.putImageData(imageData, 0, 0);
       }
 
+      // Method to start the animation loop
+      startAnimation() {
+        this.animate();
+      }
+
+      // Method to handle animation, drawing the glitch on the canvas
       animate() {
         this.randomGlitch();
+        // Request the next animation frame, which calls this method again
         requestAnimationFrame(() => this.animate());
       }
     }
 
-    // Initialize glitch animation on page load
+    // Initialize the glitch animation when the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
       const glitchAnimation = new AdvancedGlitchAnimation('images/kirupa.png', 'glitchCanvas');
+
+      // Optional: Add click to resume audio context on mobile/autoplay-restricted browsers
+      document.addEventListener('click', () => {
+        if (glitchAnimation.audioContext.state === 'suspended') {
+          glitchAnimation.audioContext.resume();
+        }
+      });
     });
   </script>
 </body>
