@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitmap Color Manipulation Tutorial</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        canvas { 
+            border: 1px solid #000; 
+            max-width: 100%; 
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bitmap Color Manipulation Tutorial</h1>
+    
+    <div>
+        <h2>Original Image</h2>
+        <canvas id="originalCanvas"></canvas>
+    </div>
+    
+    <div class="controls">
+        <button onclick="applyGrayscale()">Grayscale</button>
+        <button onclick="applyInvert()">Invert Colors</button>
+        <button onclick="applyBrighten()">Brighten</button>
+        <button onclick="applyDarken()">Darken</button>
+        <button onclick="applyRedTint()">Red Tint</button>
+    </div>
+
+    <div>
+        <h2>Manipulated Image</h2>
+        <canvas id="manipulatedCanvas"></canvas>
+    </div>
+
+    <script>
+        // Load image and set up canvases
+        const img = new Image();
+        const originalCanvas = document.getElementById('originalCanvas');
+        const manipulatedCanvas = document.getElementById('manipulatedCanvas');
+        const originalCtx = originalCanvas.getContext('2d');
+        const manipulatedCtx = manipulatedCanvas.getContext('2d');
+
+        img.onload = function() {
+            // Set canvas sizes to match image
+            originalCanvas.width = img.width;
+            originalCanvas.height = img.height;
+            manipulatedCanvas.width = img.width;
+            manipulatedCanvas.height = img.height;
+
+            // Draw original image
+            originalCtx.drawImage(img, 0, 0);
+        };
+
+        // Image source (replace with your own image path)
+        img.src = 'images/kirupa.png';
+
+        // Bitmap color manipulation functions
+        function manipulateImageData(manipulationFn) {
+            // Get image data from original canvas
+            const imageData = originalCtx.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
+            const data = imageData.data;
+
+            // Apply color manipulation to each pixel
+            for (let i = 0; i < data.length; i += 4) {
+                // Each pixel is represented by 4 values: R, G, B, A
+                const pixel = {
+                    r: data[i],
+                    g: data[i + 1],
+                    b: data[i + 2],
+                    a: data[i + 3]
+                };
+
+                const modifiedPixel = manipulationFn(pixel);
+
+                // Update image data
+                data[i] = modifiedPixel.r;
+                data[i + 1] = modifiedPixel.g;
+                data[i + 2] = modifiedPixel.b;
+                data[i + 3] = modifiedPixel.a;
+            }
+
+            // Draw manipulated image data
+            manipulatedCtx.putImageData(imageData, 0, 0);
+        }
+
+        // Color manipulation functions
+        function applyGrayscale() {
+            manipulateImageData((pixel) => {
+                const avg = (pixel.r + pixel.g + pixel.b) / 3;
+                return {
+                    r: avg,
+                    g: avg,
+                    b: avg,
+                    a: pixel.a
+                };
+            });
+        }
+
+        function applyInvert() {
+            manipulateImageData((pixel) => ({
+                r: 255 - pixel.r,
+                g: 255 - pixel.g,
+                b: 255 - pixel.b,
+                a: pixel.a
+            }));
+        }
+
+        function applyBrighten() {
+            manipulateImageData((pixel) => ({
+                r: Math.min(pixel.r + 50, 255),
+                g: Math.min(pixel.g + 50, 255),
+                b: Math.min(pixel.b + 50, 255),
+                a: pixel.a
+            }));
+        }
+
+        function applyDarken() {
+            manipulateImageData((pixel) => ({
+                r: Math.max(pixel.r - 50, 0),
+                g: Math.max(pixel.g - 50, 0),
+                b: Math.max(pixel.b - 50, 0),
+                a: pixel.a
+            }));
+        }
+
+        function applyRedTint() {
+            manipulateImageData((pixel) => ({
+                r: Math.min(pixel.r + 100, 255),
+                g: pixel.g,
+                b: pixel.b,
+                a: pixel.a
+            }));
+        }
+    </script>
+</body>
+</html>
