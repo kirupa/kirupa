@@ -32,28 +32,50 @@
 
 <body>
   <script>
+    /**
+     * ZoomDetector class - Monitors and reports browser zoom level changes
+     * Handles both browser zoom (Ctrl+/- or Cmd+/-) and pinch-to-zoom gestures
+     */
     class ZoomDetector {
+      /**
+      * Initialize the detector with initial window measurements
+      * Sets up event listeners for zoom detection
+      */
       constructor() {
+        // Store initial window width for comparison
         this.lastWidth = window.innerWidth;
+        // Calculate and store initial zoom level
         this.lastScale = this.getZoomLevel();
+        // Set up event listeners for zoom detection
         this.setupListeners();
       }
 
+      /**
+      * Calculate the current zoom level as a percentage
+      * Uses the ratio of outer window width to inner window width
+      * @returns {number} Zoom level as a percentage (e.g., 100 for 100%)
+      */
       getZoomLevel() {
         return Math.round(window.outerWidth / window.innerWidth * 100);
       }
 
+      /**
+      * Set up event listeners for different types of zoom events
+      * Handles both browser zoom and pinch-to-zoom gestures
+      */
       setupListeners() {
-        // For browser zoom (CMD/CTRL +/-)
+        // Listen for browser window resize events (triggered by browser zoom)
         window.addEventListener('resize', () => {
-          // Ensuring the update happens at the next frame repaint
+          // Use requestAnimationFrame to optimize performance
+          // Ensures zoom check happens during the next frame render
           requestAnimationFrame(() => this.checkZoom());
         });
 
-        // For pinch zoom and other viewport changes
+        // Handle pinch-to-zoom events using visualViewport API if available
         if (window.visualViewport) {
           window.visualViewport.addEventListener('resize', () => {
-            // Only check if window width hasn't changed (to avoid double triggers)
+            // Only process if window width hasn't changed
+            // This prevents duplicate events when both viewport and window resize
             if (window.innerWidth === this.lastWidth) {
               this.checkZoom();
             }
@@ -61,41 +83,54 @@
         }
       }
 
+      /**
+      * Check if zoom level has changed and dispatch appropriate events
+      * Determines zoom direction and triggers custom zoom event
+      */
       checkZoom() {
+        // Get current measurements
         const currentScale = this.getZoomLevel();
         const currentWidth = window.innerWidth;
 
-        // Only trigger if there's a real zoom change
+        // Only proceed if there's an actual change in zoom or window size
         if (currentScale !== this.lastScale || currentWidth !== this.lastWidth) {
+          // Determine if user is zooming in or out
           const direction = currentScale > this.lastScale ? 'in' : 'out';
           console.log(`Zoom ${direction} detected: ${currentScale}%`);
 
-          // Dispatch custom event
+          // Create and dispatch custom zoom event with detailed information
           window.dispatchEvent(new CustomEvent('zoom', {
             detail: {
-              oldScale: this.lastScale,
-              newScale: currentScale,
-              direction: direction,
-              isWindowResize: currentWidth !== this.lastWidth
+              oldScale: this.lastScale,      // Previous zoom level
+              newScale: currentScale,         // New zoom level
+              direction: direction,           // Zoom direction ('in' or 'out')
+              isWindowResize: currentWidth !== this.lastWidth  // Whether window size changed
             }
           }));
 
+          // Update stored values for next comparison
           this.lastScale = currentScale;
           this.lastWidth = currentWidth;
         }
       }
     }
 
-    // Usage:
+    // Initialize zoom detector and update initial zoom display
     const zoomDetector = new ZoomDetector();
     updateZoomText(zoomDetector.getZoomLevel());
 
-    // Listen for zoom changes
+    // Set up listener for custom zoom events
     window.addEventListener('zoom', (e) => {
+      // Extract zoom details from event
       const { oldScale, newScale, direction, isWindowResize } = e.detail;
+      // Update zoom level display
       updateZoomText(newScale);
     });
 
+    /**
+     * Update the zoom level display in the UI
+     * @param {number} zoomValue - Current zoom level percentage
+     */
     function updateZoomText(zoomValue) {
       document.querySelector("#zoomText").innerText = "🔎 " + zoomValue + "%";
     }
