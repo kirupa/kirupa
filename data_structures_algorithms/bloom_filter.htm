@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bloom Filter Example</title>
+  </head>
+  <body>
+    <script>
+      class BloomFilter {
+        /**
+         * Constructor for the Bloom Filter.
+         * @param {number} size - The size of the bit array.
+         * @param {number} numHashFunctions - The number of hash functions to use.
+         */
+        constructor(size, numHashFunctions) {
+          // Store the size of the bit array.
+          this.size = size;
+          // Initialize the bit array with 0s.
+          this.bitArray = new Array(size).fill(0);
+          // Store the number of hash functions.
+          this.numHashFunctions = numHashFunctions;
+        }
+
+        /**
+         * Adds an element to the Bloom Filter.
+         * @param {string} element - The element to add.
+         */
+        add(element) {
+          // Loop through the number of hash functions.
+          for (let i = 0; i < this.numHashFunctions; i++) {
+            // Calculate the index using a hash function.
+            const index = this.hash(element, i) % this.size;
+            // Set the bit at the calculated index to 1.
+            this.bitArray[index] = 1;
+          }
+        }
+
+        /**
+         * Checks if an element might be in the Bloom Filter.
+         * @param {string} element - The element to check.
+         * @returns {boolean} - True if the element might be present, false if definitely not.
+         */
+        contains(element) {
+          // Loop through the number of hash functions.
+          for (let i = 0; i < this.numHashFunctions; i++) {
+            // Calculate the index using a hash function.
+            const index = this.hash(element, i) % this.size;
+            // If any bit is 0, the element is definitely not present.
+            if (this.bitArray[index] === 0) {
+              return false;
+            }
+          }
+          // All bits are 1, so the element might be present.
+          return true;
+        }
+
+        /**
+         * A simple hash function.
+         * @param {string} element - The element to hash.
+         * @param {number} seed - A seed to generate different hash values.
+         * @returns {number} - The hash value.
+         */
+        hash(element, seed) {
+          // Initialize the hash value.
+          let hash = 0;
+          // Combine the element and seed.
+          const str = element + seed;
+          // Loop through the characters of the combined string.
+          for (let i = 0; i < str.length; i++) {
+            // Get the ASCII code of the character.
+            const char = str.charCodeAt(i);
+            // Shift and add to generate a hash.
+            hash = (hash << 5) - hash + char;
+            // Convert to 32bit integer.
+            hash = hash & hash;
+          }
+          // Return the absolute hash value.
+          return Math.abs(hash);
+        }
+      }
+
+      // Example Usage
+      // Size of the bit array.
+      const filterSize = 100;
+      // Number of hash functions.
+      const numHashes = 3;
+      // Create a Bloom Filter instance.
+      const bloomFilter = new BloomFilter(filterSize, numHashes);
+
+      // Sample data to add to the filter.
+      const sampleData = ["apple", "banana", "cherry", "date"];
+      // Add each item to the filter.
+      sampleData.forEach((item) => bloomFilter.add(item));
+
+      // Test elements to check.
+      const testElements = ["apple", "grape", "cherry", "kiwi"];
+      // Loop through the test elements and check their presence.
+      testElements.forEach((element) => {
+        // Check if the element might be present.
+        if (bloomFilter.contains(element)) {
+          // Print the result to the console.
+          console.log(`"${element}" might be present.`);
+        } else {
+          // Print the result to the console.
+          console.log(`"${element}" is definitely not present.`);
+        }
+      });
+    </script>
+  </body>
+</html>
