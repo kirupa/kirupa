@@ -40,10 +40,10 @@
         }
 
         // Remove a node and all its incident edges from the graph
-        removeNode(nodeToRemove) {
-          if (this.nodes.has(nodeToRemove)) {
+        removeNode(node) {
+          if (this.nodes.has(node)) {
             // Remove the node and its edges from the graph
-            this.nodes.delete(nodeToRemove);
+            this.nodes.delete(node);
 
             // Remove any incident edges in other nodes
             for (const [node, adjacentNodes] of this.nodes) {
