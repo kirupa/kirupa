@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mouse Particle Animation</title>
+    <title>Mouse Follow : Particles</title>
     <style>
       body,
       html {
@@ -31,7 +31,7 @@
         border-radius: 50%;
         left: 0;
         top: 0;
-        opacity: 0.7;
+        opacity: 0.9;
         will-change: transform;
       }
     </style>
@@ -43,7 +43,7 @@
       // ParticleSystem Class: Manages the particle animation system
       class ParticleSystem {
         // Constructor: Initializes the particle system
-        constructor(container, particleCount = 12) {
+        constructor(container, particleCount = 15) {
           // The DOM element that will contain the particles
           this.container = container;
           // The number of particles to create
@@ -58,7 +58,7 @@
           // Clustering Parameters:
           // - clusterRadius: Distance of the cluster center from the mouse cursor.
           // - clusterSpread: How much the particles are spread within the cluster around the center
-          this.clusterRadius = 60;
+          this.clusterRadius = 20;
           this.clusterSpread = 50;
 
           // Initialize the particles
@@ -79,10 +79,10 @@
             // Generate a random hue for the particle's color
             const hue = Math.floor(Math.random() * 360);
             // Set the particle's background color using HSL
-            particle.style.backgroundColor = `hsl(${hue}, 70%, 0%)`;
+            particle.style.backgroundColor = `hsl(${hue}, 0%, 0%)`;
 
             // Set the particle's size with some variation
-            const size = 50 + Math.random() * 100;
+            const size = 2 + Math.random() * 100;
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
 
@@ -99,12 +99,16 @@
               x: clusterX,
               // Initial y position offset for clustering
               y: clusterY,
+              // Particle size
+              size: size,
+              // Stoed angle
+              angle: angle,
               // Random offset for the cluster center in x direction
               clusterOffsetX: (Math.random() - 0.5) * this.clusterSpread,
               // Random offset for the cluster center in y direction
               clusterOffsetY: (Math.random() - 0.5) * this.clusterSpread,
               // Speed at which the particle moves towards its target
-              speed: 0.02 + Math.random() * 0.04,
+              speed: 0.1 + Math.random() * 0.5,
               // Index of the particle in the array
               index: i,
             });
@@ -130,14 +134,14 @@
           // Loop through each particle
           this.particles.forEach((particle, index) => {
             // Recalculate cluster center with offsets for organic movement
-            const angle = Math.random() * Math.PI * 2;
+            particle.angle += Math.random() * .05;
             const clusterCenterX =
               this.mouseX +
-              Math.cos(angle) * this.clusterRadius +
+              Math.cos(particle.angle) * this.clusterRadius +
               particle.clusterOffsetX;
             const clusterCenterY =
               this.mouseY +
-              Math.sin(angle) * this.clusterRadius +
+              Math.sin(particle.angle) * this.clusterRadius +
               particle.clusterOffsetY;
 
             // Calculate the distance between the current position and the cluster center
@@ -149,7 +153,7 @@
             particle.y += dy * particle.speed;
 
             // Update the particle's position using CSS transform for better performance
-            particle.element.style.transform = `translate(${particle.x}px, ${particle.y}px)`;
+            particle.element.style.transform = `translate(${particle.x - particle.size / 2}px, ${particle.y - particle.size / 2}px)`;
           });
 
           // Request the next animation frame
