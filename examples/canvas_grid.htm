@@ -30,7 +30,7 @@
 
     function accountForDPI() {
       // Get the current device pixel ratio
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.ceil(window.devicePixelRatio) || 1;
 
       // Get the canvas size from CSS
       const rect = myCanvas.getBoundingClientRect();

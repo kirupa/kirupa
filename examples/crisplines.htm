@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Line Rendering Demo</title>
+  <style>
+    body {
+      font-family: monospace;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 16px;
+      background-color: #f9fafb;
+      border-radius: 8px;
+    }
+    
+    .header {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    
+    .example {
+      padding: 8px;
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+    }
+    
+    .example-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    canvas {
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      width: 100%;
+      height: auto;
+    }
+    
+    .explanation {
+      font-size: 14px;
+      background-color: #eff6ff;
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid #dbeafe;
+    }
+    
+    .explanation-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .explanation p {
+      margin: 0 0 8px 0;
+    }
+
+    .examplehighlight {
+      background-color: #fff86c;
+      border-radius: 10px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Canvas Line Rendering Comparison</div>
+    
+    <div class="grid">
+      <div class="example">
+        <div class="example-title">Example 1: 1px-width line at <span class="examplehighlight">y=25</span></div>
+        <canvas id="canvas1" width="200" height="60"></canvas>
+      </div>
+      
+      <div class="example">
+        <div class="example-title">Example 2: 1px-width line at <span class="examplehighlight">y=25.5</span></div>
+        <canvas id="canvas2" width="200" height="60"></canvas>
+      </div>
+      
+      <div class="example">
+        <div class="example-title">Example 3: 2px-width line at <span class="examplehighlight">y=25</span></div>
+        <canvas id="canvas3" width="200" height="60"></canvas>
+      </div>
+      
+      <div class="example">
+        <div class="example-title">Example 4: 2px-width line at <span class="examplehighlight">y=25.5</span></div>
+        <canvas id="canvas4" width="200" height="60"></canvas>
+      </div>
+    </div>
+    
+    <div class="explanation">
+      <div class="explanation-title">Why this happens:</div>
+      <p>Read the tutorial for why this is the case:</p>
+    </div>
+  </div>
+
+  <script>
+    // Draw 1px lines at whole coordinates
+    const canvas1 = document.querySelector('#canvas1');
+    const ctx1 = canvas1.getContext('2d');
+    ctx1.beginPath();
+    ctx1.moveTo(50, 25);
+    ctx1.lineTo(150, 25);
+    ctx1.lineWidth = 1;
+    ctx1.strokeStyle = 'black';
+    ctx1.stroke();
+    
+    // Draw 1px lines at half-pixel coordinates
+    const canvas2 = document.querySelector('#canvas2');
+    const ctx2 = canvas2.getContext('2d');
+    ctx2.beginPath();
+    ctx2.moveTo(50, 25.5);
+    ctx2.lineTo(150, 25.5);
+    ctx2.lineWidth = 1;
+    ctx2.strokeStyle = 'black';
+    ctx2.stroke();
+    
+    // Draw 2px lines at whole coordinates
+    const canvas3 = document.querySelector('#canvas3');
+    const ctx3 = canvas3.getContext('2d');
+    ctx3.beginPath();
+    ctx3.moveTo(50, 25);
+    ctx3.lineTo(150, 25);
+    ctx3.lineWidth = 2;
+    ctx3.strokeStyle = 'black';
+    ctx3.stroke();
+    
+    // Draw 2px lines at half-pixel coordinates
+    const canvas4 = document.querySelector('#canvas4');
+    const ctx4 = canvas4.getContext('2d');
+    ctx4.beginPath();
+    ctx4.moveTo(50, 25.5);
+    ctx4.lineTo(150, 25.5);
+    ctx4.lineWidth = 2;
+    ctx4.strokeStyle = 'black';
+    ctx4.stroke();
+  </script>
+</body>
+</html>
