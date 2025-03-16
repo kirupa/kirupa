@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bresenham Circle Algorithm Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .canvas-container {
+            position: relative;
+            margin-top: 20px;
+        }
+        
+        canvas {
+            border: 1px solid #333;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            width: 100%;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        input {
+            padding: 5px;
+            width: 60px;
+        }
+        
+        label {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: none;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bresenham Circle Algorithm Demo</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="centerX">Center X:</label>
+                <input type="number" id="centerX" value="200">
+            </div>
+            <div class="control-group">
+                <label for="centerY">Center Y:</label>
+                <input type="number" id="centerY" value="150">
+            </div>
+            <div class="control-group">
+                <label for="radius">Radius:</label>
+                <input type="number" id="radius" value="100" min="1">
+            </div>
+            <div class="control-group">
+                <label for="circleColor">Color:</label>
+                <input type="color" id="circleColor" value="#000000" class="color-picker">
+            </div>
+            <div class="control-group">
+                <label for="pixelSize">Pixel Size:</label>
+                <input type="number" id="pixelSize" value="2" min="1" max="10">
+            </div>
+            <div class="control-group">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="showOctants" checked>
+                    <label for="showOctants">Show Octants</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="fillCircle">
+                    <label for="fillCircle">Fill Circle</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <button id="drawButton">Draw Circle</button>
+            </div>
+            <div class="control-group">
+                <button id="clearButton">Clear Canvas</button>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="canvas" width="400" height="300"></canvas>
+        </div>
+        
+        <div class="instructions">
+            <p><strong>Instructions:</strong> Enter the center coordinates and radius, then click "Draw Circle" to see Bresenham's circle algorithm in action. You can adjust the circle color and pixel size for better visibility.</p>
+            <p>The animation shows how the algorithm works by calculating points in the first octant and then mirroring them to complete the circle. Enable "Show Octants" to see this mirroring effect with different colors.</p>
+            <p>You can also click anywhere on the canvas to set a new center point for the circle.</p>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Bresenham's Circle Algorithm
+         * Efficiently plots a circle using only integer operations
+         * 
+         * @param {number} centerX - x-coordinate of the circle's center
+         * @param {number} centerY - y-coordinate of the circle's center
+         * @param {number} radius - radius of the circle
+         * @returns {Object} - Object containing points organized by octant
+         */
+        function bresenhamCircle(centerX, centerY, radius) {
+            const points = {
+                octant1: [],
+                octant2: [],
+                octant3: [],
+                octant4: [],
+                octant5: [],
+                octant6: [],
+                octant7: [],
+                octant8: []
+            };
+            
+            let x = 0;
+            let y = radius;
+            let d = 3 - 2 * radius;
+            
+            // Generate points for the first octant
+            while (y >= x) {
+                // Store the point in the first octant
+                points.octant1.push({ x: centerX + x, y: centerY - y });
+                
+                // Mirror the point to the other 7 octants
+                points.octant2.push({ x: centerX + y, y: centerY - x });
+                points.octant3.push({ x: centerX + y, y: centerY + x });
+                points.octant4.push({ x: centerX + x, y: centerY + y });
+                points.octant5.push({ x: centerX - x, y: centerY + y });
+                points.octant6.push({ x: centerX - y, y: centerY + x });
+                points.octant7.push({ x: centerX - y, y: centerY - x });
+                points.octant8.push({ x: centerX - x, y: centerY - y });
+                
+                // Update x, y, and decision parameter using Bresenham's algorithm
+                if (d < 0) {
+                    d = d + 4 * x + 6;
+                } else {
+                    d = d + 4 * (x - y) + 10;
+                    y--;
+                }
+                x++;
+            }
+            
+            return points;
+        }
+
+        /**
+         * Generates all points for a filled circle
+         * 
+         * @param {number} centerX - x-coordinate of the circle's center
+         * @param {number} centerY - y-coordinate of the circle's center
+         * @param {number} radius - radius of the circle
+         * @returns {Array} - Array of points [{x, y}] representing the filled circle
+         */
+        function generateFilledCircle(centerX, centerY, radius) {
+            const points = [];
+            
+            // Generate concentric circles from radius down to 1
+            for (let r = radius; r > 0; r--) {
+                const circlePoints = bresenhamCircle(centerX, centerY, r);
+                
+                // Combine all octants into a single array
+                for (const octant in circlePoints) {
+                    points.push(...circlePoints[octant]);
+                }
+            }
+            
+            // Add the center point
+            points.push({ x: centerX, y: centerY });
+            
+            return points;
+        }
+
+        // Get DOM elements
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const centerXInput = document.getElementById('centerX');
+        const centerYInput = document.getElementById('centerY');
+        const radiusInput = document.getElementById('radius');
+        const circleColorInput = document.getElementById('circleColor');
+        const pixelSizeInput = document.getElementById('pixelSize');
+        const showOctantsCheckbox = document.getElementById('showOctants');
+        const fillCircleCheckbox = document.getElementById('fillCircle');
+        const drawButton = document.getElementById('drawButton');
+        const clearButton = document.getElementById('clearButton');
+
+        // Clear the canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Draw a point at (x, y)
+        function drawPoint(x, y, color, size) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, size, size);
+        }
+
+        // Define colors for each octant
+        const octantColors = {
+            octant1: '#FF0000', // Red
+            octant2: '#FFA500', // Orange
+            octant3: '#FFFF00', // Yellow
+            octant4: '#00FF00', // Green
+            octant5: '#00FFFF', // Cyan
+            octant6: '#0000FF', // Blue
+            octant7: '#800080', // Purple
+            octant8: '#FF00FF'  // Magenta
+        };
+
+        // Animation speed in milliseconds
+        const animationSpeed = 20;
+
+        // Animate drawing the circle with octants
+        function animateCircleDrawing(circlePoints, baseColor, pixelSize, showOctants) {
+            const octants = Object.keys(circlePoints);
+            let octantIndex = 0;
+            let pointIndex = 0;
+            
+            const interval = setInterval(() => {
+                if (octantIndex < octants.length) {
+                    const octant = octants[octantIndex];
+                    const points = circlePoints[octant];
+                    
+                    if (pointIndex < points.length) {
+                        const point = points[pointIndex];
+                        const color = showOctants ? octantColors[octant] : baseColor;
+                        drawPoint(point.x, point.y, color, pixelSize);
+                        pointIndex++;
+                    } else {
+                        octantIndex++;
+                        pointIndex = 0;
+                    }
+                } else {
+                    clearInterval(interval);
+                }
+            }, animationSpeed);
+        }
+
+        // Animate drawing a filled circle
+        function animateFilledCircleDrawing(points, color, pixelSize) {
+            let i = 0;
+            const batchSize = 10; // Draw multiple points per frame for better performance
+            
+            const interval = setInterval(() => {
+                for (let j = 0; j < batchSize && i < points.length; j++, i++) {
+                    const point = points[i];
+                    drawPoint(point.x, point.y, color, pixelSize);
+                }
+                
+                if (i >= points.length) {
+                    clearInterval(interval);
+                }
+            }, animationSpeed / 10);
+        }
+
+        // Draw circle button click handler
+        drawButton.addEventListener('click', () => {
+            const centerX = parseInt(centerXInput.value);
+            const centerY = parseInt(centerYInput.value);
+            const radius = parseInt(radiusInput.value);
+            const color = circleColorInput.value;
+            const pixelSize = parseInt(pixelSizeInput.value);
+            const showOctants = showOctantsCheckbox.checked;
+            const fillCircle = fillCircleCheckbox.checked;
+
+            clearCanvas();
+            
+            if (fillCircle) {
+                // Generate and draw a filled circle
+                const points = generateFilledCircle(centerX, centerY, radius);
+                animateFilledCircleDrawing(points, color, pixelSize);
+            } else {
+                // Generate and draw a circle outline using Bresenham's algorithm
+                const circlePoints = bresenhamCircle(centerX, centerY, radius);
+                animateCircleDrawing(circlePoints, color, pixelSize, showOctants);
+            }
+        });
+
+        // Clear canvas button click handler
+        clearButton.addEventListener('click', clearCanvas);
+
+        // Draw an initial circle on load
+        window.addEventListener('load', () => {
+            drawButton.click();
+        });
+
+        // Set center point by clicking on the canvas
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            centerXInput.value = Math.floor(x);
+            centerYInput.value = Math.floor(y);
+            
+            drawButton.click();
+        });
+
+        // Draw preview circle when radius is changed
+        radiusInput.addEventListener('input', () => {
+            // Only update if the value is valid
+            if (radiusInput.value && parseInt(radiusInput.value) > 0) {
+                drawButton.click();
+            }
+        });
+
+        // Draw preview circle when fill option is changed
+        fillCircleCheckbox.addEventListener('change', () => {
+            drawButton.click();
+        });
+
+        // Draw preview circle when octant view is toggled
+        showOctantsCheckbox.addEventListener('change', () => {
+            drawButton.click();
+        });
+    </script>
+</body>
+</html>

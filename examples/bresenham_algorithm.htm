@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bresenham Line Algorithm Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .canvas-container {
+        position: relative;
+        margin-top: 20px;
+      }
+
+      canvas {
+        border: 1px solid #333;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .controls {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
+        padding: 15px;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        width: 100%;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      button {
+        padding: 8px 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      input {
+        padding: 5px;
+        width: 60px;
+      }
+
+      label {
+        font-size: 14px;
+        color: #333;
+      }
+
+      .instructions {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .color-picker {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bresenham Line Algorithm Demo</h1>
+
+      <div class="controls">
+        <div class="control-group">
+          <label for="startX">Start X:</label>
+          <input type="number" id="startX" value="50" />
+        </div>
+        <div class="control-group">
+          <label for="startY">Start Y:</label>
+          <input type="number" id="startY" value="50" />
+        </div>
+        <div class="control-group">
+          <label for="endX">End X:</label>
+          <input type="number" id="endX" value="250" />
+        </div>
+        <div class="control-group">
+          <label for="endY">End Y:</label>
+          <input type="number" id="endY" value="150" />
+        </div>
+        <div class="control-group">
+          <label for="lineColor">Color:</label>
+          <input
+            type="color"
+            id="lineColor"
+            value="#000000"
+            class="color-picker"
+          />
+        </div>
+        <div class="control-group">
+          <label for="pixelSize">Pixel Size:</label>
+          <input type="number" id="pixelSize" value="2" min="1" max="10" />
+        </div>
+        <div class="control-group">
+          <button id="drawButton">Draw Line</button>
+        </div>
+        <div class="control-group">
+          <button id="clearButton">Clear Canvas</button>
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="canvas" width="400" height="300"></canvas>
+      </div>
+
+      <div class="instructions">
+        <p>
+          <strong>Instructions:</strong> Enter the start and end coordinates,
+          then click "Draw Line" to see Bresenham's algorithm in action. You can
+          adjust the line color and pixel size for better visibility.
+        </p>
+        <p>
+          Points will be drawn one-by-one to visualize how the algorithm works.
+          Watch as each pixel is placed without using floating-point operations!
+        </p>
+      </div>
+    </div>
+
+    <script>
+      /**
+       * Bresenham's Line Algorithm
+       * Efficiently plots a line between two points using only integer operations
+       *
+       * @param {number} x0 - Starting x-coordinate
+       * @param {number} y0 - Starting y-coordinate
+       * @param {number} x1 - Ending x-coordinate
+       * @param {number} y1 - Ending y-coordinate
+       * @returns {Array} - Array of points [{x, y}] representing the line
+       */
+      function bresenhamLine(x0, y0, x1, y1) {
+        // Points array to store the line coordinates
+        const points = [];
+
+        // Calculate the absolute differences and direction of movement
+        const dx = Math.abs(x1 - x0);
+        const dy = Math.abs(y1 - y0);
+        const sx = x0 < x1 ? 1 : -1;
+        const sy = y0 < y1 ? 1 : -1;
+
+        // Initialize the error term
+        let err = dx - dy;
+
+        // Current position
+        let x = x0;
+        let y = y0;
+
+        // Continue until we reach the end point
+        while (true) {
+          // Add the current point to our result
+          points.push({ x, y });
+
+          // Break if we've reached the end point
+          if (x === x1 && y === y1) break;
+
+          // Calculate the error for the next position
+          const e2 = 2 * err;
+
+          // Update x if appropriate
+          if (e2 > -dy) {
+            err -= dy;
+            x += sx;
+          }
+
+          // Update y if appropriate
+          if (e2 < dx) {
+            err += dx;
+            y += sy;
+          }
+        }
+
+        return points;
+      }
+
+      // Get DOM elements
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const startXInput = document.getElementById("startX");
+      const startYInput = document.getElementById("startY");
+      const endXInput = document.getElementById("endX");
+      const endYInput = document.getElementById("endY");
+      const lineColorInput = document.getElementById("lineColor");
+      const pixelSizeInput = document.getElementById("pixelSize");
+      const drawButton = document.getElementById("drawButton");
+      const clearButton = document.getElementById("clearButton");
+
+      // Clear the canvas
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // Draw a point at (x, y)
+      function drawPoint(x, y, color, size) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, size, size);
+      }
+
+      // Animate drawing the line
+      function animateLineDrawing(points, color, pixelSize) {
+        let i = 0;
+        const interval = setInterval(() => {
+          if (i < points.length) {
+            const point = points[i];
+            drawPoint(point.x, point.y, color, pixelSize);
+            i++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 20); // Draw a new point every 20ms
+      }
+
+      // Draw line button click handler
+      drawButton.addEventListener("click", () => {
+        const x0 = parseInt(startXInput.value);
+        const y0 = parseInt(startYInput.value);
+        const x1 = parseInt(endXInput.value);
+        const y1 = parseInt(endYInput.value);
+        const color = lineColorInput.value;
+        const pixelSize = parseInt(pixelSizeInput.value);
+
+        clearCanvas();
+
+        // Get line points using Bresenham's algorithm
+        const points = bresenhamLine(x0, y0, x1, y1);
+
+        // Animate drawing the line
+        animateLineDrawing(points, color, pixelSize);
+      });
+
+      // Clear canvas button click handler
+      clearButton.addEventListener("click", clearCanvas);
+
+      // Draw an initial line on load
+      window.addEventListener("load", () => {
+        drawButton.click();
+      });
+
+      // Allow drawing by clicking and dragging on the canvas
+      let isDrawing = false;
+      let startX, startY;
+
+      canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+
+        // Update input fields
+        startXInput.value = Math.floor(startX);
+        startYInput.value = Math.floor(startY);
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!isDrawing) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const currentX = e.clientX - rect.left;
+        const currentY = e.clientY - rect.top;
+
+        // Update input fields
+        endXInput.value = Math.floor(currentX);
+        endYInput.value = Math.floor(currentY);
+
+        // Clear and redraw
+        clearCanvas();
+
+        const color = lineColorInput.value;
+        const pixelSize = parseInt(pixelSizeInput.value);
+
+        // Draw line immediately without animation during drag
+        const points = bresenhamLine(
+          Math.floor(startX),
+          Math.floor(startY),
+          Math.floor(currentX),
+          Math.floor(currentY)
+        );
+
+        points.forEach((point) => {
+          drawPoint(point.x, point.y, color, pixelSize);
+        });
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        isDrawing = false;
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        isDrawing = false;
+      });
+    </script>
+  </body>
+</html>
