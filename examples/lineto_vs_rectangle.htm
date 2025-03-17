@@ -1,226 +1,160 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>1px Horizontal Lines: LineTo vs Rectangle</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      color: #333;
-      font-size: 24px;
-    }
-    .canvas-container {
-      margin-bottom: 30px;
-    }
-    canvas {
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-    .controls {
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 8px 15px;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-    button:hover {
-      background-color: #3a80d2;
-    }
-    .line-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 5px;
-    }
-    .line-label {
-      display: flex;
-      align-items: center;
-      margin-right: 20px;
-    }
-    .line-color {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-    }
-    .red {
-      background-color: red;
-    }
-    .blue {
-      background-color: blue;
-    }
-  </style>
-</head>
-<body>
-  <h1>1px Horizontal Lines: LineTo vs Rectangle</h1>
-  
-  <div class="controls">
-    <button id="toggleGrid">Toggle Grid</button>
-    <button id="zoomIn">Zoom In (2x)</button>
-  </div>
-  
-  <div class="canvas-container">
-    <canvas id="linesCanvas" width="600" height="300"></canvas>
-    <div class="line-labels">
-      <div class="line-label">
-        <div class="line-color red"></div>
-        <span>LineTo Method</span>
-      </div>
-      <div class="line-label">
-        <div class="line-color blue"></div>
-        <span>Rectangle Method</span>
-      </div>
+  <head>
+    <title>1px Horizontal Lines: LineTo vs Rectangle</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+        font-size: 24px;
+      }
+      .canvas-container {
+        margin-bottom: 30px;
+      }
+      canvas {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+      .controls {
+        margin-bottom: 20px;
+      }
+      button {
+        padding: 8px 15px;
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button:hover {
+        background-color: #3a80d2;
+      }
+      .line-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+      }
+      .line-label {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+      }
+      .line-color {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>1px Horizontal Lines: LineTo vs Rectangle</h1>
+
+    <div class="canvas-container">
+      <canvas id="linesCanvas" width="600" height="300"></canvas>
     </div>
-  </div>
 
-  <div id="explanation">
-    <h3>What's happening here?</h3>
-    <p>This demonstration shows two methods of drawing 1px horizontal lines on an HTML canvas:</p>
-    <ul>
-      <li><strong>LineTo Method (Red):</strong> Uses the canvas stroke API with moveTo() and lineTo() with a 1px lineWidth.</li>
-      <li><strong>Rectangle Method (Blue):</strong> Uses fillRect() with a 1px height to draw a line.</li>
-    </ul>
-    <p>The grid (when enabled) shows the pixel boundaries. Notice how the placement of lines relative to the pixel grid can affect crispness.</p>
-    <p>The "Zoom In" button shows a magnified view to better understand how the lines are rendered at the pixel level.</p>
-  </div>
+    <div class="controls">
+      <button id="toggleGrid">Toggle Grid</button>
+    </div>
 
-  <script>
-    // DOM Elements
-    const canvas = document.getElementById('linesCanvas');
-    const ctx = canvas.getContext('2d');
-    const toggleGridBtn = document.getElementById('toggleGrid');
-    const zoomInBtn = document.getElementById('zoomIn');
-    
-    // State
-    let showGrid = false;
-    let zoomLevel = 1;
-    
-    // Draw grid
-    function drawGrid() {
-      if (!showGrid) return;
-      
-      ctx.save();
-      ctx.strokeStyle = '#dddddd';
-      ctx.lineWidth = 0.5;
-      
-      // Draw vertical lines
-      for (let x = 0; x < canvas.width; x += 10) {
+    <script>
+      // DOM Elements
+      const canvas = document.getElementById("linesCanvas");
+      const ctx = canvas.getContext("2d");
+      const toggleGridBtn = document.getElementById("toggleGrid");
+
+      // State
+      let showGrid = false;
+      let zoomLevel = 1;
+
+      // Draw grid
+      function drawGrid() {
+        if (!showGrid) return;
+
+        ctx.save();
+        ctx.strokeStyle = "#dddddd";
+        ctx.lineWidth = 1;
+
+        // Draw vertical lines
+        for (let x = 0; x < canvas.width; x += 10) {
+          ctx.beginPath();
+          ctx.moveTo(x + 0.5, 0);
+          ctx.lineTo(x + 0.5, canvas.height);
+          ctx.stroke();
+        }
+
+        // Draw horizontal lines
+        for (let y = 0; y < canvas.height; y += 10) {
+          ctx.beginPath();
+          ctx.moveTo(0, y + 0.5);
+          ctx.lineTo(canvas.width, y + 0.5);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      // Draw the lines
+      function drawLines() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Set up scaling for zoom
+        ctx.save();
+        ctx.scale(zoomLevel, zoomLevel);
+
+        // Draw grid if enabled
+        drawGrid();
+
+        // First line - LineTo method
+        const y1 = 100.5;
         ctx.beginPath();
-        ctx.moveTo(x + 0.5, 0);
-        ctx.lineTo(x + 0.5, canvas.height);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 1;
+        ctx.moveTo(50, y1);
+        ctx.lineTo(550, y1);
         ctx.stroke();
+
+        // Label for LineTo line
+        ctx.fillStyle = "red";
+        ctx.font = "12px sans-serif";
+        ctx.fillText("LineTo Method", 50, y1 - 10);
+
+        // Second line - Rectangle method
+        const y2 = 200;
+        ctx.fillStyle = "blue";
+        ctx.fillRect(50, y2, 500, 1);
+
+        // Label for Rectangle line
+        ctx.fillStyle = "blue";
+        ctx.font = "12px sans-serif";
+        ctx.fillText("Rectangle Method", 50, y2 - 10);
+
+        ctx.restore();
       }
-      
-      // Draw horizontal lines
-      for (let y = 0; y < canvas.height; y += 10) {
-        ctx.beginPath();
-        ctx.moveTo(0, y + 0.5);
-        ctx.lineTo(canvas.width, y + 0.5);
-        ctx.stroke();
-      }
-      
-      ctx.restore();
-    }
-    
-    // Draw the lines
-    function drawLines() {
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Set up scaling for zoom
-      ctx.save();
-      ctx.scale(zoomLevel, zoomLevel);
-      
-      // Draw grid if enabled
-      drawGrid();
-      
-      // First line - LineTo method
-      const y1 = 100;
-      ctx.beginPath();
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 1;
-      ctx.moveTo(50, y1);
-      ctx.lineTo(550, y1);
-      ctx.stroke();
-      
-      // Label for LineTo line
-      ctx.fillStyle = 'red';
-      ctx.font = '12px sans-serif';
-      if (zoomLevel === 1) {
-        ctx.fillText('LineTo Method', 50, y1 - 10);
-      }
-      
-      // Second line - Rectangle method
-      const y2 = 200;
-      ctx.fillStyle = 'blue';
-      ctx.fillRect(50, y2, 500, 1);
-      
-      // Label for Rectangle line
-      ctx.fillStyle = 'blue';
-      ctx.font = '12px sans-serif';
-      if (zoomLevel === 1) {
-        ctx.fillText('Rectangle Method', 50, y2 - 10);
-      }
-      
-      // Draw pixel positions for clarity
-      if (zoomLevel > 1) {
-        const pixelSections = [
-          { y: y1, color: 'rgba(255, 0, 0, 0.2)', label: 'LineTo y=' + y1 },
-          { y: y1 + 0.5, color: 'rgba(255, 0, 0, 0.1)', label: 'LineTo y=' + (y1 + 0.5) },
-          { y: y2, color: 'rgba(0, 0, 255, 0.2)', label: 'Rect y=' + y2 },
-          { y: y2 + 0.5, color: 'rgba(0, 0, 255, 0.1)', label: 'Rect y=' + (y2 + 0.5) }
-        ];
-        
-        const zoomedSectionWidth = 200;
-        
-        // Draw pixel position indicators
-        pixelSections.forEach(section => {
-          ctx.fillStyle = section.color;
-          ctx.fillRect(50, section.y - 0.5, zoomedSectionWidth, 1);
-          
-          ctx.fillStyle = '#333';
-          ctx.font = '6px sans-serif';
-          ctx.fillText(section.label, 55, section.y + 3);
-        });
-      }
-      
-      ctx.restore();
-      
-      // If zoomed, add explanatory text
-      if (zoomLevel > 1) {
-        ctx.fillStyle = '#333';
-        ctx.font = '12px sans-serif';
-        ctx.fillText('Zoomed view (2x) - Notice how the lines are positioned relative to the pixel grid', 20, 20);
-      }
-    }
-    
-    // Event listeners
-    toggleGridBtn.addEventListener('click', () => {
-      showGrid = !showGrid;
+
+      // Event listeners
+      toggleGridBtn.addEventListener("click", () => {
+        showGrid = !showGrid;
+        drawLines();
+      });
+
+      // Initial draw
       drawLines();
-    });
-    
-    zoomInBtn.addEventListener('click', () => {
-      if (zoomLevel === 1) {
-        zoomLevel = 2;
-        zoomInBtn.textContent = 'Normal View (1x)';
-      } else {
-        zoomLevel = 1;
-        zoomInBtn.textContent = 'Zoom In (2x)';
-      }
-      drawLines();
-    });
-    
-    // Initial draw
-    drawLines();
-  </script>
-</body>
+    </script>
+  </body>
 </html>
