@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Straight Line Example</title>
+  <style>
+    body {
+      margin: 20px;
+    }
+    h1 {
+      font-family: monospace;
+    }
+    #myCanvas {
+      border: 2px solid #CCC;
+    }
+  </style>
+</head>
+<body>
+  <h1>Straight Line Example</h1>
+  <canvas id="myCanvas" width="600" height="300"></canvas>
+  <script>
+    const canvas = document.querySelector("#myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.moveTo(300.5, 50);
+    ctx.lineTo(300.5, 250);
+    ctx.stroke();
+
+  </script>
+</body>
+</html>

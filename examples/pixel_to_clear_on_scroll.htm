@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixelated to Clear Image Transition</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 3000px; /* Long page to enable scrolling */
+        }
+
+        .spacer {
+            height: 100vh;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .transition-image {
+            width: 400px;
+            height: auto;
+            /* Start with a pixelated image */
+            filter: blur(10px);
+            /* For SVGs, we can use a different approach */
+            image-rendering: pixelated; /* For PNGs */
+            transform: scale(1);
+            transition: filter .3s ease-out;
+            opacity: 0.8;
+        }
+
+        /* For SVG specific transitions */
+        .svg-image {
+            filter: blur(10px);
+            transition: filter .3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="spacer">Scroll down to see the effect</div>
+    
+    <div class="image-container">
+        <!-- Using a placeholder image - note: in a real implementation, you would use your own image or an Unsplash image -->
+        <img src="https://images.unsplash.com/photo-1682687982502-1529b3b33f85?q=80&w=1000&auto=format&fit=crop" 
+     alt="Mountain landscape from Unsplash" 
+     class="transition-image" 
+     id="pngImage">
+    </div>
+    
+    <div class="image-container">
+        <!-- For SVG example -->
+        <svg width="400" height="320" viewBox="0 0 400 320" class="svg-image" id="svgImage">
+            <rect x="50" y="50" width="300" height="220" fill="#4287f5" rx="10" ry="10" />
+            <circle cx="200" cy="160" r="80" fill="#f54242" />
+            <polygon points="200,80 150,180 250,180" fill="#42f581" />
+            <text x="200" y="250" text-anchor="middle" font-size="20" fill="white">SVG Example</text>
+        </svg>
+    </div>
+
+    <script>
+        // Get our images
+        const pngImage = document.getElementById('pngImage');
+        const svgImage = document.getElementById('svgImage');
+        
+        // Function to handle when image enters/exits viewport
+        function handleIntersection(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Element is in view
+                    entry.target.style.filter = 'blur(0px)';
+                    if (entry.target.id === 'pngImage') {
+                        entry.target.style.opacity = '1';
+                    }
+                } else {
+                    // Element is out of view
+                    entry.target.style.filter = 'blur(100px)';
+                    if (entry.target.id === 'pngImage') {
+                        entry.target.style.opacity = '0.8';
+                    }
+                }
+            });
+        }
+        
+        // Create the Intersection Observer
+        const options = {
+            root: null, // Use viewport as root
+            rootMargin: '0px', // No margin
+            threshold: 0.4 // Trigger when 40% of the element is visible
+        };
+        
+        const observer = new IntersectionObserver(handleIntersection, options);
+        
+        // Observe both images
+        observer.observe(pngImage);
+        observer.observe(svgImage);
+    </script>
+</body>
+</html>
