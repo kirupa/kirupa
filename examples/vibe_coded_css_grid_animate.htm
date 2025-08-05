@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Grid Animation - Canvas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: white;
+            cursor: none;
+            font-family: Arial, sans-serif;
+        }
+
+        #gridCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: white;
+        }
+
+        .cursor-indicator {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-indicator::before,
+        .cursor-indicator::after {
+            content: '';
+            position: absolute;
+            background: red;
+            border-radius: 1px;
+        }
+
+        .cursor-indicator::before {
+            width: 30px;
+            height: 4px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .cursor-indicator::after {
+            width: 4px;
+            height: 30px;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1001;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gridCanvas"></canvas>
+    <div class="cursor-indicator" id="cursor"></div>
+    <div class="info" id="info">
+        Move mouse to animate grid<br>
+        Distance from center: <span id="distance">0</span>px<br>
+        Speed: <span id="speed">0</span>%<br>
+        FPS: <span id="fps">0</span>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gridCanvas');
+        const ctx = canvas.getContext('2d');
+        const cursor = document.getElementById('cursor');
+        const distanceSpan = document.getElementById('distance');
+        const speedSpan = document.getElementById('speed');
+        const fpsSpan = document.getElementById('fps');
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let centerX = window.innerWidth / 2;
+        let centerY = window.innerHeight / 2;
+        
+        let gridOffsetX = 0;
+        let gridOffsetY = 0;
+        let animationId;
+        
+        // FPS tracking
+        let lastTime = performance.now();
+        let frameCount = 0;
+        let fps = 0;
+
+        const gridSize = 15;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            centerX = window.innerWidth / 2;
+            centerY = window.innerHeight / 2;
+        }
+
+        function drawGrid() {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set line style
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            
+            // Calculate starting positions with offset
+            const startX = (gridOffsetX % gridSize) - gridSize;
+            const startY = (gridOffsetY % gridSize) - gridSize;
+            
+            // Draw vertical lines
+            for (let x = startX; x <= width + gridSize; x += gridSize) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+            }
+            
+            // Draw horizontal lines
+            for (let y = startY; y <= height + gridSize; y += gridSize) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+            }
+            
+            ctx.stroke();
+        }
+
+        function updateFPS(currentTime) {
+            frameCount++;
+            if (currentTime - lastTime >= 1000) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                frameCount = 0;
+                lastTime = currentTime;
+                fpsSpan.textContent = fps;
+            }
+        }
+
+        function animate(currentTime) {
+            // Update FPS
+            updateFPS(currentTime);
+            
+            // Calculate distance and direction from center
+            const deltaX = mouseX - centerX;
+            const deltaY = mouseY - centerY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
+            // Calculate maximum possible distance (corner to center)
+            const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+            
+            // Calculate speed based on distance (0 to 100%)
+            const speedFactor = Math.min(distance / maxDistance, 1);
+            const maxSpeed = 3; // Maximum pixels per frame
+            
+            // Calculate velocity - always moving, speed varies by distance from center
+            let velocityX = 0;
+            let velocityY = 0;
+            
+            if (distance > 5) {
+                // Calculate direction vector (normalized)
+                const directionX = deltaX / distance;
+                const directionY = deltaY / distance;
+                
+                // Apply speed based on distance from center
+                velocityX = directionX * maxSpeed * speedFactor;
+                velocityY = directionY * maxSpeed * speedFactor;
+            }
+            
+            // Continuously update grid position for infinite scroll
+            gridOffsetX += velocityX;
+            gridOffsetY += velocityY;
+            
+            // Draw the grid
+            drawGrid();
+            
+            // Update info display
+            distanceSpan.textContent = Math.round(distance);
+            speedSpan.textContent = Math.round(speedFactor * 100);
+            
+            // Continue animation
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', resizeCanvas);
+
+        // Track mouse movement
+        document.addEventListener('mousemove', function(e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Update cursor position
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        // Initialize
+        resizeCanvas();
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+
+        // Start animation
+        animate(performance.now());
+    </script>
+</body>
+</html>
