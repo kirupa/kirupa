@@ -1,176 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mouse-Responsive Animated Grid</title>
     <style>
-      #myCanvas {
-        outline: 2px solid #333;
-        width: 100vw;
-        height: 100vh;
-      }
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-      }
+        #myCanvas {
+            outline: 2px solid #333;
+            width: 100vw;
+            height: 100vh;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <canvas id="myCanvas" width="500" height="500"></canvas>
     <script>
-      // Get the canvas context
-      let myCanvas = document.querySelector("#myCanvas");
-      const ctx = myCanvas.getContext("2d");
+        // Get the canvas context
+        let myCanvas = document.querySelector("#myCanvas");
+        const ctx = myCanvas.getContext("2d");
 
-      function accountForDPI() {
-        // Get the current device pixel ratio
-        const dpr = window.devicePixelRatio || 1;
-        // Get the canvas size from CSS
-        const rect = myCanvas.getBoundingClientRect();
-        // Set the canvas internal dimensions to match DPI
-        myCanvas.width = rect.width * dpr;
-        myCanvas.height = rect.height * dpr;
-        // Scale all canvas operations to account for DPI
-        ctx.scale(dpr, dpr);
-        // Reset the canvas display size
-        myCanvas.style.width = `${rect.width}px`;
-        myCanvas.style.height = `${rect.height}px`;
-      }
-
-      accountForDPI();
-
-      let offsetX = 0;
-      let offsetY = 0;
-      let baseAnimationSpeed = 2;
-      let currentAnimationSpeedX = 0;
-      let currentAnimationSpeedY = 0;
-
-      // Mouse tracking variables
-      let mouseX = 0;
-      let mouseY = 0;
-      let centerX = window.innerWidth / 2;
-      let centerY = window.innerHeight / 2;
-      let maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
-
-      // Track latest mouse position without immediate processing
-      let latestMouseX = centerX;
-      let latestMouseY = centerY;
-
-      function drawGrid(lineWidth, cellWidth, cellHeight, color) {
-        // Set line properties
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWidth;
-
-        // Get size (use display size, not internal canvas size)
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-
-        // Draw vertical lines with horizontal offset
-        let verticalStartCondition = -cellWidth + (offsetX % cellWidth);
-        let verticalEndCondition = width + cellWidth;
-        for (
-          let x = verticalStartCondition;
-          x <= verticalEndCondition;
-          x += cellWidth
-        ) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, height);
-          ctx.stroke();
+        function accountForDPI() {
+            // Get the current device pixel ratio
+            const dpr = window.devicePixelRatio || 1;
+            // Get the canvas size from CSS
+            const rect = myCanvas.getBoundingClientRect();
+            // Set the canvas internal dimensions to match DPI
+            myCanvas.width = rect.width * dpr;
+            myCanvas.height = rect.height * dpr;
+            // Scale all canvas operations to account for DPI
+            ctx.scale(dpr, dpr);
+            // Reset the canvas display size
+            myCanvas.style.width = `${rect.width}px`;
+            myCanvas.style.height = `${rect.height}px`;
         }
 
-        // Draw horizontal lines with vertical offset
-        let horizontalStartCondition = -cellHeight + (offsetY % cellHeight);
-        let horizontalEndCondition = height + cellHeight;
-        for (
-          let y = horizontalStartCondition;
-          y <= horizontalEndCondition;
-          y += cellHeight
-        ) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(width, y);
-          ctx.stroke();
+        accountForDPI();
+
+        let offsetX = 0;
+        let offsetY = 0;
+        let baseAnimationSpeed = 2;
+        let currentAnimationSpeedX = 0;
+        let currentAnimationSpeedY = 0;
+        
+        // Mouse tracking variables
+        let mouseX = 0;
+        let mouseY = 0;
+        let centerX = window.innerWidth / 2;
+        let centerY = window.innerHeight / 2;
+        let maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+        
+        // Track latest mouse position without immediate processing
+        let latestMouseX = centerX;
+        let latestMouseY = centerY;
+        
+        // Lagged mouse position for visual indicator
+        let laggedMouseX = centerX;
+        let laggedMouseY = centerY;
+        let lagSpeed = 0.1; // How quickly the lagged position catches up (0.1 = 10% per frame)
+
+        function drawGrid(lineWidth, cellWidth, cellHeight, color) {
+            // Set line properties
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+
+            // Get size (use display size, not internal canvas size)
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+
+            // Draw vertical lines with horizontal offset
+            let verticalStartCondition = -cellWidth + (offsetX % cellWidth);
+            let verticalEndCondition = width + cellWidth;
+            for (let x = verticalStartCondition; x <= verticalEndCondition; x += cellWidth) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            // Draw horizontal lines with vertical offset
+            let horizontalStartCondition = -cellHeight + (offsetY % cellHeight);
+            let horizontalEndCondition = height + cellHeight;
+            for (let y = horizontalStartCondition; y <= horizontalEndCondition; y += cellHeight) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
         }
-      }
 
-      function updateAnimationSpeed() {
-        // Calculate distance and direction from center
-        let deltaX = mouseX - centerX;
-        let deltaY = mouseY - centerY;
-        let distanceX = Math.abs(deltaX);
-        let distanceY = Math.abs(deltaY);
+        function drawMouseIndicator(x, y) {
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            
+            const size = 8;
+            
+            // Draw X shape
+            ctx.beginPath();
+            // Top-left to bottom-right
+            ctx.moveTo(x - size, y - size);
+            ctx.lineTo(x + size, y + size);
+            // Top-right to bottom-left
+            ctx.moveTo(x + size, y - size);
+            ctx.lineTo(x - size, y + size);
+            ctx.stroke();
+        }
+        function updateAnimationSpeed() {
+            // Calculate distance and direction from center
+            let deltaX = mouseX - centerX;
+            let deltaY = mouseY - centerY;
+            let distanceX = Math.abs(deltaX);
+            let distanceY = Math.abs(deltaY);
+            
+            // Normalize distances (0 to 1) based on screen dimensions
+            let normalizedDistanceX = Math.min(distanceX / centerX, 1);
+            let normalizedDistanceY = Math.min(distanceY / centerY, 1);
+            
+            // Calculate speed based on distance and direction
+            // Positive delta means mouse is right/down from center, negative means left/up
+            currentAnimationSpeedX = (deltaX / centerX) * baseAnimationSpeed * 3;
+            currentAnimationSpeedY = (deltaY / centerY) * baseAnimationSpeed * 3;
+        }
 
-        // Normalize distances (0 to 1) based on screen dimensions
-        let normalizedDistanceX = Math.min(distanceX / centerX, 1);
-        let normalizedDistanceY = Math.min(distanceY / centerY, 1);
-
-        // Calculate speed based on distance and direction
-        // Positive delta means mouse is right/down from center, negative means left/up
-        currentAnimationSpeedX = (deltaX / centerX) * baseAnimationSpeed * 3;
-        currentAnimationSpeedY = (deltaY / centerY) * baseAnimationSpeed * 3;
-      }
-
-      // Mouse event listeners - just capture position, don't process
-      myCanvas.addEventListener("mousemove", (e) => {
-        latestMouseX = e.clientX;
-        latestMouseY = e.clientY;
-      });
-
-      // Initialize mouse position to center
-      latestMouseX = centerX;
-      latestMouseY = centerY;
-      mouseX = centerX;
-      mouseY = centerY;
-
-      let frames_per_second = 60;
-      let previousTime = performance.now();
-      let frame_interval = 1000 / frames_per_second;
-      let delta_time_multiplier = 1;
-      let delta_time = 0;
-
-      // Our animation loop
-      function animate(currentTime) {
-        delta_time = currentTime - previousTime;
-        delta_time_multiplier = delta_time / frame_interval;
-
-        // Update mouse position and animation speed once per frame
-        mouseX = latestMouseX;
-        mouseY = latestMouseY;
-        updateAnimationSpeed();
-
-        offsetX += delta_time_multiplier * currentAnimationSpeedX;
-        offsetY += delta_time_multiplier * currentAnimationSpeedY;
-
-        // Clear with display dimensions
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        drawGrid(1, 20, 20, "#000");
-
-        previousTime = currentTime;
-        requestAnimationFrame(animate);
-      }
-
-      requestAnimationFrame(animate);
-
-      window.addEventListener("resize", () => {
-        requestAnimationFrame(() => {
-          myCanvas.style.width = window.innerWidth + "px";
-          myCanvas.style.height = window.innerHeight + "px";
-          accountForDPI();
-
-          // Update center coordinates
-          centerX = window.innerWidth / 2;
-          centerY = window.innerHeight / 2;
-          maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
-
-          drawGrid(1, 20, 20, "#000");
+        // Mouse event listeners - just capture position, don't process
+        myCanvas.addEventListener('mousemove', (e) => {
+            latestMouseX = e.clientX;
+            latestMouseY = e.clientY;
         });
-      });
+
+        // Initialize mouse position to center
+        latestMouseX = centerX;
+        latestMouseY = centerY;
+        mouseX = centerX;
+        mouseY = centerY;
+        laggedMouseX = centerX;
+        laggedMouseY = centerY;
+
+        let frames_per_second = 60;
+        let previousTime = performance.now();
+        let frame_interval = 1000 / frames_per_second;
+        let delta_time_multiplier = 1;
+        let delta_time = 0;
+
+        // Our animation loop
+        function animate(currentTime) {
+            delta_time = currentTime - previousTime;
+            delta_time_multiplier = delta_time / frame_interval;
+            
+            // Update mouse position and animation speed once per frame
+            mouseX = latestMouseX;
+            mouseY = latestMouseY;
+            updateAnimationSpeed();
+            
+            // Update lagged mouse position with smooth interpolation
+            laggedMouseX += (mouseX - laggedMouseX) * lagSpeed;
+            laggedMouseY += (mouseY - laggedMouseY) * lagSpeed;
+            
+            offsetX += (delta_time_multiplier * currentAnimationSpeedX);
+            offsetY += (delta_time_multiplier * currentAnimationSpeedY);
+            
+            // Clear with display dimensions
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            drawGrid(1, 20, 20, "#000");
+            
+            // Draw the lagged mouse indicator
+            drawMouseIndicator(laggedMouseX, laggedMouseY);
+            
+            previousTime = currentTime;
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+
+        window.addEventListener("resize", () => {
+            requestAnimationFrame(() => {
+                myCanvas.style.width = window.innerWidth + "px";
+                myCanvas.style.height = window.innerHeight + "px";
+                accountForDPI();
+                
+                // Update center coordinates
+                centerX = window.innerWidth / 2;
+                centerY = window.innerHeight / 2;
+                maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+                
+                drawGrid(1, 20, 20, "#000");
+            });
+        });
     </script>
-  </body>
+</body>
 </html>
