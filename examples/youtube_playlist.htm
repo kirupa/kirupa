@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>YouTube Playlist → Clickable Rows</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Layout container */
+    #playlist {
+      max-width: 720px;
+      margin: 2rem auto;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Each row is one big link */
+    .video-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;             /* remove default underline */
+      padding: 10px 12px;
+      border-radius: 8px;
+      transition: background 120ms ease;
+      color: inherit;                    /* keep text color consistent */
+    }
+    .video-row:hover,
+    .video-row:focus-visible {
+      background: #f2f2f2;
+      outline: none;
+    }
+
+    .thumb {
+      width: 120px;                      /* "default" YouTube thumb is 120×90 */
+      height: 90px;
+      flex: 0 0 auto;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #ddd;
+    }
+
+    .title {
+      line-height: 1.3;
+      font-size: 0.98rem;
+    }
+
+    .meta {
+      display: block;
+      color: #666;
+      font-size: 0.82rem;
+      margin-top: 2px;
+    }
+
+    .empty,
+    .error,
+    .loading {
+      text-align: center;
+      color: #666;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+  <main id="playlist">
+    <div class="loading" id="status">Loading playlist…</div>
+  </main>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────
+    // 1) Configure these:
+    const API_KEY = "AIzaSyBWp-MbE5CpBbDwd--ghciPreZGS_v2bm0";               // Restrict this to your domain in Google Cloud Console
+    const PLAYLIST_ID = "UUZCQ3LXtU3IUzMBQBqN69KQ";       // e.g., PLBCF2DAC6FFB574DE
+    const MAX_RESULTS_PER_PAGE = 50;                   // YouTube API max is 50
+    // ─────────────────────────────────────────────────────────────
+
+    const endpoint = "https://www.googleapis.com/youtube/v3/playlistItems";
+
+    async function fetchAllPlaylistItems(playlistId) {
+      let items = [];
+      let pageToken = undefined;
+
+      do {
+        const url = new URL(endpoint);
+        url.search = new URLSearchParams({
+          part: "snippet,contentDetails",
+          playlistId,
+          maxResults: MAX_RESULTS_PER_PAGE,
+          key: API_KEY,
+          ...(pageToken ? { pageToken } : {})
+        });
+
+        const res = await fetch(url.toString());
+        if (!res.ok) {
+          const msg = await res.text().catch(() => "");
+          throw new Error(`YouTube API error (${res.status}): ${msg || res.statusText}`);
+        }
+
+        const data = await res.json();
+        items = items.concat(data.items || []);
+        pageToken = data.nextPageToken;
+      } while (pageToken);
+
+      // Filter out private/deleted items defensively
+      return items.filter(it => it?.snippet?.title && it?.contentDetails?.videoId);
+    }
+
+    function buildVideoRowEl({ videoId, title, channelTitle, position, playlistId, thumbnailUrl }) {
+      const a = document.createElement("a");
+      a.className = "video-row";
+      a.href = `https://www.youtube.com/watch?v=${videoId}&list=${playlistId}&index=${position + 1}`;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.setAttribute("aria-label", title);
+
+      const img = document.createElement("img");
+      img.className = "thumb";
+      img.src = thumbnailUrl;
+      img.alt = ""; // decorative; title text follows
+      img.loading = "lazy";
+      a.appendChild(img);
+
+      const titleWrap = document.createElement("div");
+      const h = document.createElement("div");
+      h.className = "title";
+      h.textContent = title;
+      titleWrap.appendChild(h);
+
+      const meta = document.createElement("span");
+      meta.className = "meta";
+      meta.textContent = channelTitle || "YouTube";
+      titleWrap.appendChild(meta);
+
+      a.appendChild(titleWrap);
+      return a;
+    }
+
+    async function renderPlaylist(playlistId) {
+      const container = document.getElementById("playlist");
+      const status = document.getElementById("status");
+
+      try {
+        const items = await fetchAllPlaylistItems(playlistId);
+        status?.remove();
+
+        if (!items.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = "No videos found in this playlist.";
+          container.appendChild(empty);
+          return;
+        }
+
+        // Build rows (thumbnail + title), entire row is clickable
+        const fragment = document.createDocumentFragment();
+
+        items.forEach((it) => {
+          const sn = it.snippet;
+          const cd = it.contentDetails;
+
+          // Prefer "default" thumbnail for a small row; fallback chain provided.
+          const thumb =
+            sn.thumbnails?.default?.url ||
+            sn.thumbnails?.medium?.url ||
+            sn.thumbnails?.high?.url ||
+            "";
+
+          const row = buildVideoRowEl({
+            videoId: cd.videoId,
+            title: sn.title,
+            channelTitle: sn.channelTitle,
+            position: sn.position ?? 0,
+            playlistId,
+            thumbnailUrl: thumb
+          });
+
+          fragment.appendChild(row);
+        });
+
+        container.appendChild(fragment);
+      } catch (err) {
+        console.error(err);
+        if (status) {
+          status.className = "error";
+          status.textContent = "Sorry, we couldn’t load that playlist.";
+        } else {
+          const error = document.createElement("div");
+          error.className = "error";
+          error.textContent = "Sorry, we couldn’t load that playlist.";
+          container.appendChild(error);
+        }
+      }
+    }
+
+    // Kick off rendering
+    renderPlaylist(PLAYLIST_ID);
+  </script>
+</body>
+</html>
