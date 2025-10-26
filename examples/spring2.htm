@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .square {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 12px;
+            cursor: grab;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: box-shadow 0.2s ease;
+            will-change: transform;
+        }
+
+        .square:active {
+            cursor: grabbing;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .instructions {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-group .value {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+            margin-left: 10px;
+        }
+
+        input[type="range"] {
+            width: 120px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="instructions">Drag the square and release!</div>
+        <div class="square" id="square"></div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>
+                    Stiffness (k)
+                    <span class="value" id="kValue">0.15</span>
+                </label>
+                <input type="range" id="stiffness" min="0.01" max="0.5" step="0.01" value="0.15">
+            </div>
+            
+            <div class="control-group">
+                <label>
+                    Damping
+                    <span class="value" id="dampingValue">0.85</span>
+                </label>
+                <input type="range" id="damping" min="0.5" max="0.99" step="0.01" value="0.85">
+            </div>
+            
+            <div class="control-group">
+                <label>
+                    Mass
+                    <span class="value" id="massValue">1.0</span>
+                </label>
+                <input type="range" id="mass" min="0.1" max="5.0" step="0.1" value="1.0">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const square = document.getElementById('square');
+        const container = document.querySelector('.container');
+        
+        // Slider elements
+        const stiffnessSlider = document.getElementById('stiffness');
+        const dampingSlider = document.getElementById('damping');
+        const massSlider = document.getElementById('mass');
+        const kValue = document.getElementById('kValue');
+        const dampingValue = document.getElementById('dampingValue');
+        const massValue = document.getElementById('massValue');
+
+        // Spring physics parameters
+        let springStiffness = 0.15;
+        let springDamping = 0.85;
+        let springMass = 1.0;
+
+        // State
+        let isDragging = false;
+        let currentX = 0;
+        let currentY = 0;
+        let velocityX = 0;
+        let velocityY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        let offsetX = 0;
+        let offsetY = 0;
+        let rotation = 0;
+        let angularVelocity = 0;
+        let animationFrame = null;
+
+        // Initialize position at center
+        function init() {
+            const rect = container.getBoundingClientRect();
+            targetX = rect.width / 2 - square.offsetWidth / 2;
+            targetY = rect.height / 2 - square.offsetHeight / 2;
+            currentX = targetX;
+            currentY = targetY;
+            updatePosition();
+        }
+
+        // Update square position and rotation
+        function updatePosition() {
+            square.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotation}deg)`;
+        }
+
+        // Spring animation loop
+        function animate() {
+            if (!isDragging) {
+                // Calculate spring forces
+                const dx = targetX - currentX;
+                const dy = targetY - currentY;
+
+                // Apply spring acceleration (F = -kx, then a = F/m)
+                const accelerationX = (dx * springStiffness) / springMass;
+                const accelerationY = (dy * springStiffness) / springMass;
+
+                velocityX += accelerationX;
+                velocityY += accelerationY;
+
+                // Apply damping
+                velocityX *= springDamping;
+                velocityY *= springDamping;
+
+                // Update position
+                currentX += velocityX;
+                currentY += velocityY;
+
+                // Calculate rotation based on velocity direction and magnitude
+                const speed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+                const targetAngularVelocity = velocityX * 0.5; // Rotation proportional to horizontal velocity
+                
+                // Smooth angular velocity transition
+                angularVelocity += (targetAngularVelocity - angularVelocity) * 0.1;
+                angularVelocity *= springDamping;
+                rotation += angularVelocity;
+
+                updatePosition();
+
+                // Continue animation if still moving
+                if (Math.abs(velocityX) > 0.01 || Math.abs(velocityY) > 0.01 || 
+                    Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01 ||
+                    Math.abs(angularVelocity) > 0.01) {
+                    animationFrame = requestAnimationFrame(animate);
+                } else {
+                    // Snap to final position
+                    currentX = targetX;
+                    currentY = targetY;
+                    velocityX = 0;
+                    velocityY = 0;
+                    angularVelocity = 0;
+                    updatePosition();
+                }
+            } else {
+                animationFrame = requestAnimationFrame(animate);
+            }
+        }
+
+        // Mouse/Touch event handlers
+        function handleStart(e) {
+            isDragging = true;
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const rect = square.getBoundingClientRect();
+            offsetX = clientX - rect.left;
+            offsetY = clientY - rect.top;
+
+            // Reset velocity when starting drag
+            velocityX = 0;
+            velocityY = 0;
+            angularVelocity = 0;
+
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+            animationFrame = requestAnimationFrame(animate);
+
+            e.preventDefault();
+        }
+
+        function handleMove(e) {
+            if (!isDragging) return;
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            currentX = clientX - offsetX;
+            currentY = clientY - offsetY;
+
+            updatePosition();
+            e.preventDefault();
+        }
+
+        function handleEnd(e) {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            
+            // Start spring animation back to center
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+            animationFrame = requestAnimationFrame(animate);
+
+            e.preventDefault();
+        }
+
+        // Slider event listeners
+        stiffnessSlider.addEventListener('input', (e) => {
+            springStiffness = parseFloat(e.target.value);
+            kValue.textContent = springStiffness.toFixed(2);
+        });
+
+        dampingSlider.addEventListener('input', (e) => {
+            springDamping = parseFloat(e.target.value);
+            dampingValue.textContent = springDamping.toFixed(2);
+        });
+
+        massSlider.addEventListener('input', (e) => {
+            springMass = parseFloat(e.target.value);
+            massValue.textContent = springMass.toFixed(1);
+        });
+
+        // Mouse events
+        square.addEventListener('mousedown', handleStart);
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('mouseup', handleEnd);
+
+        // Touch events
+        square.addEventListener('touchstart', handleStart, { passive: false });
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('touchend', handleEnd, { passive: false });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const rect = container.getBoundingClientRect();
+            targetX = rect.width / 2 - square.offsetWidth / 2;
+            targetY = rect.height / 2 - square.offsetHeight / 2;
+        });
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
