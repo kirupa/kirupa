@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DOM Spring Drag — Snap-back Square</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --fg: #e5e7eb;
+      --muted: #aab0bb;
+      --accent1: #6EE7F9;
+      --accent2: #A78BFA;
+      --card: rgba(255,255,255,.06);
+      --card-border: rgba(255,255,255,.08);
+    }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .wrap { height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
+    header, footer { padding: 10px 14px; opacity: .85; }
+    header { font-weight: 600; letter-spacing: .2px; }
+    footer { font-size: 12px; color: var(--muted); }
+
+    .stage { position: relative; overflow: hidden; height: calc(100vh - 60px); transform: translateZ(0); }
+
+    .box {
+      position: absolute; width: 90px; height: 90px; border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      border: 2px solid rgba(255,255,255,0.6);
+      touch-action: none; cursor: grab; will-change: transform;
+      display: grid; place-items: end start; padding: 0 0 10px 12px; user-select: none;
+    }
+    .box.dragging { cursor: grabbing; }
+    .box .hint { font: 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: rgba(255,255,255,0.85); }
+
+    .anchor { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.35); pointer-events: none; transform: translate(-50%, -50%); }
+    .tether { position: absolute; height: 2px; background: rgba(255,255,255,0.15); transform-origin: 0 50%; pointer-events: none; }
+
+    .hud { position: fixed; right: 12px; bottom: 12px; background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 12px; font-size: 12px; backdrop-filter: blur(6px); }
+    .hud code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .slider { display:flex; align-items:center; gap:8px; margin-top:6px; }
+    .slider input { width: 140px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>DOM Spring Drag — Snap-back Square</header>
+
+    <div class="stage" id="stage">
+      <div class="box" id="box"><div class="hint">drag me</div></div>
+      <div class="anchor" id="anchor"></div>
+      <div class="tether" id="tether"></div>
+    </div>
+
+    <footer>Drag the square anywhere. Release to watch it spring back ✨ Adjust physics below.</footer>
+  </div>
+
+  <div class="hud" id="hud">
+    <div><strong>Spring</strong></div>
+    <div class="slider"><label for="k">k</label><input id="k" type="range" min="20" max="400" step="1" value="180"><code id="kVal">180</code></div>
+    <div class="slider"><label for="d">damping</label><input id="d" type="range" min="0" max="10" step="0.05" value="2.2"><code id="dVal">2.20</code></div>
+    <div class="slider"><label for="m">mass</label><input id="m" type="range" min="0.2" max="5" step="0.05" value="1.0"><code id="mVal">1.00</code></div>
+  </div>
+
+<script>
+// --- Globals (kept small + documented) ---
+let stage, box, anchorEl, tetherEl, hud;
+let k, d, m;              // physics params
+let state, rest;          // positions, velocities, rest/anchor
+let prevTime = 0;         // last raf timestamp
+let lastT = 0;            // last pointer sample time
+let rafId = null;         // current RAF id (for pause/resume safety)
+
+// Entry: set up everything. Call once after DOM is ready.
+function initSpringDemo(){
+  stage = document.getElementById('stage');
+  box = document.getElementById('box');
+  anchorEl = document.getElementById('anchor');
+  tetherEl = document.getElementById('tether');
+
+  hud = {
+    k: document.getElementById('k'),
+    d: document.getElementById('d'),
+    m: document.getElementById('m'),
+    kVal: document.getElementById('kVal'),
+    dVal: document.getElementById('dVal'),
+    mVal: document.getElementById('mVal'),
+  };
+
+  state = { size: 90, x: 0, y: 0, vx: 0, vy: 0, dragging: false, offsetX: 0, offsetY: 0 };
+  rest = { x: 0, y: 0 };
+
+  k = parseFloat(hud.k.value);
+  d = parseFloat(hud.d.value);
+  m = parseFloat(hud.m.value);
+  syncHUD();
+  setupHUDListeners();
+
+  window.addEventListener('resize', layout);
+  layout();
+  setupPointerEvents();
+
+  startAnimationLoop();
+}
+
+function startAnimationLoop(){
+  if (rafId !== null) return; // already running
+  prevTime = performance.now();
+  rafId = requestAnimationFrame(tick);
+}
+
+function stopAnimationLoop(){
+  if (rafId === null) return;
+  cancelAnimationFrame(rafId);
+  rafId = null;
+}
+
+function syncHUD(){
+  hud.kVal.textContent = k.toFixed(0);
+  hud.dVal.textContent = d.toFixed(2);
+  hud.mVal.textContent = m.toFixed(2);
+}
+
+function setupHUDListeners(){
+  for (const [el, key] of [[hud.k,'k'], [hud.d,'d'], [hud.m,'m']]){
+    el.addEventListener('input', () => {
+      if (key === 'k') k = parseFloat(hud.k.value);
+      if (key === 'd') d = parseFloat(hud.d.value);
+      if (key === 'm') m = parseFloat(hud.m.value);
+      syncHUD();
+    });
+  }
+}
+
+function layout(){
+  computeRest();
+}
+
+function computeRest(){
+  const rect = stage.getBoundingClientRect();
+  rest.x = (rect.width - state.size) * 0.5;
+  rest.y = (rect.height - state.size) * 0.5;
+  anchorEl.style.left = (rest.x + state.size/2) + 'px';
+  anchorEl.style.top  = (rest.y + state.size/2) + 'px';
+  if (!state.dragging){
+    state.x = rest.x; state.y = rest.y; state.vx = 0; state.vy = 0;
+    applyTransform();
+    updateTether();
+  }
+}
+
+function applyTransform(){
+  const rot = Math.atan2(state.vy, 2000) - Math.atan2(state.vx, 2000);
+  box.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) rotate(${rot}rad)`;
+}
+
+function updateTether(){
+  const cx = rest.x + state.size/2;
+  const cy = rest.y + state.size/2;
+  const sx = state.x + state.size/2;
+  const sy = state.y + state.size/2;
+  const dx = sx - cx, dy = sy - cy;
+  const len = Math.hypot(dx, dy);
+  const ang = Math.atan2(dy, dx);
+  tetherEl.style.left = cx + 'px';
+  tetherEl.style.top = cy + 'px';
+  tetherEl.style.width = len + 'px';
+  tetherEl.style.transform = `rotate(${ang}rad)`;
+}
+
+function setupPointerEvents(){
+  box.addEventListener('pointerdown', onPointerDown);
+  box.addEventListener('pointermove', onPointerMove);
+  box.addEventListener('pointerup', onPointerUp);
+  box.addEventListener('pointercancel', onPointerUp);
+}
+
+function getLocalPointer(evt){
+  const r = stage.getBoundingClientRect();
+  return { x: evt.clientX - r.left, y: evt.clientY - r.top };
+}
+
+function onPointerDown(e){
+  const p = getLocalPointer(e);
+  box.setPointerCapture(e.pointerId);
+  state.dragging = true;
+  box.classList.add('dragging');
+  state.offsetX = p.x - state.x;
+  state.offsetY = p.y - state.y;
+  lastT = performance.now();
+  e.preventDefault();
+}
+
+function onPointerMove(e){
+  if (!state.dragging) return;
+  const now = performance.now();
+  const p = getLocalPointer(e);
+  const nx = p.x - state.offsetX;
+  const ny = p.y - state.offsetY;
+  const dt = Math.max(0.0001, (now - lastT) / 1000);
+  state.vx = (nx - state.x) / dt;
+  state.vy = (ny - state.y) / dt;
+  state.x = nx; state.y = ny;
+  lastT = now;
+  applyTransform();
+  updateTether();
+}
+
+function onPointerUp(){
+  if (!state.dragging) return;
+  state.dragging = false;
+  box.classList.remove('dragging');
+}
+
+// --- Animation loop (requestAnimationFrame) ---
+function tick(now){
+  rafId = requestAnimationFrame(tick); // schedule next frame first
+  const rawDt = (now - prevTime) / 1000;
+  const dt = Math.min(0.032, Math.max(0.001, rawDt || 0));
+  prevTime = now;
+
+  if (!state || !rest) return; // safety if called before init
+
+  if (!state.dragging){
+    const dx = state.x - rest.x;
+    const dy = state.y - rest.y;
+    const fx = -k * dx - d * state.vx;
+    const fy = -k * dy - d * state.vy;
+    const ax = fx / m;
+    const ay = fy / m;
+    state.vx += ax * dt;
+    state.vy += ay * dt;
+    state.x  += state.vx * dt;
+    state.y  += state.vy * dt;
+    if (Math.hypot(dx, dy) < 0.02 && Math.hypot(state.vx, state.vy) < 0.02){
+      state.x = rest.x; state.y = rest.y; state.vx = state.vy = 0;
+    }
+    applyTransform();
+    updateTether();
+  }
+}
+
+// Auto-init once DOM is ready (safer than body onload in some environments)
+document.addEventListener('DOMContentLoaded', initSpringDemo);
+
+// Optional: pause loop when tab hidden to be extra polite
+// document.addEventListener('visibilitychange', () => {
+//   if (document.hidden) stopAnimationLoop(); else startAnimationLoop();
+// });
+</script>
+</body>
+</html>
