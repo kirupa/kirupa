@@ -106,21 +106,13 @@
       }
 
       function drawMouseIndicator(x, y) {
-        ctx.strokeStyle = "#ff0000";
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
+        ctx.fillStyle = "#ff0000";
+        const radius = 8;
 
-        const size = 8;
-
-        // Draw X shape
+        // Draw circle shape
         ctx.beginPath();
-        // Top-left to bottom-right
-        ctx.moveTo(x - size, y - size);
-        ctx.lineTo(x + size, y + size);
-        // Top-right to bottom-left
-        ctx.moveTo(x + size, y - size);
-        ctx.lineTo(x - size, y + size);
-        ctx.stroke();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
       }
       function updateAnimationSpeed() {
         // Calculate distance and direction from center
@@ -146,12 +138,12 @@
       });
 
       // Initialize mouse position to top-left
-      latestMouseX = 100;
-      latestMouseY = 100;
-      mouseX = 100;
-      mouseY = 100;
-      laggedMouseX = 100;
-      laggedMouseY = 100;
+      latestMouseX = 10;
+      latestMouseY = 10;
+      mouseX = 10;
+      mouseY = 10;
+      laggedMouseX = 10;
+      laggedMouseY = 10;
 
       let frames_per_second = 60;
       let previousTime = performance.now();
