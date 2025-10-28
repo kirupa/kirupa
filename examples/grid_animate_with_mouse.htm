@@ -145,13 +145,13 @@
         latestMouseY = e.clientY;
       });
 
-      // Initialize mouse position to center
-      latestMouseX = centerX;
-      latestMouseY = centerY;
-      mouseX = centerX;
-      mouseY = centerY;
-      laggedMouseX = centerX;
-      laggedMouseY = centerY;
+      // Initialize mouse position to top-left
+      latestMouseX = 100;
+      latestMouseY = 100;
+      mouseX = 100;
+      mouseY = 100;
+      laggedMouseX = 100;
+      laggedMouseY = 100;
 
       let frames_per_second = 60;
       let previousTime = performance.now();
