@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grid Movement: Avoiding Obstacles</title>
+  <style>
+    @font-face {
+      font-family: "kirupaPixel";
+      src: url("https://www.kirupa.com/fonts/born2bsportyv2-webfont.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: light;
+      --demo-primary: #0798ff;
+      --demo-primary-darker: #0267af;
+      --demo-primary-lighter: #aadcff;
+      --demo-primary-lightest: #eaf7ff;
+      --demo-text: #373d42;
+      --demo-page: #ffffff;
+      --demo-surface: #ffffff;
+      --demo-border: #eeeeee;
+      --demo-input-border: #aadcff;
+      --line: color-mix(in srgb, var(--demo-input-border) 58%, var(--demo-border));
+      --line-strong: color-mix(in srgb, var(--demo-primary-darker) 68%, var(--demo-text));
+      --player-cell: var(--demo-primary-lighter);
+      --obstacle-cell: color-mix(in srgb, var(--demo-text) 12%, var(--demo-surface));
+      --rock: color-mix(in srgb, var(--demo-text) 54%, var(--demo-surface));
+      --rock-dark: color-mix(in srgb, var(--demo-text) 78%, var(--demo-surface));
+      --rock-light: color-mix(in srgb, var(--demo-text) 28%, var(--demo-surface));
+      --status-background: color-mix(in srgb, var(--demo-primary-lightest) 40%, var(--demo-page));
+      --button-shadow: color-mix(in srgb, var(--demo-text) 28%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --demo-primary: #518ac1;
+        --demo-primary-darker: #3a6fa1;
+        --demo-primary-lighter: #aadcff;
+        --demo-primary-lightest: #3e4f5f;
+        --demo-text: #f5f9fe;
+        --demo-page: #383a42;
+        --demo-surface: #373b41;
+        --demo-border: #504f4f;
+        --demo-input-border: #8eb2e8;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(12px, 4vw, 24px);
+      background: var(--demo-page);
+      color: var(--demo-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .demo {
+      width: min(100%, 480px);
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-family: "kirupaPixel", "Courier New", monospace;
+      font-size: clamp(1.45rem, 5vw, 2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      text-align: center;
+      -webkit-font-smoothing: none;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 480px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 2px solid var(--line-strong);
+      border-radius: 10px;
+      background: var(--demo-surface);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      flex: 1 1 0;
+      min-height: 0;
+    }
+
+    .grid:focus-visible {
+      outline: 4px solid color-mix(in srgb, var(--demo-primary) 42%, transparent);
+      outline-offset: 3px;
+    }
+
+    .cell {
+      position: relative;
+      min-width: 0;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--demo-surface);
+    }
+
+    .cell.last-col {
+      border-right: 0;
+    }
+
+    .cell.last-row {
+      border-bottom: 0;
+    }
+
+    .cell.obstacle {
+      background: var(--obstacle-cell);
+    }
+
+    .cell.obstacle::before {
+      position: absolute;
+      inset: 18% 13% 14%;
+      border: 2px solid var(--rock-dark);
+      border-radius: 46% 54% 42% 38% / 54% 48% 40% 36%;
+      background:
+        radial-gradient(circle at 34% 28%, var(--rock-light) 0 9%, transparent 10%),
+        linear-gradient(145deg, var(--rock-light), var(--rock));
+      content: "";
+      transform: rotate(-3deg);
+    }
+
+    .cell.player {
+      background: var(--player-cell);
+    }
+
+    .cell.player::after {
+      position: absolute;
+      inset: 14%;
+      background: url("https://www.kirupa.com/icon/zorb.svg") center / contain no-repeat;
+      content: "";
+    }
+
+    .grid.bumped {
+      animation: bump 180ms ease-out;
+    }
+
+    @keyframes bump {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      35% {
+        transform: translateX(-5px);
+      }
+      70% {
+        transform: translateX(5px);
+      }
+    }
+
+    .status {
+      display: grid;
+      min-height: 48px;
+      margin: 12px 0;
+      padding: 9px 12px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--status-background);
+      color: var(--demo-text);
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .status.blocked {
+      border-color: var(--demo-primary);
+      background: var(--player-cell);
+      color: var(--demo-text);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px 24px;
+    }
+
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(4, 50px);
+      gap: 5px;
+    }
+
+    .move-button,
+    .reset-button {
+      min-width: 50px;
+      min-height: 50px;
+      border: 1px solid var(--demo-input-border);
+      border-radius: 12px;
+      background: var(--demo-surface);
+      color: var(--demo-text);
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 0 3px 0 var(--button-shadow);
+    }
+
+    .move-button {
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .move-button:hover,
+    .reset-button:hover {
+      border-color: var(--demo-primary);
+      background: var(--player-cell);
+    }
+
+    .move-button:active,
+    .reset-button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--button-shadow);
+    }
+
+    .move-button:focus-visible,
+    .reset-button:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--demo-primary) 42%, transparent);
+      outline-offset: 2px;
+    }
+
+    .reset-button {
+      padding: 0 18px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 430px) {
+      body {
+        padding: 10px;
+      }
+
+      .dpad {
+        grid-template-columns: repeat(4, 54px);
+      }
+
+      .move-button,
+      .reset-button {
+        min-width: 54px;
+        min-height: 54px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .grid.bumped {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="demo">
+    <h1>Move Zorb</h1>
+
+    <div
+      id="grid"
+      class="grid"
+      role="grid"
+      tabindex="0"
+      aria-label="10 by 10 movement grid with rock obstacles"
+    ></div>
+
+    <p id="status" class="status" role="status" aria-live="polite">Zorb starts at (4, 4). Watch out for the rocks!</p>
+
+    <div class="controls">
+      <div class="dpad" role="group" aria-label="Direction controls">
+        <button class="move-button" type="button" data-direction="up" aria-label="Move up">&uarr;</button>
+        <button class="move-button" type="button" data-direction="left" aria-label="Move left">&larr;</button>
+        <button class="move-button" type="button" data-direction="down" aria-label="Move down">&darr;</button>
+        <button class="move-button" type="button" data-direction="right" aria-label="Move right">&rarr;</button>
+      </div>
+
+      <button id="reset" class="reset-button" type="button">Reset</button>
+    </div>
+  </main>
+
+  <script>
+    function syncParentTheme() {
+      if (window.parent === window || !document.referrer) {
+        return;
+      }
+
+      const parentUrl = new URL(document.referrer);
+
+      if (parentUrl.origin !== window.location.origin) {
+        return;
+      }
+
+      const parentRoot = window.parent.document.documentElement;
+      const themeProperties = [
+        ["--demo-primary", "--primary"],
+        ["--demo-primary-darker", "--primaryDarker"],
+        ["--demo-primary-lighter", "--primaryLighter"],
+        ["--demo-primary-lightest", "--primaryLightest"],
+        ["--demo-text", "--bodyText"],
+        ["--demo-page", "--pageBackground"],
+        ["--demo-surface", "--inputBackground"],
+        ["--demo-border", "--structureBorder"],
+        ["--demo-input-border", "--inputBorder"]
+      ];
+
+      function applyParentTheme() {
+        const parentStyles = window.parent.getComputedStyle(parentRoot);
+        let copiedThemeValue = false;
+
+        for (const [demoProperty, parentProperty] of themeProperties) {
+          const value = parentStyles.getPropertyValue(parentProperty).trim();
+
+          if (value) {
+            document.documentElement.style.setProperty(demoProperty, value);
+            copiedThemeValue = true;
+          }
+        }
+
+        if (copiedThemeValue) {
+          document.documentElement.style.colorScheme =
+            parentRoot.classList.contains("theme_dark") ? "dark" : "light";
+        }
+      }
+
+      applyParentTheme();
+      new MutationObserver(applyParentTheme).observe(parentRoot, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+
+    syncParentTheme();
+
+    const rows = 10;
+    const cols = 10;
+    const start = { x: 4, y: 4 };
+    const player = { ...start };
+
+    const obstacles = new Set([
+      "1,1", "2,1", "3,1", "6,1", "7,1", "8,1",
+      "3,2", "8,2",
+      "0,3", "1,3", "3,3", "5,3", "6,3", "8,3",
+      "5,4",
+      "1,5", "2,5", "3,5", "5,5", "7,5", "8,5",
+      "3,6", "7,6",
+      "1,7", "5,7", "7,7",
+      "1,8", "2,8", "3,8", "5,8"
+    ]);
+
+    const DIRECTIONS = {
+      up: [0, -1],
+      down: [0, 1],
+      left: [-1, 0],
+      right: [1, 0]
+    };
+
+    const KEY_TO_DIRECTION = {
+      ArrowUp: "up",
+      KeyW: "up",
+      ArrowDown: "down",
+      KeyS: "down",
+      ArrowLeft: "left",
+      KeyA: "left",
+      ArrowRight: "right",
+      KeyD: "right"
+    };
+
+    const gridElement = document.querySelector("#grid");
+    const statusElement = document.querySelector("#status");
+    const resetButton = document.querySelector("#reset");
+    const cells = [];
+
+    let swipeStart = null;
+
+    for (let y = 0; y < rows; y += 1) {
+      const rowElement = document.createElement("div");
+      rowElement.className = "grid-row";
+      rowElement.setAttribute("role", "row");
+
+      for (let x = 0; x < cols; x += 1) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.classList.toggle("last-col", x === cols - 1);
+        cell.classList.toggle("last-row", y === rows - 1);
+        cell.setAttribute("role", "gridcell");
+        rowElement.append(cell);
+        cells.push(cell);
+      }
+
+      gridElement.append(rowElement);
+    }
+
+    function inBounds(x, y) {
+      return x >= 0 && x < cols &&
+             y >= 0 && y < rows;
+    }
+
+    function isObstacle(x, y) {
+      return obstacles.has(`${x},${y}`);
+    }
+
+    function render(message, blocked = false) {
+      for (let y = 0; y < rows; y += 1) {
+        for (let x = 0; x < cols; x += 1) {
+          const cell = cells[y * cols + x];
+          const isPlayer = x === player.x && y === player.y;
+          const obstacle = isObstacle(x, y);
+          const contents = isPlayer
+            ? ", Zorb"
+            : obstacle
+              ? ", rock obstacle"
+              : "";
+
+          cell.classList.toggle("obstacle", obstacle);
+          cell.classList.toggle("player", isPlayer);
+          cell.setAttribute(
+            "aria-label",
+            `Column ${x}, row ${y}${contents}`
+          );
+        }
+      }
+
+      statusElement.textContent = message;
+      statusElement.classList.toggle("blocked", blocked);
+    }
+
+    function showBump() {
+      gridElement.classList.remove("bumped");
+      requestAnimationFrame(() => gridElement.classList.add("bumped"));
+    }
+
+    function tryMove(direction) {
+      const [xOffset, yOffset] = DIRECTIONS[direction];
+      const nextX = player.x + xOffset;
+      const nextY = player.y + yOffset;
+
+      if (!inBounds(nextX, nextY)) {
+        showBump();
+        render(
+          `The ${direction} edge blocked that move. Zorb stays at (${player.x}, ${player.y}).`,
+          true
+        );
+        return false;
+      }
+
+      if (isObstacle(nextX, nextY)) {
+        showBump();
+        render(
+          `A rock at (${nextX}, ${nextY}) blocked that move. Zorb stays at (${player.x}, ${player.y}).`,
+          true
+        );
+        return false;
+      }
+
+      player.x = nextX;
+      player.y = nextY;
+      render(`Zorb moved ${direction} to (${player.x}, ${player.y}).`);
+      return true;
+    }
+
+    document.querySelectorAll("[data-direction]").forEach((button) => {
+      button.addEventListener("click", () => {
+        tryMove(button.dataset.direction);
+      });
+    });
+
+    window.addEventListener("keydown", (event) => {
+      const direction = KEY_TO_DIRECTION[event.code];
+
+      if (!direction) {
+        return;
+      }
+
+      event.preventDefault();
+      tryMove(direction);
+    });
+
+    gridElement.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+      }
+
+      swipeStart = {
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY
+      };
+      gridElement.setPointerCapture(event.pointerId);
+    });
+
+    gridElement.addEventListener("pointerup", (event) => {
+      if (!swipeStart || swipeStart.id !== event.pointerId) {
+        return;
+      }
+
+      const deltaX = event.clientX - swipeStart.x;
+      const deltaY = event.clientY - swipeStart.y;
+      swipeStart = null;
+
+      if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 24) {
+        gridElement.focus();
+        return;
+      }
+
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        tryMove(deltaX > 0 ? "right" : "left");
+      } else {
+        tryMove(deltaY > 0 ? "down" : "up");
+      }
+    });
+
+    gridElement.addEventListener("pointercancel", () => {
+      swipeStart = null;
+    });
+
+    gridElement.addEventListener("animationend", () => {
+      gridElement.classList.remove("bumped");
+    });
+
+    resetButton.addEventListener("click", () => {
+      player.x = start.x;
+      player.y = start.y;
+      render("Zorb is back at (4, 4). Watch out for the rocks!");
+      gridElement.focus();
+    });
+
+    render("Zorb starts at (4, 4). Watch out for the rocks!");
+  </script>
+</body>
+</html>
