@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grid Movement: Finding the Cheapest Path</title>
+  <style>
+    @font-face {
+      font-family: "kirupaPixel";
+      src: url("https://www.kirupa.com/fonts/born2bsportyv2-webfont.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: light;
+      --demo-primary: #0798ff;
+      --demo-primary-darker: #0267af;
+      --demo-primary-lighter: #aadcff;
+      --demo-primary-lightest: #eaf7ff;
+      --demo-text: #373d42;
+      --demo-page: #ffffff;
+      --demo-surface: #ffffff;
+      --demo-border: #eeeeee;
+      --demo-input-border: #aadcff;
+      --line: color-mix(in srgb, var(--demo-input-border) 58%, var(--demo-border));
+      --line-strong: color-mix(in srgb, var(--demo-primary-darker) 68%, var(--demo-text));
+      --obstacle-cell: color-mix(in srgb, var(--demo-text) 12%, var(--demo-surface));
+      --rock: color-mix(in srgb, var(--demo-text) 54%, var(--demo-surface));
+      --rock-dark: color-mix(in srgb, var(--demo-text) 78%, var(--demo-surface));
+      --rock-light: color-mix(in srgb, var(--demo-text) 28%, var(--demo-surface));
+      --mud-cell: color-mix(in srgb, #9a6b3f 14%, var(--demo-surface));
+      --mud: color-mix(in srgb, #9a6b3f 62%, var(--demo-surface));
+      --mud-dark: color-mix(in srgb, #6b4423 80%, var(--demo-surface));
+      --mud-light: color-mix(in srgb, #c89b6d 55%, var(--demo-surface));
+      --preview-cell: color-mix(in srgb, var(--demo-primary) 14%, var(--demo-surface));
+      --preview-line: color-mix(in srgb, var(--demo-primary) 48%, var(--demo-surface));
+      --trail-cell: color-mix(in srgb, var(--demo-primary) 34%, var(--demo-surface));
+      --trail-text: color-mix(in srgb, var(--demo-primary-darker) 55%, var(--demo-text));
+      --goal-ring: var(--demo-primary);
+      --unreachable-cell: color-mix(in srgb, var(--demo-text) 18%, var(--demo-surface));
+      --status-background: color-mix(in srgb, var(--demo-primary-lightest) 40%, var(--demo-page));
+      --button-shadow: color-mix(in srgb, var(--demo-text) 28%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --demo-primary: #518ac1;
+        --demo-primary-darker: #3a6fa1;
+        --demo-primary-lighter: #aadcff;
+        --demo-primary-lightest: #3e4f5f;
+        --demo-text: #f5f9fe;
+        --demo-page: #383a42;
+        --demo-surface: #373b41;
+        --demo-border: #504f4f;
+        --demo-input-border: #8eb2e8;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(12px, 4vw, 24px);
+      background: var(--demo-page);
+      color: var(--demo-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .demo {
+      width: min(100%, 480px);
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-family: "kirupaPixel", "Courier New", monospace;
+      font-size: clamp(1.45rem, 5vw, 2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      text-align: center;
+      -webkit-font-smoothing: none;
+    }
+
+    .grid {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 480px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 2px solid var(--line-strong);
+      border-radius: 10px;
+      background: var(--demo-surface);
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      flex: 1 1 0;
+      min-height: 0;
+    }
+
+    .cell {
+      position: relative;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--demo-surface);
+      color: var(--trail-text);
+      font: inherit;
+      line-height: 1;
+      cursor: pointer;
+      touch-action: manipulation;
+      appearance: none;
+    }
+
+    .cell.last-col {
+      border-right: 0;
+    }
+
+    .cell.last-row {
+      border-bottom: 0;
+    }
+
+    .cell:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--demo-primary) 60%, transparent);
+      outline-offset: -3px;
+    }
+
+    .cell.obstacle {
+      background: var(--obstacle-cell);
+      cursor: not-allowed;
+    }
+
+    .cell.obstacle::before {
+      position: absolute;
+      inset: 18% 13% 14%;
+      border: 2px solid var(--rock-dark);
+      border-radius: 46% 54% 42% 38% / 54% 48% 40% 36%;
+      background:
+        radial-gradient(circle at 34% 28%, var(--rock-light) 0 9%, transparent 10%),
+        linear-gradient(145deg, var(--rock-light), var(--rock));
+      content: "";
+      transform: rotate(-3deg);
+    }
+
+    .cell.mud {
+      background: var(--mud-cell);
+    }
+
+    .cell.mud::before {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 17% 6% at 36% 44%, var(--mud-light) 0 70%, transparent 80%),
+        radial-gradient(ellipse 9% 4% at 60% 60%, var(--mud-light) 0 70%, transparent 80%),
+        radial-gradient(ellipse 40% 23% at 46% 50%, var(--mud) 0 93%, transparent 100%),
+        radial-gradient(ellipse 42% 26% at 46% 53%, var(--mud-dark) 0 93%, transparent 100%),
+        radial-gradient(ellipse 11% 8% at 82% 76%, var(--mud) 0 88%, transparent 100%),
+        radial-gradient(ellipse 7% 5% at 18% 78%, var(--mud) 0 88%, transparent 100%);
+      content: "";
+    }
+
+    .cell.trail {
+      background: var(--trail-cell);
+    }
+
+    .cell.trail::after {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--trail-text);
+      font-size: clamp(0.62rem, 2.1vw, 0.85rem);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      content: attr(data-step);
+    }
+
+    .cell.mud.trail::after {
+      text-shadow: 0 0 3px var(--demo-surface), 0 0 3px var(--demo-surface);
+    }
+
+    /* A preview wins wherever it crosses an older trail, so the two
+       highlight colors never blend into one another. */
+    .cell.preview {
+      background: var(--preview-cell);
+      box-shadow: inset 0 0 0 1px var(--preview-line);
+    }
+
+    .cell.preview::after {
+      content: none;
+    }
+
+    .cell.preview-goal {
+      box-shadow: inset 0 0 0 3px var(--goal-ring);
+    }
+
+    .cell.preview-blocked {
+      background: var(--unreachable-cell);
+      box-shadow: inset 0 0 0 3px var(--unreachable-cell);
+    }
+
+    .zorb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: calc(100% / 10);
+      height: calc(100% / 10);
+      transition: transform 160ms linear;
+      pointer-events: none;
+    }
+
+    .zorb::after {
+      position: absolute;
+      inset: 14%;
+      background: url("https://www.kirupa.com/icon/zorb.svg") center / contain no-repeat;
+      content: "";
+    }
+
+    .status {
+      display: grid;
+      min-height: 48px;
+      margin: 12px 0;
+      padding: 9px 12px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--status-background);
+      color: var(--demo-text);
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .status.blocked {
+      border-color: var(--demo-primary);
+      background: var(--preview-cell);
+      color: var(--demo-text);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0 0 12px;
+      padding: 0;
+      gap: 8px 18px;
+      list-style: none;
+      font-size: 0.85rem;
+    }
+
+    .legend li {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .swatch {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .swatch.preview {
+      border-color: var(--preview-line);
+      background: var(--preview-cell);
+    }
+
+    .swatch.trail {
+      background: var(--trail-cell);
+    }
+
+    .swatch.rock {
+      background: var(--obstacle-cell);
+    }
+
+    .swatch.mud {
+      border-color: var(--mud-dark);
+      background: var(--mud);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px 24px;
+    }
+
+    .reset-button {
+      min-width: 50px;
+      min-height: 50px;
+      padding: 0 18px;
+      border: 1px solid var(--demo-input-border);
+      border-radius: 12px;
+      background: var(--demo-surface);
+      color: var(--demo-text);
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 0 3px 0 var(--button-shadow);
+    }
+
+    .reset-button:hover {
+      border-color: var(--demo-primary);
+      background: var(--preview-cell);
+    }
+
+    .reset-button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--button-shadow);
+    }
+
+    .reset-button:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--demo-primary) 42%, transparent);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 430px) {
+      body {
+        padding: 10px;
+      }
+
+      .reset-button {
+        min-width: 54px;
+        min-height: 54px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .zorb {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="demo">
+    <h1>Guide Zorb</h1>
+
+    <div
+      id="grid"
+      class="grid"
+      role="grid"
+      aria-label="10 by 10 navigation grid with rock obstacles and mud. Choose a destination cell and Zorb walks there along the cheapest route."
+    >
+      <div id="zorb" class="zorb" aria-hidden="true"></div>
+    </div>
+
+    <p id="status" class="status" role="status" aria-live="polite">Click or tap any open cell. Zorb will find the cheapest way there.</p>
+
+    <ul class="legend">
+      <li><span class="swatch preview" aria-hidden="true"></span>Route preview</li>
+      <li><span class="swatch trail" aria-hidden="true"></span>Route taken</li>
+      <li><span class="swatch rock" aria-hidden="true"></span>Rock</li>
+      <li><span class="swatch mud" aria-hidden="true"></span>Mud (cost 5)</li>
+    </ul>
+
+    <div class="controls">
+      <button id="reset" class="reset-button" type="button">Reset</button>
+    </div>
+  </main>
+
+  <script>
+    function syncParentTheme() {
+      if (window.parent === window || !document.referrer) {
+        return;
+      }
+
+      const parentUrl = new URL(document.referrer);
+
+      if (parentUrl.origin !== window.location.origin) {
+        return;
+      }
+
+      const parentRoot = window.parent.document.documentElement;
+      const themeProperties = [
+        ["--demo-primary", "--primary"],
+        ["--demo-primary-darker", "--primaryDarker"],
+        ["--demo-primary-lighter", "--primaryLighter"],
+        ["--demo-primary-lightest", "--primaryLightest"],
+        ["--demo-text", "--bodyText"],
+        ["--demo-page", "--pageBackground"],
+        ["--demo-surface", "--inputBackground"],
+        ["--demo-border", "--structureBorder"],
+        ["--demo-input-border", "--inputBorder"]
+      ];
+
+      function applyParentTheme() {
+        const parentStyles = window.parent.getComputedStyle(parentRoot);
+        let copiedThemeValue = false;
+
+        for (const [demoProperty, parentProperty] of themeProperties) {
+          const value = parentStyles.getPropertyValue(parentProperty).trim();
+
+          if (value) {
+            document.documentElement.style.setProperty(demoProperty, value);
+            copiedThemeValue = true;
+          }
+        }
+
+        if (copiedThemeValue) {
+          document.documentElement.style.colorScheme =
+            parentRoot.classList.contains("theme_dark") ? "dark" : "light";
+        }
+      }
+
+      applyParentTheme();
+      new MutationObserver(applyParentTheme).observe(parentRoot, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+
+    syncParentTheme();
+
+    const rows = 10;
+    const cols = 10;
+    const start = { x: 4, y: 4 };
+    const zorb = { ...start };
+
+    const obstacles = new Set([
+      "1,1", "2,1", "3,1", "6,1", "7,1", "8,1",
+      "3,2", "8,2",
+      "0,3", "1,3", "3,3", "5,3", "6,3", "8,3",
+      "5,4",
+      "1,5", "2,5", "3,5", "5,5", "7,5", "8,5",
+      "3,6", "7,6",
+      "1,7", "5,7", "7,7",
+      "1,8", "2,8", "3,8", "5,8"
+    ]);
+
+    const mud = new Set([
+      "2,2", "2,3",
+      "6,5", "5,6", "6,6"
+    ]);
+
+    const MUD_COST = 5;
+    const STEP_MS = 160;
+
+    const gridElement = document.querySelector("#grid");
+    const zorbElement = document.querySelector("#zorb");
+    const statusElement = document.querySelector("#status");
+    const resetButton = document.querySelector("#reset");
+    const cells = [];
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let walkTimer = null;
+    let focusedIndex = start.y * cols + start.x;
+
+    function key(x, y) {
+      return `${x},${y}`;
+    }
+
+    function inBounds(x, y) {
+      return x >= 0 && x < cols &&
+             y >= 0 && y < rows;
+    }
+
+    function isObstacle(x, y) {
+      return obstacles.has(key(x, y));
+    }
+
+    function isMud(x, y) {
+      return mud.has(key(x, y));
+    }
+
+    // What it costs to step into a cell. Open ground costs 1. Mud costs more.
+    function costOf(x, y) {
+      return isMud(x, y) ? MUD_COST : 1;
+    }
+
+    // Add up what every step of a route costs. The first cell is free
+    // because Zorb is already standing on it.
+    function pathCost(path) {
+      let total = 0;
+
+      for (let i = 1; i < path.length; i += 1) {
+        total += costOf(path[i].x, path[i].y);
+      }
+
+      return total;
+    }
+
+    function cellAt(x, y) {
+      return cells[y * cols + x];
+    }
+
+    // Which cell holds the flag. findPath never reads this. It only asks
+    // isDestination about each cell it reaches.
+    let destination = null;
+
+    function isDestination(x, y) {
+      return key(x, y) === destination;
+    }
+
+    const DIRECTIONS = {
+      up: [0, -1],
+      down: [0, 1],
+      left: [-1, 0],
+      right: [1, 0]
+    };
+
+    // Breadth-first search. It never looks up where the destination is. It fans
+    // out one ring of neighbors at a time and only recognizes the destination
+    // when it reaches that cell, so the first arrival is in the fewest steps.
+    function findPath(startX, startY) {
+      const cameFrom = new Map([[key(startX, startY), null]]);
+      const frontier = [{ x: startX, y: startY }];
+
+      while (frontier.length > 0) {
+        const current = frontier.shift();
+
+        if (isDestination(current.x, current.y)) {
+          return buildPath(cameFrom, current);
+        }
+
+        for (const [xOffset, yOffset] of Object.values(DIRECTIONS)) {
+          const nextX = current.x + xOffset;
+          const nextY = current.y + yOffset;
+          const nextKey = key(nextX, nextY);
+
+          if (!inBounds(nextX, nextY)) {
+            continue;
+          }
+
+          if (isObstacle(nextX, nextY)) {
+            continue;
+          }
+
+          if (cameFrom.has(nextKey)) {
+            continue;
+          }
+
+          cameFrom.set(nextKey, current);
+          frontier.push({ x: nextX, y: nextY });
+        }
+      }
+
+      return null;
+    }
+
+    // Walk the breadcrumb trail backwards from the goal to the start.
+    function buildPath(cameFrom, goal) {
+      const path = [];
+      let current = goal;
+
+      while (current) {
+        path.push(current);
+        current = cameFrom.get(key(current.x, current.y));
+      }
+
+      return path.reverse();
+    }
+
+    function placeZorb(duration = STEP_MS) {
+      zorbElement.style.transitionDuration = `${duration}ms`;
+      zorbElement.style.transform =
+        `translate(${zorb.x * 100}%, ${zorb.y * 100}%)`;
+    }
+
+    function setStatus(message, blocked = false) {
+      statusElement.textContent = message;
+      statusElement.classList.toggle("blocked", blocked);
+    }
+
+    function clearPreview() {
+      for (const cell of cells) {
+        cell.classList.remove("preview", "preview-goal", "preview-blocked");
+      }
+    }
+
+    function clearTrail() {
+      for (const cell of cells) {
+        cell.classList.remove("trail");
+        cell.removeAttribute("data-step");
+      }
+    }
+
+    function markTrail(x, y, cost) {
+      const cell = cellAt(x, y);
+      cell.classList.add("trail");
+      cell.dataset.step = String(cost);
+    }
+
+    function showPreview(x, y) {
+      clearPreview();
+
+      if (walkTimer !== null) {
+        return;
+      }
+
+      if (x === zorb.x && y === zorb.y) {
+        setStatus(`Zorb is already standing at (${x}, ${y}).`);
+        return;
+      }
+
+      destination = key(x, y);
+      const path = findPath(zorb.x, zorb.y);
+
+      if (!path) {
+        cellAt(x, y).classList.add("preview-blocked");
+
+        setStatus(
+          isObstacle(x, y)
+            ? `A rock fills (${x}, ${y}). Zorb has nowhere to stand.`
+            : `There is no open route to (${x}, ${y}).`,
+          true
+        );
+        return;
+      }
+
+      for (const step of path) {
+        cellAt(step.x, step.y).classList.add("preview");
+      }
+
+      cellAt(x, y).classList.add("preview-goal");
+
+      const steps = path.length - 1;
+      setStatus(
+        `Route to (${x}, ${y}): ${steps} ${steps === 1 ? "step" : "steps"}, cost ${pathCost(path)}.`
+      );
+    }
+
+    function stopWalking() {
+      if (walkTimer !== null) {
+        clearTimeout(walkTimer);
+        walkTimer = null;
+      }
+    }
+
+    function walk(path) {
+      stopWalking();
+      clearPreview();
+      clearTrail();
+
+      const goal = path[path.length - 1];
+      const steps = path.length - 1;
+      const totalCost = pathCost(path);
+
+      markTrail(path[0].x, path[0].y, 0);
+
+      if (steps === 0) {
+        setStatus(`Zorb is already standing at (${goal.x}, ${goal.y}).`);
+        return;
+      }
+
+      setStatus(`Zorb is walking to (${goal.x}, ${goal.y}).`);
+
+      let index = 1;
+      let runningCost = 0;
+
+      function takeStep() {
+        const next = path[index];
+        const stepCost = costOf(next.x, next.y);
+
+        // A muddy step costs more, so it also takes Zorb longer to walk.
+        const stepTime = reducedMotion.matches ? 0 : STEP_MS * stepCost;
+
+        zorb.x = next.x;
+        zorb.y = next.y;
+        placeZorb(stepTime);
+
+        runningCost += stepCost;
+        markTrail(next.x, next.y, runningCost);
+
+        index += 1;
+
+        if (index < path.length) {
+          walkTimer = setTimeout(takeStep, stepTime);
+          return;
+        }
+
+        walkTimer = null;
+        setStatus(
+          `Zorb reached (${goal.x}, ${goal.y}) in ${steps} ${steps === 1 ? "step" : "steps"} for a cost of ${totalCost}.`
+        );
+      }
+
+      takeStep();
+    }
+
+    function goTo(x, y) {
+      if (x === zorb.x && y === zorb.y) {
+        setStatus(`Zorb is already standing at (${x}, ${y}).`);
+        return;
+      }
+
+      destination = key(x, y);
+      const path = findPath(zorb.x, zorb.y);
+
+      if (!path) {
+        stopWalking();
+        clearPreview();
+        cellAt(x, y).classList.add("preview-blocked");
+
+        setStatus(
+          isObstacle(x, y)
+            ? `A rock fills (${x}, ${y}). Pick an open cell instead.`
+            : `There is no open route to (${x}, ${y}).`,
+          true
+        );
+        return;
+      }
+
+      walk(path);
+    }
+
+    function focusCell(index) {
+      cells[focusedIndex].tabIndex = -1;
+      focusedIndex = index;
+      cells[focusedIndex].tabIndex = 0;
+      cells[focusedIndex].focus();
+    }
+
+    const FOCUS_KEYS = {
+      ArrowUp: [0, -1],
+      ArrowDown: [0, 1],
+      ArrowLeft: [-1, 0],
+      ArrowRight: [1, 0]
+    };
+
+    for (let y = 0; y < rows; y += 1) {
+      const rowElement = document.createElement("div");
+      rowElement.className = "grid-row";
+      rowElement.setAttribute("role", "row");
+
+      for (let x = 0; x < cols; x += 1) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "cell";
+        cell.classList.toggle("last-col", x === cols - 1);
+        cell.classList.toggle("last-row", y === rows - 1);
+        cell.classList.toggle("obstacle", isObstacle(x, y));
+        cell.classList.toggle("mud", isMud(x, y));
+        cell.dataset.x = String(x);
+        cell.dataset.y = String(y);
+        cell.tabIndex = y * cols + x === focusedIndex ? 0 : -1;
+        cell.setAttribute(
+          "aria-label",
+          `Column ${x}, row ${y}${isObstacle(x, y) ? ", rock obstacle" : ""}${isMud(x, y) ? ", mud" : ""}`
+        );
+
+        rowElement.append(cell);
+        cells.push(cell);
+      }
+
+      gridElement.append(rowElement);
+    }
+
+    gridElement.addEventListener("click", (event) => {
+      const cell = event.target.closest(".cell");
+
+      if (!cell) {
+        return;
+      }
+
+      goTo(Number(cell.dataset.x), Number(cell.dataset.y));
+    });
+
+    gridElement.addEventListener("pointerover", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const cell = event.target.closest(".cell");
+
+      if (!cell) {
+        return;
+      }
+
+      showPreview(Number(cell.dataset.x), Number(cell.dataset.y));
+    });
+
+    gridElement.addEventListener("pointerleave", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      clearPreview();
+    });
+
+    gridElement.addEventListener("focusin", (event) => {
+      const cell = event.target.closest(".cell");
+
+      if (!cell) {
+        return;
+      }
+
+      focusedIndex = cells.indexOf(cell);
+      showPreview(Number(cell.dataset.x), Number(cell.dataset.y));
+    });
+
+    gridElement.addEventListener("keydown", (event) => {
+      const offset = FOCUS_KEYS[event.key];
+
+      if (!offset) {
+        return;
+      }
+
+      const cell = event.target.closest(".cell");
+
+      if (!cell) {
+        return;
+      }
+
+      const nextX = Number(cell.dataset.x) + offset[0];
+      const nextY = Number(cell.dataset.y) + offset[1];
+
+      if (!inBounds(nextX, nextY)) {
+        return;
+      }
+
+      event.preventDefault();
+      focusCell(nextY * cols + nextX);
+    });
+
+    resetButton.addEventListener("click", () => {
+      stopWalking();
+      clearPreview();
+      clearTrail();
+      zorb.x = start.x;
+      zorb.y = start.y;
+      placeZorb();
+      setStatus("Zorb is back at (4, 4). Pick a new destination.");
+    });
+
+    placeZorb();
+  </script>
+</body>
+</html>
