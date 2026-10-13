@@ -24,18 +24,19 @@
       --demo-surface: #ffffff;
       --demo-border: #eeeeee;
       --demo-input-border: #aadcff;
-      --line: color-mix(in srgb, var(--demo-input-border) 58%, var(--demo-border));
-      --card: color-mix(in srgb, #7f8fa6 10%, var(--demo-surface));
-      --rock-card: color-mix(in srgb, #7f8fa6 18%, var(--demo-surface));
-      --mud-card: color-mix(in srgb, #c08a55 18%, var(--demo-surface));
-      --burger-card: color-mix(in srgb, #ffc062 26%, var(--demo-surface));
-      --preview-cell: color-mix(in srgb, var(--demo-primary) 14%, var(--demo-surface));
-      --preview-line: color-mix(in srgb, var(--demo-primary) 48%, var(--demo-surface));
-      --trail-cell: color-mix(in srgb, #77cf3f 20%, var(--demo-surface));
-      --trail-line: #86c766;
-      --trail-text: color-mix(in srgb, #3b8a1b 40%, var(--demo-text));
-      --goal-ring: var(--demo-primary);
-      --unreachable-cell: color-mix(in srgb, var(--demo-text) 18%, var(--demo-surface));
+      --line: color-mix(in srgb, #8795a6 32%, var(--demo-surface));
+      --frame: color-mix(in srgb, #8795a6 50%, var(--demo-surface));
+      --rock-tile: color-mix(in srgb, #8795a6 36%, var(--demo-surface));
+      --rock-edge: color-mix(in srgb, #8795a6 72%, var(--demo-surface));
+      --burger-tile: color-mix(in srgb, #ffc062 22%, var(--demo-surface));
+      --burger-edge: color-mix(in srgb, #e1a73b 50%, var(--demo-surface));
+      --preview-cell: color-mix(in srgb, #3ca5ff 20%, var(--demo-surface));
+      --preview-line: color-mix(in srgb, #3f88d0 55%, var(--demo-surface));
+      --trail-cell: color-mix(in srgb, #77cf3f 24%, var(--demo-surface));
+      --trail-line: color-mix(in srgb, #6ab04c 70%, var(--demo-surface));
+      --trail-text: color-mix(in srgb, #3dbd01 60%, var(--demo-text));
+      --goal-ring: #3f88d0;
+      --unreachable-cell: color-mix(in srgb, #8795a6 26%, var(--demo-surface));
       --status-background: color-mix(in srgb, var(--demo-primary-lightest) 40%, var(--demo-page));
       --button-shadow: color-mix(in srgb, var(--demo-text) 28%, transparent);
     }
@@ -58,8 +59,8 @@
     /* Artwork for the rocks, mud, hamburgers, rocket,
        and Zorb. It matches the tutorial's illustrations. */
     :root {
-      --rock-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M8 84L14 60L30 40L52 28L76 34L90 54L94 84Z' fill='%23d8dde3'/%3E%3Cpath d='M30 40L52 28L76 34L60 48L36 54Z' fill='%23eef1f4'/%3E%3Cpath d='M76 34L90 54L94 84L68 84L60 48Z' fill='%23c4cad2'/%3E%3Cpath d='M8 84L14 60L30 40L52 28L76 34L90 54L94 84Z' fill='none' stroke='%237f8a96' stroke-width='2.6' stroke-linejoin='round'/%3E%3C/svg%3E");
-      --mud-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 90 90'%3E%3Crect x='7' y='7' width='86' height='86' rx='13' fill='%23b98a58' stroke='%235a3a1c' stroke-width='3.4'/%3E%3Cg fill='none' stroke='%238a5d30' stroke-width='4.2' stroke-linecap='round'%3E%3Cpath d='M22 40C28 35 34 45 40 40S52 35 58 40S70 45 78 40'/%3E%3Cpath d='M22 56C28 51 34 61 40 56S52 51 58 56S70 61 78 56'/%3E%3Cpath d='M22 72C28 67 34 77 40 72S52 67 58 72'/%3E%3C/g%3E%3Ccircle cx='72' cy='72' r='4.5' fill='%23d9b07f'/%3E%3C/svg%3E");
+      --rock-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='8 28 86 56'%3E%3Cpath d='M8 84L14 60L30 40L52 28L76 34L90 54L94 84Z' fill='%23f3f5f7'/%3E%3Cpath d='M30 40L52 28L76 34L60 48L36 54Z' fill='%23ffffff'/%3E%3Cpath d='M76 34L90 54L94 84L68 84L60 48Z' fill='%23c2cad3'/%3E%3C/svg%3E");
+      --mud-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 90 90'%3E%3Crect x='7' y='7' width='86' height='86' rx='13' fill='%23c99d6e' stroke='%2394683b' stroke-width='2.6'/%3E%3Cg fill='none' stroke='%2394683b' stroke-width='4.2' stroke-linecap='round'%3E%3Cpath d='M22 40C28 35 34 45 40 40S52 35 58 40S70 45 78 40'/%3E%3Cpath d='M22 56C28 51 34 61 40 56S52 51 58 56S70 61 78 56'/%3E%3Cpath d='M22 72C28 67 34 77 40 72S52 67 58 72'/%3E%3C/g%3E%3Ccircle cx='72' cy='72' r='4.5' fill='%23e6c69d'/%3E%3C/svg%3E");
       --burger-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M14 72H86V76C86 83 80 88 73 88H27C20 88 14 83 14 76Z' fill='%23f6c27a' stroke='%23b57a36' stroke-width='2.6' stroke-linejoin='round'/%3E%3Crect x='10' y='59' width='80' height='16' rx='8' fill='%238d5236' stroke='%235f3522' stroke-width='2.6'/%3E%3Cpath d='M13 56H87V62H74L68 70L62 62H38L32 68L26 62H13Z' fill='%23ffd84d' stroke='%23d9a520' stroke-width='2.08' stroke-linejoin='round'/%3E%3Cpath d='M10 53C10 51 11 50 13 50H87C89 50 90 51 90 53C90 57 88 60 85 59C82 62 77 62 74 59C71 62 66 62 63 59C60 62 55 62 52 59C49 62 44 62 41 59C38 62 33 62 30 59C27 62 22 62 19 59C15 60 10 58 10 53Z' fill='%239fd67a' stroke='%235ea63d' stroke-width='2.08' stroke-linejoin='round'/%3E%3Cpath d='M12 50C12 28 29 14 50 14C71 14 88 28 88 50C88 53 86 55 83 55H17C14 55 12 53 12 50Z' fill='%23f6c27a' stroke='%23b57a36' stroke-width='2.6' stroke-linejoin='round'/%3E%3Cpath d='M25 38C27 30 33 24 41 21' fill='none' stroke='%23fde3b8' stroke-width='3.38' stroke-linecap='round'/%3E%3Cg fill='%23fff6e3'%3E%3Cellipse cx='34' cy='33' rx='3.4' ry='1.9' transform='rotate(-25 34 33)'/%3E%3Cellipse cx='48' cy='25' rx='3.4' ry='1.9' transform='rotate(-5 48 25)'/%3E%3Cellipse cx='62' cy='30' rx='3.4' ry='1.9' transform='rotate(20 62 30)'/%3E%3Cellipse cx='42' cy='42' rx='3.4' ry='1.9' transform='rotate(10 42 42)'/%3E%3Cellipse cx='57' cy='41' rx='3.4' ry='1.9' transform='rotate(-15 57 41)'/%3E%3C/g%3E%3C/svg%3E");
       --rocket-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='18' y='86' width='64' height='9' rx='4.5' fill='%23e3e7ec' stroke='%237f8a96' stroke-width='2.21'/%3E%3Cg transform='translate(0 6)'%3E%3CclipPath id='rgb'%3E%3Cpath d='M50 5C64 17 68 39 63 71L37 71C32 39 36 17 50 5Z'/%3E%3C/clipPath%3E%3Cpath d='M43 70H57L55 79H45Z' fill='%23c3c9d0' stroke='%237f8a96' stroke-width='1.95' stroke-linejoin='round'/%3E%3Cpath d='M38 49C28 54 23 64 24 77L39 68Z' fill='%23f3887f' stroke='%23c4544c' stroke-width='2.21' stroke-linejoin='round'/%3E%3Cpath d='M62 49C72 54 77 64 76 77L61 68Z' fill='%23f3887f' stroke='%23c4544c' stroke-width='2.21' stroke-linejoin='round'/%3E%3Cpath d='M50 5C64 17 68 39 63 71L37 71C32 39 36 17 50 5Z' fill='%23ffffff'/%3E%3Cg clip-path='url(%23rgb)'%3E%3Crect x='0' y='0' width='100' height='24' fill='%23f3887f'/%3E%3Cpath d='M0 24L100 24' stroke='%23c4544c' stroke-width='1.56'/%3E%3C/g%3E%3Cpath d='M50 5C64 17 68 39 63 71L37 71C32 39 36 17 50 5Z' fill='none' stroke='%237f8a96' stroke-width='2.21' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='42' r='8.5' fill='%23b8e0fc' stroke='%233f88d0' stroke-width='1.82'/%3E%3C/g%3E%3C/svg%3E");
       --zorb-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='13 12 74 78'%3E%3Cg transform='translate(14 13) scale(2)'%3E%3Cpath d='M35 18C35 27.389 21.777 37 18 37C14.222 37 1 27.389 1 18C1 8.611 8.611 1 18 1C27.389 1 35 8.611 35 18Z' fill='%23ffe000' stroke='%236b6b6b' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M13.503 15.845C16.627 18.969 17.893 22.768 16.331 24.33C14.769 25.892 10.97 24.627 7.84601 21.502C4.72101 18.378 3.45501 14.579 5.01801 13.017C6.58101 11.455 10.379 12.721 13.503 15.845ZM22.497 15.845C19.373 18.969 18.107 22.768 19.669 24.33C21.231 25.892 25.03 24.627 28.154 21.502C31.279 18.377 32.545 14.579 30.982 13.017C29.42 11.455 25.621 12.72 22.497 15.845ZM18 32C15.653 32 14.425 30.84 14.293 30.707C13.902 30.316 13.902 29.684 14.293 29.293C14.68 28.906 15.306 28.902 15.697 29.283C15.748 29.33 16.503 30 18 30C19.519 30 20.273 29.311 20.305 29.281C20.703 28.907 21.332 28.918 21.713 29.31C22.092 29.703 22.093 30.321 21.707 30.706C21.575 30.84 20.347 32 18 32Z' fill='%23292F33'/%3E%3C/g%3E%3C/svg%3E");
@@ -105,6 +106,8 @@
       aspect-ratio: 1;
       margin: 0 auto;
       overflow: hidden;
+      border: 1px solid var(--frame);
+      border-radius: 6px;
       background: var(--demo-surface);
       touch-action: manipulation;
       user-select: none;
@@ -121,17 +124,14 @@
       min-height: 0;
     }
 
-    /* Each cell is a rounded card. The transparent
-       border leaves a small gap between the cards,
-       and background-clip keeps the color off it. */
     .cell {
       position: relative;
       min-width: 0;
       padding: 0;
-      border: 2px solid transparent;
-      border-radius: 18%;
-      background-color: var(--card);
-      background-clip: padding-box;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background-color: var(--demo-surface);
       color: var(--trail-text);
       font: inherit;
       line-height: 1;
@@ -140,50 +140,61 @@
       appearance: none;
     }
 
+    /* The grid's frame already draws the outer edge. */
+    .grid-row .cell:last-child {
+      border-right: 0;
+    }
+
+    .grid-row:last-child .cell {
+      border-bottom: 0;
+    }
+
     .cell:focus-visible {
       outline: 3px solid color-mix(in srgb, var(--demo-primary) 60%, transparent);
-      outline-offset: -2px;
+      outline-offset: -3px;
     }
 
     .cell.obstacle {
-      background-color: var(--rock-card);
       cursor: not-allowed;
-    }
-
-    .cell.mud {
-      background-color: var(--mud-card);
-    }
-
-    .cell.burger {
-      background-color: var(--burger-card);
     }
 
     .cell.obstacle::before,
     .cell.mud::before,
     .cell.burger::before {
       position: absolute;
-      background: center / contain no-repeat;
       content: "";
     }
 
+    /* Rocks and hamburgers each sit on a rounded
+       tile, just inside their cell. */
     .cell.obstacle::before {
-      inset: 8%;
-      background-image: var(--rock-art);
-    }
-
-    .cell.mud::before {
-      inset: 5.5%;
-      background-image: var(--mud-art);
+      inset: 7%;
+      border: 1.5px solid var(--rock-edge);
+      border-radius: 15%;
+      background:
+        var(--rock-art) center / 60% auto no-repeat,
+        var(--rock-tile);
+      background-origin: border-box;
     }
 
     .cell.burger::before {
-      inset: 10.5%;
-      background-image: var(--burger-art);
+      inset: 7%;
+      border: 1.5px solid var(--burger-edge);
+      border-radius: 15%;
+      background:
+        var(--burger-art) 50% 54.7% / 74.4% auto no-repeat,
+        var(--burger-tile);
+      background-origin: border-box;
+    }
+
+    /* The mud drawing comes with its own tile. */
+    .cell.mud::before {
+      inset: 5%;
+      background: var(--mud-art) center / contain no-repeat;
     }
 
     .cell.trail {
       background-color: var(--trail-cell);
-      box-shadow: inset 0 0 0 1.5px var(--trail-line);
     }
 
     /* The cost of the trip so far. */
@@ -207,9 +218,9 @@
     .cell.burger.trail:not(.has-zorb)::after {
       box-sizing: border-box;
       inset: auto;
-      top: 22.5%;
-      left: 77.5%;
-      min-width: 40%;
+      top: 25%;
+      left: 75%;
+      min-width: 36%;
       padding: 0.12em 0.35em;
       border: 1.5px solid;
       border-radius: 999px;
@@ -219,7 +230,8 @@
     }
 
     .cell.burger.trail:not(.preview)::before {
-      inset: 21% 18% 6% 9%;
+      background-position: 24.8% 78.5%;
+      background-size: 67.4% auto;
     }
 
     /* The parked rocket covers a hamburger, so the
@@ -232,8 +244,8 @@
        moves up into the corner, above him. */
     .cell.has-zorb.trail::after {
       inset: auto;
-      top: 20%;
-      left: 82.5%;
+      top: 22.6%;
+      left: 79.8%;
       z-index: 3;
       font-size: max(9px, 2.3cqw);
       transform: translate(-50%, -50%);
@@ -369,8 +381,10 @@
     }
 
     .swatch.rock {
-      border-color: transparent;
-      background: var(--rock-art) center / 80% no-repeat, var(--rock-card);
+      border-color: var(--rock-edge);
+      background:
+        var(--rock-art) center / 70% auto no-repeat,
+        var(--rock-tile);
     }
 
     .swatch.mud {
@@ -379,8 +393,10 @@
     }
 
     .swatch.burger {
-      border-color: transparent;
-      background: var(--burger-art) center / 84% no-repeat, var(--burger-card);
+      border-color: var(--burger-edge);
+      background:
+        var(--burger-art) center / 84% auto no-repeat,
+        var(--burger-tile);
     }
 
     .controls {
