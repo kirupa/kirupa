@@ -24,18 +24,17 @@
       --demo-surface: #ffffff;
       --demo-border: #eeeeee;
       --demo-input-border: #aadcff;
-      --line: color-mix(in srgb, var(--demo-input-border) 58%, var(--demo-border));
-      --line-strong: color-mix(in srgb, var(--demo-primary-darker) 68%, var(--demo-text));
-      --obstacle-cell: color-mix(in srgb, var(--demo-text) 12%, var(--demo-surface));
-      --rock: color-mix(in srgb, var(--demo-text) 54%, var(--demo-surface));
-      --rock-dark: color-mix(in srgb, var(--demo-text) 78%, var(--demo-surface));
-      --rock-light: color-mix(in srgb, var(--demo-text) 28%, var(--demo-surface));
-      --preview-cell: color-mix(in srgb, var(--demo-primary) 14%, var(--demo-surface));
-      --preview-line: color-mix(in srgb, var(--demo-primary) 48%, var(--demo-surface));
-      --trail-cell: color-mix(in srgb, var(--demo-primary) 34%, var(--demo-surface));
-      --trail-text: color-mix(in srgb, var(--demo-primary-darker) 55%, var(--demo-text));
-      --goal-ring: var(--demo-primary);
-      --unreachable-cell: color-mix(in srgb, var(--demo-text) 18%, var(--demo-surface));
+      --line: color-mix(in srgb, #8795a6 32%, var(--demo-surface));
+      --frame: color-mix(in srgb, #8795a6 50%, var(--demo-surface));
+      --rock-tile: color-mix(in srgb, #8795a6 36%, var(--demo-surface));
+      --rock-edge: color-mix(in srgb, #8795a6 72%, var(--demo-surface));
+      --preview-cell: color-mix(in srgb, #3ca5ff 20%, var(--demo-surface));
+      --preview-line: color-mix(in srgb, #3f88d0 55%, var(--demo-surface));
+      --trail-cell: color-mix(in srgb, #77cf3f 24%, var(--demo-surface));
+      --trail-line: color-mix(in srgb, #6ab04c 70%, var(--demo-surface));
+      --trail-text: color-mix(in srgb, #3dbd01 60%, var(--demo-text));
+      --goal-ring: #3f88d0;
+      --unreachable-cell: color-mix(in srgb, #8795a6 26%, var(--demo-surface));
       --status-background: color-mix(in srgb, var(--demo-primary-lightest) 40%, var(--demo-page));
       --button-shadow: color-mix(in srgb, var(--demo-text) 28%, transparent);
     }
@@ -53,6 +52,14 @@
         --demo-border: #504f4f;
         --demo-input-border: #8eb2e8;
       }
+    }
+
+    /* Artwork for the rocks, the rocket, and Zorb. It
+       matches the tutorial's illustrations. */
+    :root {
+      --rock-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='8 28 86 56'%3E%3Cpath d='M8 84L14 60L30 40L52 28L76 34L90 54L94 84Z' fill='%23f3f5f7'/%3E%3Cpath d='M30 40L52 28L76 34L60 48L36 54Z' fill='%23ffffff'/%3E%3Cpath d='M76 34L90 54L94 84L68 84L60 48Z' fill='%23c2cad3'/%3E%3C/svg%3E");
+      --rocket-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='18' y='86' width='64' height='9' rx='4.5' fill='%23e3e7ec' stroke='%237f8a96' stroke-width='2.21'/%3E%3Cg transform='translate(0 6)'%3E%3CclipPath id='rgb'%3E%3Cpath d='M50 5C64 17 68 39 63 71L37 71C32 39 36 17 50 5Z'/%3E%3C/clipPath%3E%3Cpath d='M43 70H57L55 79H45Z' fill='%23c3c9d0' stroke='%237f8a96' stroke-width='1.95' stroke-linejoin='round'/%3E%3Cpath d='M38 49C28 54 23 64 24 77L39 68Z' fill='%23f3887f' stroke='%23c4544c' stroke-width='2.21' stroke-linejoin='round'/%3E%3Cpath d='M62 49C72 54 77 64 76 77L61 68Z' fill='%23f3887f' stroke='%23c4544c' stroke-width='2.21' stroke-linejoin='round'/%3E%3Cpath d='M50 5C64 17 68 39 63 71L37 71C32 39 36 17 50 5Z' fill='%23ffffff'/%3E%3Cg clip-path='url(%23rgb)'%3E%3Crect x='0' y='0' width='100' height='24' fill='%23f3887f'/%3E%3Cpath d='M0 24L100 24' stroke='%23c4544c' stroke-width='1.56'/%3E%3C/g%3E%3Cpath d='M50 5C64 17 68 39 63 71L37 71C32 39 36 17 50 5Z' fill='none' stroke='%237f8a96' stroke-width='2.21' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='42' r='8.5' fill='%23b8e0fc' stroke='%233f88d0' stroke-width='1.82'/%3E%3C/g%3E%3C/svg%3E");
+      --zorb-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='13 12 74 78'%3E%3Cg transform='translate(14 13) scale(2)'%3E%3Cpath d='M35 18C35 27.389 21.777 37 18 37C14.222 37 1 27.389 1 18C1 8.611 8.611 1 18 1C27.389 1 35 8.611 35 18Z' fill='%23ffe000' stroke='%236b6b6b' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M13.503 15.845C16.627 18.969 17.893 22.768 16.331 24.33C14.769 25.892 10.97 24.627 7.84601 21.502C4.72101 18.378 3.45501 14.579 5.01801 13.017C6.58101 11.455 10.379 12.721 13.503 15.845ZM22.497 15.845C19.373 18.969 18.107 22.768 19.669 24.33C21.231 25.892 25.03 24.627 28.154 21.502C31.279 18.377 32.545 14.579 30.982 13.017C29.42 11.455 25.621 12.72 22.497 15.845ZM18 32C15.653 32 14.425 30.84 14.293 30.707C13.902 30.316 13.902 29.684 14.293 29.293C14.68 28.906 15.306 28.902 15.697 29.283C15.748 29.33 16.503 30 18 30C19.519 30 20.273 29.311 20.305 29.281C20.703 28.907 21.332 28.918 21.713 29.31C22.092 29.703 22.093 30.321 21.707 30.706C21.575 30.84 20.347 32 18 32Z' fill='%23292F33'/%3E%3C/g%3E%3C/svg%3E");
     }
 
     * {
@@ -95,12 +102,15 @@
       aspect-ratio: 1;
       margin: 0 auto;
       overflow: hidden;
-      border: 2px solid var(--line-strong);
-      border-radius: 10px;
+      border: 1px solid var(--frame);
+      border-radius: 6px;
       background: var(--demo-surface);
       touch-action: manipulation;
       user-select: none;
       -webkit-user-select: none;
+      /* Lets the step numbers size themselves to the
+         grid with cqw units. */
+      container-type: inline-size;
     }
 
     .grid-row {
@@ -140,20 +150,21 @@
     }
 
     .cell.obstacle {
-      background: var(--obstacle-cell);
       cursor: not-allowed;
     }
 
+    /* Each rock sits on a rounded tile, just inside
+       its cell. */
     .cell.obstacle::before {
       position: absolute;
-      inset: 18% 13% 14%;
-      border: 2px solid var(--rock-dark);
-      border-radius: 46% 54% 42% 38% / 54% 48% 40% 36%;
+      inset: 7%;
+      border: 1.5px solid var(--rock-edge);
+      border-radius: 15%;
       background:
-        radial-gradient(circle at 34% 28%, var(--rock-light) 0 9%, transparent 10%),
-        linear-gradient(145deg, var(--rock-light), var(--rock));
+        var(--rock-art) center / 60% auto no-repeat,
+        var(--rock-tile);
+      background-origin: border-box;
       content: "";
-      transform: rotate(-3deg);
     }
 
     .cell.trail {
@@ -167,9 +178,21 @@
       place-items: center;
       color: var(--trail-text);
       font-size: clamp(0.62rem, 2.1vw, 0.85rem);
+      font-size: max(10px, 3.4cqw);
       font-variant-numeric: tabular-nums;
       font-weight: 700;
       content: attr(data-step);
+    }
+
+    /* On the cell Zorb is standing on, the step
+       number moves up into the corner, above him. */
+    .cell.has-zorb.trail::after {
+      inset: auto;
+      top: 22.6%;
+      left: 79.8%;
+      z-index: 3;
+      font-size: max(9px, 2.3cqw);
+      transform: translate(-50%, -50%);
     }
 
     /* A preview wins wherever it crosses an older trail, so the two
@@ -205,8 +228,38 @@
 
     .zorb::after {
       position: absolute;
-      inset: 14%;
-      background: url("https://www.kirupa.com/icon/zorb.svg") center / contain no-repeat;
+      inset: 21.6% 20.4% 16%;
+      background: var(--zorb-art) center / contain no-repeat;
+      content: "";
+    }
+
+    /* The rocket marks where Zorb is headed. It fades
+       in on the destination and fades out once Zorb
+       is standing on the same cell. */
+    .rocket {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: calc(100% / 10);
+      height: calc(100% / 10);
+      opacity: 0;
+      transition: opacity 240ms ease;
+      pointer-events: none;
+    }
+
+    .rocket.shown {
+      opacity: 1;
+    }
+
+    .grid:has(.cell.has-rocket.has-zorb) .rocket {
+      opacity: 0;
+    }
+
+    .rocket::after {
+      position: absolute;
+      inset: 12% 7% 2%;
+      background: var(--rocket-art) center / contain no-repeat;
       content: "";
     }
 
@@ -249,10 +302,10 @@
 
     .swatch {
       display: inline-block;
-      width: 17px;
-      height: 17px;
+      width: 20px;
+      height: 20px;
       border: 1px solid var(--line);
-      border-radius: 4px;
+      border-radius: 5px;
     }
 
     .swatch.preview {
@@ -261,11 +314,15 @@
     }
 
     .swatch.trail {
+      border-color: var(--trail-line);
       background: var(--trail-cell);
     }
 
     .swatch.rock {
-      background: var(--obstacle-cell);
+      border-color: var(--rock-edge);
+      background:
+        var(--rock-art) center / 70% auto no-repeat,
+        var(--rock-tile);
     }
 
     .controls {
@@ -317,7 +374,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .zorb {
+      .zorb,
+      .rocket {
         transition: none;
       }
     }
@@ -333,6 +391,7 @@
       role="grid"
       aria-label="10 by 10 navigation grid with rock obstacles. Choose a destination cell and Zorb walks there."
     >
+      <div id="rocket" class="rocket" aria-hidden="true"></div>
       <div id="zorb" class="zorb" aria-hidden="true"></div>
     </div>
 
@@ -422,6 +481,7 @@
 
     const gridElement = document.querySelector("#grid");
     const zorbElement = document.querySelector("#zorb");
+    const rocketElement = document.querySelector("#rocket");
     const statusElement = document.querySelector("#status");
     const resetButton = document.querySelector("#reset");
     const cells = [];
@@ -453,6 +513,34 @@
     function placeZorb() {
       zorbElement.style.transform =
         `translate(${zorb.x * 100}%, ${zorb.y * 100}%)`;
+
+      // Tag the cell Zorb is on, so the stylesheet
+      // can move his step number up into the corner
+      // and fade out the rocket once he reaches it.
+      for (const cell of cells) {
+        cell.classList.remove("has-zorb");
+      }
+
+      cellAt(zorb.x, zorb.y).classList.add("has-zorb");
+    }
+
+    // Park Zorb's rocket on the destination cell. The
+    // stylesheet fades it out once Zorb is standing
+    // on the same cell.
+    function showRocket(x, y) {
+      hideRocket();
+      rocketElement.style.transform =
+        `translate(${x * 100}%, ${y * 100}%)`;
+      rocketElement.classList.add("shown");
+      cellAt(x, y).classList.add("has-rocket");
+    }
+
+    function hideRocket() {
+      rocketElement.classList.remove("shown");
+
+      for (const cell of cells) {
+        cell.classList.remove("has-rocket");
+      }
     }
 
     function setStatus(message, blocked = false) {
@@ -463,6 +551,12 @@
     function clearPreview() {
       for (const cell of cells) {
         cell.classList.remove("preview", "preview-goal", "preview-blocked");
+      }
+
+      // While Zorb walks, the rocket stays parked on
+      // the cell he is walking to.
+      if (walkTimer === null) {
+        hideRocket();
       }
     }
 
@@ -498,6 +592,7 @@
       const goal = path[path.length - 1];
       const steps = path.length - 1;
 
+      showRocket(goal.x, goal.y);
       markTrail(path[0].x, path[0].y, 0);
 
       if (steps === 0) {
