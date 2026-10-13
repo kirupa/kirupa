@@ -34,6 +34,7 @@
       --mud: color-mix(in srgb, #9a6b3f 62%, var(--demo-surface));
       --mud-dark: color-mix(in srgb, #6b4423 80%, var(--demo-surface));
       --mud-light: color-mix(in srgb, #c89b6d 55%, var(--demo-surface));
+      --rocket-cell: color-mix(in srgb, #f2a93b 20%, var(--demo-surface));
       --preview-cell: color-mix(in srgb, var(--demo-primary) 14%, var(--demo-surface));
       --preview-line: color-mix(in srgb, var(--demo-primary) 48%, var(--demo-surface));
       --trail-cell: color-mix(in srgb, var(--demo-primary) 34%, var(--demo-surface));
@@ -177,6 +178,20 @@
       content: "";
     }
 
+    .cell.rocket {
+      background: var(--rocket-cell);
+    }
+
+    .cell.rocket::before {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: clamp(0.85rem, 3.6vw, 1.4rem);
+      line-height: 1;
+      content: "\1F680";
+    }
+
     .cell.trail {
       background: var(--trail-cell);
     }
@@ -193,8 +208,13 @@
       content: attr(data-step);
     }
 
-    .cell.mud.trail::after {
+    .cell.mud.trail::after,
+    .cell.rocket.trail::after {
       text-shadow: 0 0 3px var(--demo-surface), 0 0 3px var(--demo-surface);
+    }
+
+    .cell.rocket.trail::before {
+      opacity: 0.35;
     }
 
     /* A preview wins wherever it crosses an older trail, so the two
@@ -298,6 +318,18 @@
       background: var(--mud);
     }
 
+    .swatch.rocket {
+      display: inline-grid;
+      place-items: center;
+      background: var(--rocket-cell);
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .swatch.rocket::before {
+      content: "\1F680";
+    }
+
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -361,7 +393,7 @@
       id="grid"
       class="grid"
       role="grid"
-      aria-label="10 by 10 navigation grid with rock obstacles and mud. Choose a destination cell and Zorb walks there along the cheapest route."
+      aria-label="10 by 10 navigation grid with rock obstacles, mud, and rockets. Choose a destination cell and Zorb walks there along the cheapest route."
     >
       <div id="zorb" class="zorb" aria-hidden="true"></div>
     </div>
@@ -373,6 +405,7 @@
       <li><span class="swatch trail" aria-hidden="true"></span>Route taken</li>
       <li><span class="swatch rock" aria-hidden="true"></span>Rock</li>
       <li><span class="swatch mud" aria-hidden="true"></span>Mud (cost 5)</li>
+      <li><span class="swatch rocket" aria-hidden="true"></span>Rocket (cost 0)</li>
     </ul>
 
     <div class="controls">
@@ -454,8 +487,14 @@
       "6,5", "5,6", "6,6"
     ]);
 
+    const rockets = new Set([
+      "9,7", "9,8", "9,9"
+    ]);
+
     const MUD_COST = 5;
+    const ROCKET_COST = 0;
     const STEP_MS = 160;
+    const ROCKET_STEP_MS = 40;
 
     const gridElement = document.querySelector("#grid");
     const zorbElement = document.querySelector("#zorb");
@@ -467,6 +506,7 @@
 
     let walkTimer = null;
     let focusedIndex = start.y * cols + start.x;
+    let hoveredCell = null;
 
     function key(x, y) {
       return `${x},${y}`;
@@ -485,13 +525,28 @@
       return mud.has(key(x, y));
     }
 
-    // What it costs to step into a cell. Open ground costs 1. Mud costs more.
-    function costOf(x, y) {
-      return isMud(x, y) ? MUD_COST : 1;
+    function isRocket(x, y) {
+      return rockets.has(key(x, y));
     }
 
-    // Add up what every step of a route costs. The first cell is free
-    // because Zorb is already standing on it.
+    // What it costs to step into a cell. Open ground
+    // costs 1, mud costs more, and a rocket costs
+    // nothing at all.
+    function costOf(x, y) {
+      if (isMud(x, y)) {
+        return MUD_COST;
+      }
+
+      if (isRocket(x, y)) {
+        return ROCKET_COST;
+      }
+
+      return 1;
+    }
+
+    // Add up what every step of a route costs. The
+    // first cell is free because Zorb is already
+    // standing on it.
     function pathCost(path) {
       let total = 0;
 
@@ -521,11 +576,14 @@
       right: [1, 0]
     };
 
-    // Breadth-first search. It never looks up where the destination is. It fans
-    // out one ring of neighbors at a time and only recognizes the destination
-    // when it reaches that cell, so the first arrival is in the fewest steps.
+    // Breadth-first search. It never looks up where
+    // the destination is. It fans out one ring of
+    // neighbors at a time and only recognizes the
+    // destination when it reaches that cell, so the
+    // first arrival is in the fewest steps.
     function findPath(startX, startY) {
-      const cameFrom = new Map([[key(startX, startY), null]]);
+      const startKey = key(startX, startY);
+      const cameFrom = new Map([[startKey, null]]);
       const frontier = [{ x: startX, y: startY }];
 
       while (frontier.length > 0) {
@@ -535,7 +593,9 @@
           return buildPath(cameFrom, current);
         }
 
-        for (const [xOffset, yOffset] of Object.values(DIRECTIONS)) {
+        const offsets = Object.values(DIRECTIONS);
+
+        for (const [xOffset, yOffset] of offsets) {
           const nextX = current.x + xOffset;
           const nextY = current.y + yOffset;
           const nextKey = key(nextX, nextY);
@@ -674,8 +734,19 @@
         const next = path[index];
         const stepCost = costOf(next.x, next.y);
 
-        // A muddy step costs more, so it also takes Zorb longer to walk.
-        const stepTime = reducedMotion.matches ? 0 : STEP_MS * stepCost;
+        // A pricier step takes Zorb longer to walk.
+        // A rocket costs 0, and a step that takes 0ms
+        // would look like teleporting, so rockets get
+        // a quick step time of their own.
+        let stepTime = STEP_MS * stepCost;
+
+        if (isRocket(next.x, next.y)) {
+          stepTime = ROCKET_STEP_MS;
+        }
+
+        if (reducedMotion.matches) {
+          stepTime = 0;
+        }
 
         zorb.x = next.x;
         zorb.y = next.y;
@@ -692,8 +763,13 @@
         }
 
         walkTimer = null;
+
+        const stepWord = steps === 1 ? "step" : "steps";
+
         setStatus(
-          `Zorb reached (${goal.x}, ${goal.y}) in ${steps} ${steps === 1 ? "step" : "steps"} for a cost of ${totalCost}.`
+          `Zorb reached (${goal.x}, ${goal.y}) in ` +
+          `${steps} ${stepWord} for a cost of ` +
+          `${totalCost}.`
         );
       }
 
@@ -753,12 +829,13 @@
         cell.classList.toggle("last-row", y === rows - 1);
         cell.classList.toggle("obstacle", isObstacle(x, y));
         cell.classList.toggle("mud", isMud(x, y));
+        cell.classList.toggle("rocket", isRocket(x, y));
         cell.dataset.x = String(x);
         cell.dataset.y = String(y);
         cell.tabIndex = y * cols + x === focusedIndex ? 0 : -1;
         cell.setAttribute(
           "aria-label",
-          `Column ${x}, row ${y}${isObstacle(x, y) ? ", rock obstacle" : ""}${isMud(x, y) ? ", mud" : ""}`
+          `Column ${x}, row ${y}${isObstacle(x, y) ? ", rock obstacle" : ""}${isMud(x, y) ? ", mud" : ""}${isRocket(x, y) ? ", rocket" : ""}`
         );
 
         rowElement.append(cell);
@@ -785,10 +862,16 @@
 
       const cell = event.target.closest(".cell");
 
-      if (!cell) {
+      // The browser can report the same cell
+      // again when something inside it changes
+      // under a still mouse, like a trail number
+      // appearing. Only a move to a new cell
+      // should change the preview.
+      if (!cell || cell === hoveredCell) {
         return;
       }
 
+      hoveredCell = cell;
       showPreview(Number(cell.dataset.x), Number(cell.dataset.y));
     });
 
@@ -797,6 +880,7 @@
         return;
       }
 
+      hoveredCell = null;
       clearPreview();
     });
 
